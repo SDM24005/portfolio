@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Portfolio Samuele De March</title>
 
-  <!-- FONTS -->
   <style>
     @font-face {
       font-family: 'FormaDJRText';
@@ -27,33 +26,41 @@
       margin: 0;
       padding: 0;
       font-family: 'FormaDJRText', sans-serif;
-      background-color: #000;
-      color: white;
+      background-color: #000000;
+      color: rgb(255, 255, 255);
+      cursor: none; /* Nasconde il cursore di sistema */
     }
 
-    /* CONTENITORE GENERALE */
-    .content {
-      padding: clamp(0.5rem, 2vw, 1.5rem);
+    /* --- Stile base per i link --- */
+    a {
+      color: rgb(255, 255, 255);
+      text-decoration: none;
+      cursor: none; /* Assicura che anche i link non mostrino il cursore di sistema */
     }
 
-    /* TESTI FISSI */
-    .fixed-text, .fixed-text-subtitle {
+    /* --- CURSORE PERSONALIZZATO --- */
+    .cursor {
       position: fixed;
-      color: white;
-      z-index: 9999;
-      opacity: 0;
-      animation: fadeIn 1s ease-out forwards;
+      top: 0; /* Verrà aggiornato da JS */
+      left: 0; /* Verrà aggiornato da JS */
+      width: 20px;
+      height: 20px;
+      background-color: grey; /* COLORE PREDEFINITO GRIGIO */
+      border-radius: 50%;
+      pointer-events: none; /* Non interagisce con gli eventi del mouse */
+      z-index: 1001; /* Assicurati che sia sopra l'header (z-index: 1000) */
+      transform: translate(-50%, -50%) scale(1); /* Posiziona il centro e dimensione base */
+      transition: background-color 0.3s ease, transform 0.3s ease; /* Transizione per colore e dimensione */
     }
 
-    .fixed-text {
-      top: 3vw;
-      left: 12vw;
-      font-family: 'FormaDJRDisplay', sans-serif;
-      font-size: 2vw;
-      animation-delay: 0.2s;
+    /* --- STATO HOVER CURSORE --- */
+    .cursor.cursor-hover-active {
+      background-color: white; /* COLORE BIANCO SU HOVER */
+      transform: translate(-50%, -50%) scale(1.3); /* Leggermente più grande */
     }
 
-    /* ANIMAZIONI */
+
+    /* ANIMAZIONI (Invariate) */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
@@ -63,41 +70,70 @@
       opacity: 0;
       animation: fadeIn 1s ease-out forwards;
     }
+    .label-fade-delay { animation-delay: 0.2s; }
+    .grid-fade-delay { animation-delay: 0.4s; }
+    .item-delay-1 { animation-delay: 0.6s; }
+    .item-delay-2 { animation-delay: 0.8s; }
+    .item-delay-3 { animation-delay: 1.0s; }
+    .item-delay-4 { animation-delay: 1.2s; }
+    .item-delay-5 { animation-delay: 1.4s; }
 
-    .delay-1 { animation-delay: 0.3s; }
-    .delay-2 { animation-delay: 0.5s; }
-    .delay-3 { animation-delay: 0.7s; }
-    .delay-4 { animation-delay: 0.9s; }
-    .delay-5 { animation-delay: 1.1s; }
 
-    /* HEADER */
-    .header {
-      font-family: 'FormaDJRDisplay', sans-serif;
-      font-size: clamp(2rem, 5vw, 50px);
-      padding: 2rem clamp(1rem, 4vw, 3rem) 0;
+    /* HEADER FISSO (Invariato) */
+    .sticky-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      background-color: #00000000;
+      box-sizing: border-box;
+      display: grid;
+      align-items: center;
+      padding: clamp(0.8rem, 1.5vw, 1.5rem) clamp(1.5rem, 4vw, 3rem);
+      gap: clamp(1rem, 3vw, 2rem);
     }
-    
-    /* GRIGLIA IMMAGINI */
+
+    .grid-label {
+      font-family: 'FormaDJRDisplay', sans-serif;
+      font-size: clamp(1.5rem, 2vw, 2.5rem);
+    }
+
+    .grid-label-about:hover {
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+
+    /* CONTENUTO PRINCIPALE (Invariato) */
+    .content {
+      padding-left: clamp(1.5rem, 4vw, 3rem);
+      padding-right: clamp(1.5rem, 4vw, 3rem);
+      padding-bottom: clamp(1.5rem, 4vw, 3rem);
+      padding-top: clamp(6rem, 12vw, 10rem); /* Valore da aggiustare! */
+    }
+
+    /* GRIGLIA IMMAGINI (Invariata) */
     .image-grid {
       column-count: 3;
       column-gap: clamp(1rem, 3vw, 2rem);
-      margin-top: clamp(1.5rem, 6vw, 12rem);
+      width: 100%;
     }
 
     .image-grid a {
       display: inline-block;
       width: 100%;
-      margin-bottom: clamp(1rem, 2vw, 2rem);
+      margin-bottom: clamp(0.5rem, 2vw, 1rem);
       break-inside: avoid;
       position: relative;
       overflow: hidden;
+       /* cursor: none; ereditato da body/a */
     }
 
     .image-grid img {
       width: 100%;
       display: block;
       transition: transform 0.3s ease, filter 0.3s ease;
-      cursor: pointer;
+       /* Rimosso cursor: pointer; perché usiamo il cursore custom */
     }
 
     .image-grid img:hover {
@@ -106,153 +142,159 @@
     }
 
     .project-title {
-  font-family: 'FormaDJRDisplay', sans-serif;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  padding: 0.8rem 1rem 0.8rem 2.5rem;
-  box-sizing: border-box;
-  opacity: 0;
-  transition: all 0.3s ease;
-  pointer-events: none;
-}
+      font-family: 'FormaDJRDisplay', sans-serif;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0);
+      color: white;
+      padding-bottom: clamp(1.5rem, 2vw, 2.5rem);
+      padding-left: clamp(1.5rem, 2vw, 2.5rem);
+      box-sizing: border-box;
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      font-size:  clamp(1.5rem, 2vw, 2.5rem);
+    }
 
-.project-name {
-      font-size: 2vw;
-  line-height: 1.5;
-}
+    .project-name {
+       line-height: 1.3;
+       display: block;
+    }
 
-.project-type {
-  font-size: 1vw;
-  opacity: 0.8;
-  font-family: 'FormaDJRText', sans-serif;
-}
-
-.image-grid a:hover .project-title {
-  opacity: 1;
-  transform: scale(1.05);
-  background: rgba(0, 0, 0, 0.6);
-}
-
+    .project-type {
+      font-size: clamp(0.8rem, 1.5vw, 1.6rem);
+      opacity: 1;
+      font-family: 'FormaDJRDisplay', sans-serif;
+      display: block;
+      margin-top: 0.2em;
+    }
 
     .image-grid a:hover .project-title {
       opacity: 1;
-      transform: scale(1.05);
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0);
     }
 
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      .fixed-text, .fixed-text-subtitle {
-        font-size: 30px;
-      }
-      .image-grid { column-count: 2; }
+    /* LAYOUT RESPONSIVE (Invariato) */
+    /* Default: 3 Colonne */
+    .sticky-header {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+    .grid-label-samuele {
+        grid-column: 2; grid-row: 1; justify-self: start;
+    }
+    .grid-label-about {
+        grid-column: 3; grid-row: 1; justify-self: start;
     }
 
-    @media (max-width: 480px) {
-      .fixed-text, .fixed-text-subtitle {
-        font-size: 25px;
-      }
-      .image-grid { column-count: 1; }
+    /* Medium screens: 2 Colonne */
+    @media (max-width: 1024px) {
+        .sticky-header {
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(1rem, 3vw, 2rem);
+        }
+        .grid-label-samuele { grid-column: 1; grid-row: 1; }
+        .grid-label-about { grid-column: 2; grid-row: 1; }
+        .image-grid { column-count: 2; }
     }
-    .fixed-header {
-  position: fixed;
-  top: 3vw;
-  left: 34vw;
-  right: 28vw;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 9999;
-  opacity: 0;
-  animation: fadeIn 1s ease-out forwards;
-  animation-delay: 0.2s;
-}
 
-.header-left {
-  display: flex;
-  align-items: center;
-}
-
-.header-name {
-  font-family: 'FormaDJRDisplay', sans-serif;
-  font-size: 2vw;
-}
-
-.header-right .about-link {
-  font-family: 'FormaDJRDisplay', sans-serif;
-  font-size: 2vw;
-  color: white;
-  text-decoration: none;
-  transition: opacity 0.3s;
-}
-
-.header-right .about-link:hover {
-  opacity: 0.7;
-}
+    /* Small screens: 1 Colonna */
+    @media (max-width: 600px) {
+         .sticky-header {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto auto;
+            gap: 5px clamp(0.8rem, 2.5vw, 1.5rem);
+            padding-top: clamp(0.5rem, 1.5vw, 1rem);
+            padding-bottom: clamp(0.5rem, 1.5vw, 1rem);
+         }
+        .grid-label-samuele { grid-column: 1; grid-row: 1; }
+        .grid-label-about { grid-column: 1; grid-row: 2; }
+        .image-grid { column-count: 1; }
+        .grid-label { font-size: clamp(1.2rem, 5vw, 1.8rem); }
+        .content { padding-top: clamp(5rem, 18vw, 8rem); /* Valore da aggiustare! */ }
+    }
 
   </style>
 </head>
 
 <body>
 
-  <!-- Testi fissi -->
-<div class="fixed-header">
-  <div class="header-left">
-    <span class="header-name">Samuele De March</span>
-  </div>
-  <div class="header-right">
-    <a href="#about" class="about-link">About</a>
-  </div>
-</div>
+  <div class="cursor" id="customCursor"></div>
 
+  <header class="sticky-header">
+    <span class="grid-label grid-label-samuele fade-in label-fade-delay">Samuele De March</span>
+    <a href="#about" class="grid-label grid-label-about fade-in label-fade-delay">About</a>
+  </header>
 
+  <div class="content">
+    <div class="image-grid grid-fade-delay">
+      <a href="progetti/konn.html" class="fade-in item-delay-1">
+        <img src="img/imgPreview/konn1.png" alt="Progetto Konn 1">
+        <div class="project-title">
+          <span class="project-name">Konn</span>
+          <span class="project-type">Illustrazione</span>
+        </div>
+      </a>
+      <a href="progetti/konn.html" class="fade-in item-delay-2">
+        <img src="img/imgPreview/konn2.JPG" alt="Progetto Konn 2">
+        <div class="project-title">
+           <span class="project-name">Konn</span>
+           <span class="project-type">Illustrazione</span>
+        </div>
+      </a>
+      <a href="progetti/konn.html" class="fade-in item-delay-3">
+        <img src="img/imgPreview/konn3.JPG" alt="Progetto Konn 3">
+        <div class="project-title">
+           <span class="project-name">Konn</span>
+           <span class="project-type">Illustrazione</span>
+        </div>
+      </a>
+      <a href="progetti/konn.html" class="fade-in item-delay-4">
+        <img src="img/imgPreview/konn4.png" alt="Progetto Konn 4">
+        <div class="project-title">
+           <span class="project-name">Konn</span>
+           <span class="project-type">Illustrazione</span>
+        </div>
+      </a>
+      <a href="progetti/konn.html" class="fade-in item-delay-5">
+        <img src="img/imgPreview/prova%205.png" alt="Progetto Prova 5">
+        <div class="project-title">
+          <span class="project-name">Prova</span>
+          <span class="project-type">Grafica</span>
+        </div>
+      </a>
+      <a href="progetti/altro.html" class="fade-in item-delay-5">
+        <img src="placeholder.jpg" alt="Altro Progetto">
+        <div class="project-title">
+          <span class="project-name">Altro Progetto</span>
+          <span class="project-type">Web Design</span>
+        </div>
+      </a>
+      </div> </div> <script>
+  const cursor = document.getElementById('customCursor');
+  // Seleziona TUTTI i link della pagina per aggiungere l'effetto hover
+  const interactiveElements = document.querySelectorAll('a');
 
-  <!-- Contenuto principale -->
-  <div class="content fade-in delay-2">
-    <div class="image-grid">
-      <a href="progetti/konn.html" class="fade-in delay-3">
-        <img src="img/imgPreview/konn1.png" alt="Progetto 1">
-<div class="project-title">
-  <div class="project-name">Progetto numero uno</div>
-  <div class="project-type">Illustrazione</div>
-</div>
-      </a>
-      <a href="progetti/konn.html" class="fade-in delay-4">
-        <img src="img/imgPreview/konn2.JPG" alt="Progetto 2">
-<div class="project-title">
-  <div class="project-name">Progetto numero uno</div>
-  <div class="project-type">Illustrazione</div>
-</div>
-      </a>
-      <a href="progetti/konn.html" class="fade-in delay-5">
-        <img src="img/imgPreview/konn3.JPG" alt="Progetto 3">
-<div class="project-title">
-  <div class="project-name">Progetto numero uno</div>
-  <div class="project-type">Illustrazione</div>
-</div>
-      </a>
-      <a href="progetti/konn.html" class="fade-in delay-5">
-        <img src="img/imgPreview/konn4.png" alt="Progetto 4">
-<div class="project-title">
-  <div class="project-name">Progetto numero uno</div>
-  <div class="project-type">Illustrazione</div>
-</div>
-      </a>
-      <a href="progetti/konn.html" class="fade-in delay-5">
-        <img src="img/imgPreview/prova 5.png" alt="Progetto 5">
-<div class="project-title">
-  <div class="project-name">Progetto numero uno</div>
-  <div class="project-type">Illustrazione</div>
-</div>
-      </a>
-    </div>
-  </div>
+  // Aggiorna la posizione del cursore custom
+  document.addEventListener('mousemove', (e) => {
+    // Usiamo requestAnimationFrame per performance migliori (opzionale ma consigliato)
+    window.requestAnimationFrame(() => {
+        cursor.style.top = `${e.clientY}px`;
+        cursor.style.left = `${e.clientX}px`;
+    });
+  });
 
-  </script>
+  // Aggiungi/Rimuovi la classe per l'effetto hover del cursore
+  interactiveElements.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.classList.add('cursor-hover-active');
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.classList.remove('cursor-hover-active');
+    });
+  });
+</script>
 
 </body>
 </html>
