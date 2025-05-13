@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio Samuele De March</title>
+
+  <style>
+    /* === DEFINIZIONE FONT === */
+    @font-face {
+      font-family: 'FormaDJRText';
+      src: url('fonts/FormaDJRText-Medium-Testing.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'PPEditorialOld';
+      src: url('fonts/PPEditorialOld-ThinItalic.woff') format('woff');
+    }
+
+    @font-face {
+      font-family: 'FormaDJRDisplay';
+      src: url('fonts/FormaDJRDisplay-Regular-Testing.otf') format('opentype');
+    }
+
+    /* === RESET BASE E STILI GLOBALI === */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'FormaDJRText', sans-serif;
+      background-color: #000000;
+      color: rgb(255, 255, 255);
+      cursor: none; /* Nasconde il cursore di sistema */
+    }
+
+    a {
+      color: rgb(255, 255, 255);
+      text-decoration: none;
+      cursor: none; /* Nasconde il cursore di sistema anche per i link */
+    }
+
+    /* === CURSORE PERSONALIZZATO === */
+    .cursor {
+      position: fixed;
+      top: 0; 
+      left: 0; 
+      width: 20px; 
+      height: 20px;
+      background-color: grey; 
+      border-radius: 50%;
+      pointer-events: none; /* Non interagisce con gli eventi del mouse */
+      z-index: 1001; /* Sopra la maggior parte degli elementi */
+      transform: translate(-50%, -50%) scale(1); 
+      transition: background-color 0.3s ease, transform 0.3s ease; 
+    }
+
+    .cursor.cursor-hover-active {
+      background-color: white; 
+      transform: translate(-50%, -50%) scale(1.3); /* Leggermente più grande su hover di elementi interattivi */
+    }
+
+    /* === ANIMAZIONI === */
+    /* Animazione generica per dissolvenza in entrata al caricamento pagina */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Animazione specifica per gli elementi del menu a tendina al click */
+    @keyframes dropdownFadeIn {
+      from { opacity: 0; transform: translateY(-5px); } /* Leggero slide dall'alto */
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Classe base per animazione fadeIn al caricamento */
+    .fade-in { 
+      opacity: 0; /* Inizia trasparente */
+      animation: fadeIn 1s ease-out forwards;
+    }
+    /* Classi per ritardare l'animazione fadeIn al caricamento */
+    .label-fade-delay { animation-delay: 0.2s; }
+    .grid-fade-delay { animation-delay: 0.4s; } /* Per la griglia immagini nel suo complesso */
+    .item-delay-1 { animation-delay: 0.6s; } /* Ritardi per singoli elementi della griglia */
+    .item-delay-2 { animation-delay: 0.8s; }
+    .item-delay-3 { animation-delay: 1.0s; }
+    .item-delay-4 { animation-delay: 1.2s; }
+    .item-delay-5 { animation-delay: 1.4s; }
+
+    /* === HEADER FISSO === */
+    .sticky-header {
+      position: fixed;
+      top: 0; 
+      left: 0;
+      width: 100%;
+      z-index: 1000; /* Sotto il cursore custom, sopra il contenuto */
+      background-color: transparent; /* Sfondo trasparente come da richiesta */
+      box-sizing: border-box;
+      display: grid;
+      align-items: start; /* Allinea gli item della griglia (blocchi di testo) in alto */
+      padding: clamp(0.8rem, 1.5vw, 1.5rem) clamp(1.5rem, 4vw, 3rem); /* Padding verticale e orizzontale */
+      gap: clamp(1rem, 3vw, 2rem); /* Spazio tra le colonne della griglia dell'header */
+    }
+
+    /* Stile generale per le etichette nell'header */
+    .grid-label {
+      font-family: 'FormaDJRDisplay', sans-serif;
+      font-size: clamp(1.5rem, 2vw, 2.5rem); 
+    }
+
+    /* Effetto hover per link "About" e link nel sottomenu */
+    .grid-label-about:hover,
+    .header-sub-nav a:hover { 
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+
+    /* Contenitore per "Samuele De March" e il suo sottomenu */
+    .grid-label-samuele { 
+      display: flex;
+      flex-direction: column; /* "Samuele De March" sopra, sottomenu sotto */
+      align-items: flex-start; /* Allineamento a sinistra del contenuto */
+    }
+    
+    /* Elemento cliccabile per aprire/chiudere il dropdown */
+    #samuele-dropdown-toggle {
+      cursor: pointer; /* Indica interattività */
+      display: inline-block; 
+    }
+
+    /* Contenitore per i link "Bio" e "Home" (sottomenu) */
+    .header-sub-nav { 
+      width: 100%; 
+      /* margin-top calcolato per posizionare Bio/Home sotto la .screen-wide-internal-line, 
+         mantenendo una spaziatura (G) di 0.35em sopra e sotto la linea.
+         G + spessore_linea (1px) + G */
+      margin-top: calc(0.35em + 1px + 0.35em); 
+      display: none; /* Nascosto di default, mostrato con JS */
+      opacity: 0; 
+    }
+
+    .header-sub-nav a {
+      display: block; /* Fa andare i link "Bio" e "Home" a capo */
+      font-family: 'FormaDJRDisplay', sans-serif;
+      /* font-size ereditata da .grid-label, quindi uguale a "Samuele De March" */
+      line-height: 1.3; 
+    }
+    
+    /* Linea interna all'header, tra "Samuele De March" e "Bio/Home" */
+    /* Questa linea è SEMPRE VISIBILE dopo il caricamento pagina, non fa parte del toggle dropdown */
+    .screen-wide-internal-line { 
+      position: fixed;
+      left: clamp(1.5rem, 4vw, 3rem); /* Stessa larghezza del .divider principale */  
+      right: clamp(1.5rem, 4vw, 3rem);  
+      height: 1px;
+      background-color: rgb(255, 255, 255);
+      z-index: 999; /* Sotto l'header text, sopra il contenuto pagina */
+      /* Calcolo del 'top' per posizionare la linea G (0.35em) sotto il testo "Samuele De March" stimato */
+      /* P_T_H = padding-top di .sticky-header */
+      /* H_SDM_TEXT_BLOCK = altezza stimata del testo "Samuele De March" (font-size * fattore_line-height) */
+      /* G = 0.35em (spazio desiderato sopra la linea) */
+      top: calc(
+        clamp(0.8rem, 1.5vw, 1.5rem) + /* P_T_H */            
+        (clamp(1.5rem, 2vw, 2.5rem) * 1.2) + /* H_SDM_TEXT_BLOCK (stima con line-height ~1.2) */     
+        0.35em /* G */                                   
+      );
+      opacity: 0; /* Inizialmente trasparente per animazione fadeIn */
+      animation: fadeIn 1s ease-out forwards; /* Animazione per caricamento pagina */
+      animation-delay: 0.25s; /* Leggero ritardo */
+    }
+    
+    /* Linea principale sotto l'intero header, PARTE DEL DROPDOWN */
+    .divider { 
+      position: fixed;
+      top: clamp(6rem, 15vw, 11rem); /* Posizione stimata, DA TESTARE E AGGIUSTARE */
+      left: clamp(1.5rem, 4vw, 3rem);
+      right: clamp(1.5rem, 4vw, 3rem);
+      height: 1px;
+      background-color: rgb(255, 255, 255);
+      z-index: 999;
+      display: none; /* Nascosto di default, toggle con JS */
+      opacity: 0;    
+      animation: none; /* Animazione di caricamento pagina rimossa, gestita da .dropdown-item-attivo */
+    }
+
+    /* === STILI DROPDOWN === */
+    /* Classe aggiunta con JS per mostrare e animare gli elementi del dropdown */
+    .dropdown-item-attivo { 
+      display: block; /* Sovrascrive display:none; non serve !important se specificità è corretta */
+      animation: dropdownFadeIn 0.4s ease-out forwards;
+    }
+
+    /* === CONTENUTO PRINCIPALE === */
+    .content {
+      padding-left: clamp(1.5rem, 4vw, 3rem);
+      padding-right: clamp(1.5rem, 4vw, 3rem);
+      padding-bottom: clamp(1.5rem, 4vw, 3rem);
+      /* padding-top per evitare sovrapposizione con header fisso. DA TESTARE E AGGIUSTARE. */
+      padding-top: clamp(7rem, 14vw, 13.5rem); 
+    }
+
+    /* === GRIGLIA IMMAGINI === */
+    .image-grid { 
+      column-count: 3; 
+      column-gap: clamp(1rem, 3vw, 2rem); 
+      width: 100%; 
+    }
+    .image-grid a { 
+      display: inline-block; 
+      width: 100%; 
+      margin-bottom: clamp(0.5rem, 2vw, 1rem); 
+      break-inside: avoid; /* Evita che un item si spezzi tra colonne */
+      position: relative; 
+      overflow: hidden; 
+    }
+    .image-grid img { 
+      width: 100%; 
+      display: block; 
+      transition: transform 0.3s ease, filter 0.3s ease; 
+    }
+    .image-grid img:hover { 
+      transform: scale(1.03); 
+      filter: brightness(1.2); 
+    }
+    /* Titolo del progetto sull'immagine (appare su hover) */
+    .project-title { 
+      font-family: 'FormaDJRDisplay', sans-serif; 
+      position: absolute; 
+      bottom: 0; left: 0; right: 0; 
+      background: rgba(0, 0, 0, 0); /* Sfondo trasparente, potrebbe essere un gradiente leggero */
+      color: white; 
+      padding-bottom: clamp(1.5rem, 2vw, 2.5rem); 
+      padding-left: clamp(1.5rem, 2vw, 2.5rem); 
+      box-sizing: border-box; 
+      opacity: 0; /* Nascosto di default */
+      transition: all 0.3s ease; 
+      pointer-events: none; 
+      font-size:  clamp(1.5rem, 2vw, 2.5rem); 
+    }
+    .project-name { 
+      line-height: 1.3; 
+      display: block; 
+    }
+    .project-type { 
+      font-size: clamp(0.8rem, 1.5vw, 1.6rem); 
+      opacity: 1; 
+      font-family: 'FormaDJRDisplay', sans-serif; 
+      display: block; 
+      margin-top: 0.2em; 
+    }
+    .image-grid a:hover .project-title { 
+      opacity: 1; /* Mostra titolo su hover dell'immagine */
+    }
+
+    /* === LAYOUT RESPONSIVE === */
+    /* Default (Desktop): Header a 3 colonne, Griglia immagini a 3 colonne */
+    .sticky-header { 
+      grid-template-columns: 1fr 1fr 1fr; 
+    }
+    .grid-label-samuele { 
+      grid-column: 2 / span 1; /* Occupa la seconda colonna */
+      grid-row: 1; 
+      justify-self: start; /* Allineato all'inizio della cella di griglia */
+    }
+    .grid-label-about { 
+      grid-column: 3 / span 1; /* Occupa la terza colonna */
+      grid-row: 1; 
+      justify-self: start; 
+    }
+
+    /* Medium screens (Tablet): Header a 2 colonne, Griglia immagini a 2 colonne */
+    @media (max-width: 1024px) {
+      .sticky-header { 
+        grid-template-columns: 1fr 1fr; 
+        gap: clamp(1rem, 3vw, 2rem); 
+      }
+      .grid-label-samuele { grid-column: 1 / span 1; } /* Prima colonna */
+      .grid-label-about { grid-column: 2 / span 1; }    /* Seconda colonna */
+      .image-grid { column-count: 2; }
+      
+      /* Aggiustamenti verticali per .divider e .content. DA TESTARE. */
+      .divider { top: clamp(6rem, 10vw, 9rem); }
+      .content { padding-top: clamp(7rem, 12vw, 10.5rem); }
+    }
+
+    /* Small screens (Mobile): Header e Griglia immagini a 1 colonna */
+    @media (max-width: 600px) {
+      .sticky-header {
+        grid-template-columns: 1fr; /* Singola colonna */
+        grid-template-rows: auto auto; /* Due righe per "Samuele" e "About" */
+        gap: 5px clamp(0.8rem, 2.5vw, 1.5rem); /* Gap ridotto */
+        padding-top: clamp(0.5rem, 1.5vw, 1rem);
+        padding-bottom: clamp(0.5rem, 1.5vw, 1rem);
+        /* padding-left/right ereditati da .sticky-header default: clamp(1.5rem, 4vw, 3rem) */
+        /* Se si desidera un padding laterale diverso su mobile, aggiungerlo qui, es: */
+        /* padding-left: clamp(0.8rem, 2.5vw, 1.5rem); */
+        /* padding-right: clamp(0.8rem, 2.5vw, 1.5rem); */
+      }
+      .grid-label-samuele { grid-column: 1; grid-row: 1; } 
+      .grid-label-about { grid-column: 1; grid-row: 2; } 
+      .image-grid { column-count: 1; }
+      
+      /* Dimensione font etichette header ridotta su mobile */
+      .grid-label { font-size: clamp(1.2rem, 5vw, 1.8rem); } 
+      
+      /* Linea interna all'header su mobile */
+      .screen-wide-internal-line { 
+        left: clamp(0.8rem, 2.5vw, 1.5rem);  /* Adatta larghezza ai padding ridotti del .divider */
+        right: clamp(0.8rem, 2.5vw, 1.5rem); 
+        /* Calcolo 'top' con font e padding per mobile */
+        top: calc(
+          clamp(0.5rem, 1.5vw, 1rem) +           /* P_T_H (small) */ 
+          (clamp(1.2rem, 5vw, 1.8rem) * 1.2) +   /* H_SDM_TEXT_BLOCK (small) */ 
+          0.35em                                 /* G */
+        );
+      }
+
+      /* Sottomenu header su mobile */
+      .header-sub-nav { 
+        margin-top: calc(0.35em + 1px + 0.35em); 
+      }
+
+      /* Linea principale sotto header su mobile (parte del dropdown) */
+      .divider { 
+        top: clamp(7.5rem, 21vw, 11rem); /* DA TESTARE E AGGIUSTARE */
+        left: clamp(0.8rem, 2.5vw, 1.5rem);
+        right: clamp(0.8rem, 2.5vw, 1.5rem);
+      }
+      /* Contenuto principale su mobile */
+      .content {
+        padding-top: clamp(8.5rem, 24vw, 12.5rem); /* DA TESTARE E AGGIUSTARE */
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="cursor" id="customCursor"></div>
+
+  <header class="sticky-header">
+    <div class="grid-label grid-label-samuele fade-in label-fade-delay">
+        <span id="samuele-dropdown-toggle">Samuele De March</span> 
+        <div class="header-sub-nav"> 
+          <a href="/index.html">Home</a>
+            <a href="Bio/index.html">Bio</a>
+        </div>
+    </div>
+    <a href="" class="grid-label grid-label-about fade-in label-fade-delay">Galleria</a>
+    
+    <div class="screen-wide-internal-line"></div> 
+  </header>
+
+  <div class="divider"></div>
+
+  <div class="content">
+    <div class="image-grid grid-fade-delay">
+      <a href="/progetti/konn.html" class="fade-in item-delay-1">
+        <img src="/img/imgPreview/kon glass.gif" alt="Progetto Konn 1">
+        <div class="project-title">
+          <span class="project-name">Konn</span>
+          <span class="project-type">Illustrazione</span>
+        </div>
+      </a>
+      <a href="/progetti/konn.html" class="fade-in item-delay-2">
+        <img src="/img/imgPreview/konn2.JPG" alt="Progetto Konn 2">
+        <div class="project-title">
+            <span class="project-name">Konn</span>
+            <span class="project-type">Illustrazione</span>
+        </div>
+      </a>
+      <a href="/progetti/konn.html" class="fade-in item-delay-3">
+        <img src="/img/imgPreview/konn3.JPG" alt="Progetto Konn 3">
+        <div class="project-title">
+            <span class="project-name">Konn</span>
+            <span class="project-type">Illustrazione</span>
+        </div>
+      </a>
+      <a href="/progetti/konn.html" class="fade-in item-delay-4">
+        <img src="/img/imgPreview/konn4.png" alt="Progetto Konn 4">
+        <div class="project-title">
+            <span class="project-name">Konn</span>
+            <span class="project-type">Illustrazione</span>
+        </div>
+      </a>
+      <a href="/progetti/konn.html" class="fade-in item-delay-5">
+        <img src="/img/imgPreview/prova%205.png" alt="Progetto Prova 5">
+        <div class="project-title">
+          <span class="project-name">Prova</span>
+          <span class="project-type">Grafica</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // --- SCRIPT CURSORE PERSONALIZZATO ---
+    const customCursorElement = document.getElementById('customCursor'); 
+    // Elementi che attivano l'effetto hover del cursore
+    const interactiveElements = document.querySelectorAll('a, #samuele-dropdown-toggle');
+
+    if (customCursorElement) { // Controlla se l'elemento cursore esiste
+        document.addEventListener('mousemove', (e) => {
+            // Aggiorna la posizione del cursore custom seguendo il mouse
+            window.requestAnimationFrame(() => { // Ottimizzazione per animazioni fluide
+                customCursorElement.style.top = `${e.clientY}px`;
+                customCursorElement.style.left = `${e.clientX}px`;
+            });
+        });
+
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                customCursorElement.classList.add('cursor-hover-active');
+            });
+            el.addEventListener('mouseleave', () => {
+                customCursorElement.classList.remove('cursor-hover-active');
+            });
+        });
+    }
+
+    // --- SCRIPT MENU A TENDINA ---
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleElement = document.getElementById('samuele-dropdown-toggle');
+        const subNav = document.querySelector('.header-sub-nav'); // Menu Bio/Home
+        const mainDivider = document.querySelector('.divider');   // Linea principale sotto l'header
+
+        // Controlla che tutti gli elementi necessari esistano prima di aggiungere l'event listener
+        if (toggleElement && subNav && mainDivider) { 
+            toggleElement.addEventListener('click', function(event) {
+                event.preventDefault(); // Previene azioni di default (es. se il toggle fosse un link <a>)
+                
+                // Alterna la classe per mostrare/nascondere il sottomenu Bio/Home
+                subNav.classList.toggle('dropdown-item-attivo');
+                // Alterna la classe per mostrare/nascondere la linea divisoria principale
+                mainDivider.classList.toggle('dropdown-item-attivo'); 
+            });
+        }
+    });
+  </script>
+
+</body>
+</html>
