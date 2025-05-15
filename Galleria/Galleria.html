@@ -41,20 +41,20 @@
     /* === CURSORE PERSONALIZZATO === */
     .cursor {
       position: fixed;
-      top: 0; 
-      left: 0; 
-      width: 20px; 
+      top: 0;
+      left: 0;
+      width: 20px;
       height: 20px;
-      background-color: grey; 
+      background-color: grey;
       border-radius: 50%;
       pointer-events: none; /* Non interagisce con gli eventi del mouse */
       z-index: 1001; /* Sopra la maggior parte degli elementi */
-      transform: translate(-50%, -50%) scale(1); 
-      transition: background-color 0.3s ease, transform 0.3s ease; 
+      transform: translate(-50%, -50%) scale(1);
+      transition: background-color 0.3s ease, transform 0.3s ease;
     }
 
     .cursor.cursor-hover-active {
-      background-color: white; 
+      background-color: white;
       transform: translate(-50%, -50%) scale(1.3); /* Leggermente più grande su hover di elementi interattivi */
     }
 
@@ -69,7 +69,7 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .fade-in { 
+    .fade-in {
       opacity: 0;
       animation: fadeIn 1s ease-out forwards;
     }
@@ -84,11 +84,11 @@
     /* === HEADER FISSO === */
     .sticky-header {
       position: fixed;
-      top: 0; 
+      top: 0;
       left: 0;
       width: 100%;
       z-index: 1000;
-      background-color: transparent;
+      background-color: transparent; 
       box-sizing: border-box;
       display: grid;
       align-items: start;
@@ -98,16 +98,16 @@
 
     .grid-label {
       font-family: 'FormaDJRDisplay', sans-serif;
-      font-size: clamp(1.5rem, 2vw, 2.5rem); 
+      font-size: clamp(1.5rem, 2vw, 2.5rem);
     }
 
     .grid-label-about:hover,
-    .header-sub-nav a:hover { 
+    .header-sub-nav a:hover {
       opacity: 0.7;
       transition: opacity 0.3s;
     }
 
-    .grid-label-samuele { 
+    .grid-label-samuele {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -115,23 +115,23 @@
     
     #samuele-dropdown-toggle {
       cursor: pointer;
-      display: inline-block; 
+      display: inline-block;
     }
 
-    .header-sub-nav { 
-      width: 100%; 
-      margin-top: calc(0.35em + 1px + 0.35em); 
+    .header-sub-nav {
+      width: 100%;
+      margin-top: calc(0.35em + 1px + 0.35em);
       display: none; /* Nascosto di default, mostrato con JS */
-      opacity: 0; 
+      opacity: 0;
     }
 
     .header-sub-nav a {
       display: block;
       font-family: 'FormaDJRDisplay', sans-serif;
-      line-height: 1.3; 
+      line-height: 1.3;
     }
     
-    .screen-wide-internal-line { 
+    .screen-wide-internal-line {
       position: fixed;
       left: clamp(1.5rem, 4vw, 3rem);  
       right: clamp(1.5rem, 4vw, 3rem);  
@@ -139,30 +139,30 @@
       background-color: rgb(255, 255, 255);
       z-index: 999;
       top: calc(
-        clamp(0.8rem, 1.5vw, 1.5rem) + 
-        (clamp(1.5rem, 2vw, 2.5rem) * 1.2) + 
-        0.35em 
+        clamp(0.8rem, 1.5vw, 1.5rem) +
+        (clamp(1.5rem, 2vw, 2.5rem) * 1.2) +
+        0.35em
       );
       opacity: 0;
       animation: fadeIn 1s ease-out forwards;
       animation-delay: 0.25s;
     }
     
-    .divider { 
+    .divider {
       position: fixed;
       left: clamp(1.5rem, 4vw, 3rem);
       right: clamp(1.5rem, 4vw, 3rem);
       height: 1px;
       background-color: rgb(255, 255, 255);
       z-index: 999;
-      display: none; 
-      opacity: 0;    
-      animation: none; 
+      display: none;
+      opacity: 0;      
+      animation: none;
     }
 
     /* === STILI DROPDOWN === */
-    .dropdown-item-attivo { 
-      display: block !important; 
+    .dropdown-item-attivo {
+      display: block !important;
       animation: dropdownFadeIn 0.4s ease-out forwards;
     }
 
@@ -171,79 +171,80 @@
       padding-left: clamp(1.5rem, 4vw, 3rem);
       padding-right: clamp(1.5rem, 4vw, 3rem);
       padding-bottom: clamp(1.5rem, 4vw, 3rem);
+      /* padding-top sarà gestito da JavaScript */
     }
 
     /* === GRIGLIA IMMAGINI === */
-    .image-grid { 
-      column-count: 3; 
-      column-gap: clamp(1rem, 3vw, 2rem); 
-      width: 100%; 
+    .image-grid {
+      column-count: 3;
+      column-gap: clamp(1rem, 3vw, 2rem);
+      width: 100%;
     }
-    .image-grid a { 
-      display: inline-block; 
-      width: 100%; 
-      margin-bottom: clamp(0.5rem, 2vw, 1rem); 
+    .image-grid a {
+      display: inline-block;
+      width: 100%;
+      margin-bottom: clamp(0.5rem, 2vw, 1rem);
       break-inside: avoid;
-      position: relative; 
-      overflow: hidden; 
+      position: relative;
+      overflow: hidden;
     }
-    .image-grid img { 
-      width: 100%; 
-      display: block; 
-      transition: transform 0.3s ease, filter 0.3s ease; 
+    .image-grid img {
+      width: 100%;
+      display: block;
+      transition: transform 0.3s ease, filter 0.3s ease;
     }
-    .image-grid img:hover { 
-      transform: scale(1.03); 
-      filter: brightness(1.2); 
+    .image-grid img:hover {
+      transform: scale(1.03);
+      filter: brightness(1.2);
     }
-    .project-title { 
-      font-family: 'FormaDJRDisplay', sans-serif; 
-      position: absolute; 
-      bottom: 0; left: 0; right: 0; 
+    .project-title {
+      font-family: 'FormaDJRDisplay', sans-serif;
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
       background: rgba(0, 0, 0, 0);
-      color: white; 
-      padding-bottom: clamp(1.5rem, 2vw, 2.5rem); 
-      padding-left: clamp(1.5rem, 2vw, 2.5rem); 
-      box-sizing: border-box; 
+      color: white;
+      padding-bottom: clamp(1.5rem, 2vw, 2.5rem);
+      padding-left: clamp(1.5rem, 2vw, 2.5rem);
+      box-sizing: border-box;
       opacity: 0;
-      transition: all 0.3s ease; 
-      pointer-events: none; 
-      font-size:  clamp(1.5rem, 2vw, 2.5rem); 
+      transition: all 0.3s ease;
+      pointer-events: none;
+      font-size:  clamp(1.5rem, 2vw, 2.5rem);
     }
-    .project-name { 
-      line-height: 1.3; 
-      display: block; 
+    .project-name {
+      line-height: 1.3;
+      display: block;
     }
-    .project-type { 
-      font-size: clamp(0.8rem, 1.5vw, 1.6rem); 
-      opacity: 1; 
-      font-family: 'FormaDJRDisplay', sans-serif; 
-      display: block; 
-      margin-top: 0.2em; 
+    .project-type {
+      font-size: clamp(0.8rem, 1.5vw, 1.6rem);
+      opacity: 1;
+      font-family: 'FormaDJRDisplay', sans-serif;
+      display: block;
+      margin-top: 0.2em;
     }
-    .image-grid a:hover .project-title { 
+    .image-grid a:hover .project-title {
       opacity: 1;
     }
 
     /* === LAYOUT RESPONSIVE === */
-    .sticky-header { 
-      grid-template-columns: 1fr 1fr 1fr; 
+    .sticky-header {
+      grid-template-columns: 1fr 1fr 1fr;
     }
-    .grid-label-samuele { 
+    .grid-label-samuele {
       grid-column: 2 / span 1;
-      grid-row: 1; 
+      grid-row: 1;
       justify-self: start;
     }
-    .grid-label-about { 
+    .grid-label-about {
       grid-column: 3 / span 1;
-      grid-row: 1; 
-      justify-self: start; 
+      grid-row: 1;
+      justify-self: start;
     }
 
     @media (max-width: 1024px) {
-      .sticky-header { 
-        grid-template-columns: 1fr 1fr; 
-        gap: clamp(1rem, 3vw, 2rem); 
+      .sticky-header {
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(1rem, 3vw, 2rem);
       }
       .grid-label-samuele { grid-column: 1 / span 1; }
       .grid-label-about { grid-column: 2 / span 1; }
@@ -252,41 +253,40 @@
 
     @media (max-width: 600px) {
       .sticky-header {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto;
-        gap: 5px clamp(0.8rem, 2.5vw, 1.5rem);
+        grid-template-columns: 1fr; 
+        grid-template-rows: auto auto; 
+        gap: 5px clamp(0.8rem, 2.5vw, 1.5rem); 
         padding-top: clamp(0.5rem, 1.5vw, 1rem);
-        padding-bottom: clamp(0.5rem, 1.5vw, 1rem);
+        padding-bottom: clamp(0.5rem, 1.5vw, 1rem); 
       }
-      .grid-label-samuele { 
+      .grid-label-samuele {
         grid-column: 1; 
-        grid-row: 1; 
-      } 
+        grid-row: 1;    
+      }
       .grid-label-about { /* "Galleria" */
         grid-column: 1; 
-        grid-row: 2; 
-        position: relative; 
-        top: 10px;      
-      } 
-      .image-grid { column-count: 1; }
+        grid-row: 2;    
+        margin-top: 10px; /* Aggiunge spazio sopra "Galleria" */
+      }
+      .image-grid { column-count: 1; } 
       
-      .grid-label { font-size: clamp(1.2rem, 5vw, 1.8rem); } 
+      .grid-label { font-size: clamp(1.2rem, 5vw, 1.8rem); }
       
-      .screen-wide-internal-line { 
+      .screen-wide-internal-line {
         left: clamp(0.8rem, 2.5vw, 1.5rem);
-        right: clamp(0.8rem, 2.5vw, 1.5rem); 
-        top: calc(
-          clamp(0.5rem, 1.5vw, 1rem) +   
+        right: clamp(0.8rem, 2.5vw, 1.5rem);
+        top: calc( 
+          clamp(0.5rem, 1.5vw, 1rem) +  
           (clamp(1.2rem, 5vw, 1.8rem) * 1.2) + 
-          0.35em
+          0.35em 
         );
       }
 
-      .header-sub-nav { 
-        margin-top: calc(0.35em + 1px + 0.35em); 
+      .header-sub-nav {
+        margin-top: calc(0.35em + 1px + 0.35em);
       }
 
-      .divider { 
+      .divider {
         left: clamp(0.8rem, 2.5vw, 1.5rem);
         right: clamp(0.8rem, 2.5vw, 1.5rem);
       }
@@ -300,15 +300,15 @@
 
   <header class="sticky-header">
     <div class="grid-label grid-label-samuele fade-in label-fade-delay">
-        <span id="samuele-dropdown-toggle">Samuele De March</span> 
-        <div class="header-sub-nav"> 
+        <span id="samuele-dropdown-toggle">Samuele De March</span>
+        <div class="header-sub-nav">
           <a href="/portfolio/index.html">Home</a>
           <a href="/portfolio/Bio/index.html">Bio</a>
         </div>
     </div>
     <a href="/portfolio/index.html" class="grid-label grid-label-about fade-in label-fade-delay">Galleria</a>
     
-    <div class="screen-wide-internal-line"></div> 
+    <div class="screen-wide-internal-line"></div>
   </header>
 
   <div class="divider"></div>
@@ -354,7 +354,7 @@
 
   <script>
     // --- SCRIPT CURSORE PERSONALIZZATO ---
-    const customCursorElement = document.getElementById('customCursor'); 
+    const customCursorElement = document.getElementById('customCursor');
     const interactiveElements = document.querySelectorAll('a, #samuele-dropdown-toggle');
 
     if (customCursorElement) {
@@ -401,7 +401,7 @@
             content.style.paddingTop = newContentPaddingTop + 'px';
         } else {
             // Dropdown è chiuso
-            mainDivider.style.top = ''; 
+            mainDivider.style.top = '';
             
             const headerRect = header.getBoundingClientRect();
             let defaultContentPaddingTop = headerRect.bottom + spacingHeaderToContentDefault;
@@ -412,20 +412,20 @@
     // --- SCRIPT MENU A TENDINA (MODIFICATO PER INCLUDERE AGGIORNAMENTO LAYOUT) ---
     document.addEventListener('DOMContentLoaded', function() {
         const toggleElement = document.getElementById('samuele-dropdown-toggle');
-        const subNav = document.querySelector('.header-sub-nav'); 
-        const mainDivider = document.querySelector('.divider');   
+        const subNav = document.querySelector('.header-sub-nav');
+        const mainDivider = document.querySelector('.divider');  
 
-        if (toggleElement && subNav && mainDivider) { 
+        if (toggleElement && subNav && mainDivider) {
             toggleElement.addEventListener('click', function(event) {
-                event.preventDefault(); 
+                event.preventDefault();
                 
                 subNav.classList.toggle('dropdown-item-attivo');
-                mainDivider.classList.toggle('dropdown-item-attivo'); 
+                mainDivider.classList.toggle('dropdown-item-attivo');
                 
                 requestAnimationFrame(updateDynamicHeaderLayout);
             });
         }
-        requestAnimationFrame(updateDynamicHeaderLayout);
+        requestAnimationFrame(updateDynamicHeaderLayout); // Chiamata iniziale
     });
 
     window.addEventListener('resize', () => {
