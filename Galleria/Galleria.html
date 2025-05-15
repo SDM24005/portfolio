@@ -150,7 +150,6 @@
     
     .divider { 
       position: fixed;
-      /* top: clamp(6rem, 15vw, 11rem); -- JS gestirà il top quando il menu è attivo */
       left: clamp(1.5rem, 4vw, 3rem);
       right: clamp(1.5rem, 4vw, 3rem);
       height: 1px;
@@ -163,7 +162,7 @@
 
     /* === STILI DROPDOWN === */
     .dropdown-item-attivo { 
-      display: block !important; /* Usa !important per sovrascrivere display:none con certezza */
+      display: block !important; 
       animation: dropdownFadeIn 0.4s ease-out forwards;
     }
 
@@ -172,11 +171,6 @@
       padding-left: clamp(1.5rem, 4vw, 3rem);
       padding-right: clamp(1.5rem, 4vw, 3rem);
       padding-bottom: clamp(1.5rem, 4vw, 3rem);
-      /* padding-top è gestito da JavaScript. 
-         I valori clamp originali possono essere lasciati qui come fallback se JS è disabilitato,
-         oppure rimossi se si preferisce che JS abbia il controllo esclusivo.
-         Esempio di fallback: padding-top: clamp(7rem, 14vw, 13.5rem); 
-      */
     }
 
     /* === GRIGLIA IMMAGINI === */
@@ -254,9 +248,6 @@
       .grid-label-samuele { grid-column: 1 / span 1; }
       .grid-label-about { grid-column: 2 / span 1; }
       .image-grid { column-count: 2; }
-      
-      /* .divider { top: clamp(6rem, 10vw, 9rem); } -- JS gestirà */
-      /* .content { padding-top: clamp(7rem, 12vw, 10.5rem); } -- JS gestirà */
     }
 
     @media (max-width: 600px) {
@@ -274,8 +265,8 @@
       .grid-label-about { /* "Galleria" */
         grid-column: 1; 
         grid-row: 2; 
-        position: relative; /* Necessario per usare 'top' */
-        top: 10px;          /* Abbassa "Galleria" di 10px. Regola questo valore. */
+        position: relative; 
+        top: 10px;      
       } 
       .image-grid { column-count: 1; }
       
@@ -296,11 +287,9 @@
       }
 
       .divider { 
-        /* top: clamp(7.5rem, 21vw, 11rem); -- JS gestirà */
         left: clamp(0.8rem, 2.5vw, 1.5rem);
         right: clamp(0.8rem, 2.5vw, 1.5rem);
       }
-      /* .content { padding-top: clamp(8.5rem, 24vw, 12.5rem); } -- JS gestirà */
     }
   </style>
 </head>
@@ -314,10 +303,10 @@
         <span id="samuele-dropdown-toggle">Samuele De March</span> 
         <div class="header-sub-nav"> 
           <a href="/portfolio/index.html">Home</a>
-            <a href="Bio/index.html">Bio</a>
+          <a href="/portfolio/Bio/index.html">Bio</a>
         </div>
     </div>
-    <a href="" class="grid-label grid-label-about fade-in label-fade-delay">Galleria</a>
+    <a href="/portfolio/index.html" class="grid-label grid-label-about fade-in label-fade-delay">Galleria</a>
     
     <div class="screen-wide-internal-line"></div> 
   </header>
@@ -326,36 +315,35 @@
 
   <div class="content">
     <div class="image-grid grid-fade-delay">
-      <a href="/progetti/konn.html" class="fade-in item-delay-1">
-        <img src="/img/imgPreview/kon glass.gif" alt="Progetto Konn 1">
+      <a href="/portfolio/progetti/konn.html" class="fade-in item-delay-1">
+        <img src="/portfolio/img/imgPreview/kon glass.gif" alt="Progetto Konn 1">
         <div class="project-title">
           <span class="project-name">Konn</span>
           <span class="project-type">Illustrazione</span>
         </div>
       </a>
-      <a href="/progetti/konn.html" class="fade-in item-delay-2">
-        <img src="/img/imgPreview/konn2.JPG" alt="Progetto Konn 2">
+      <a href="/portfolio/progetti/konn.html" class="fade-in item-delay-2">
+        <img src="/portfolio/img/imgPreview/konn2.JPG" alt="Progetto Konn 2">
         <div class="project-title">
             <span class="project-name">Konn</span>
             <span class="project-type">Illustrazione</span>
         </div>
       </a>
-      <a href="/progetti/konn.html" class="fade-in item-delay-3">
-        <img src="/img/imgPreview/konn3.JPG" alt="Progetto Konn 3">
+      <a href="/portfolio/progetti/konn.html" class="fade-in item-delay-3">
+        <img src="/portfolio/img/imgPreview/konn3.JPG" alt="Progetto Konn 3">
         <div class="project-title">
             <span class="project-name">Konn</span>
             <span class="project-type">Illustrazione</span>
         </div>
       </a>
-      <a href="/progetti/konn.html" class="fade-in item-delay-4">
-        <img src="/img/imgPreview/konn4.png" alt="Progetto Konn 4">
+      <a href="/portfolio/progetti/konn.html" class="fade-in item-delay-4">
+        <img src="/portfolio/img/imgPreview/konn4.png" alt="Progetto Konn 4">
         <div class="project-title">
             <span class="project-name">Konn</span>
             <span class="project-type">Illustrazione</span>
         </div>
       </a>
-      <a href="/progetti/konn.html" class="fade-in item-delay-5">
-        <img src="/img/imgPreview/prova%205.png" alt="Progetto Prova 5">
+      <a href="/portfolio/progetti/konn.html" class="fade-in item-delay-5"> <img src="/portfolio/img/imgPreview/prova%205.png" alt="Progetto Prova 5">
         <div class="project-title">
           <span class="project-name">Prova</span>
           <span class="project-type">Grafica</span>
