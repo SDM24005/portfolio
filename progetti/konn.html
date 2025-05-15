@@ -3,137 +3,348 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Progetto X</title>
+  <title>Portfolio Samuele De March</title>
 
   <style>
+    /* === DEFINIZIONE FONT === */
     @font-face {
       font-family: 'FormaDJRText';
       src: url('fonts/FormaDJRText-Medium-Testing.otf') format('opentype');
     }
+
     @font-face {
       font-family: 'PPEditorialOld';
       src: url('fonts/PPEditorialOld-ThinItalic.woff') format('woff');
     }
+
     @font-face {
       font-family: 'FormaDJRDisplay';
       src: url('fonts/FormaDJRDisplay-Regular-Testing.otf') format('opentype');
     }
 
-    /* RESET BASE */
+    /* === RESET BASE E STILI GLOBALI === */
     body {
       margin: 0;
       padding: 0;
       font-family: 'FormaDJRText', sans-serif;
-      background-color: #000;
-      color: #fff;
-      cursor: none;
+      background-color: #000000;
+      color: rgb(255, 255, 255);
+      cursor: none; /* Nasconde il cursore di sistema */
     }
+
     a {
-      color: #fff;
+      color: rgb(255, 255, 255);
       text-decoration: none;
-      cursor: none;
+      cursor: none; /* Nasconde il cursore di sistema anche per i link */
     }
 
-    /* FRECCIA INDIETRO */
-    .back-svg {
-      position: relative;
-      grid-column: 1;        /* prima colonna dell’header */
-      justify-self: end;     /* allineata a destra della colonna */
-      align-self: center;    /* verticalmente centrata */
-      width: 2em;
-      height: 2em;
-      background: transparent;
-      border-radius: 50%;
-      transition: transform 0.2s ease;
-      z-index: 1002;
-    }
-    .back-svg:hover {
-      transform: scale(1.1);
-    }
-    .back-svg svg {
-      display: block;
-      margin: auto;
-      color: #fff;
-    }
-
-    /* CURSORE PERSONALIZZATO */
+    /* === CURSORE PERSONALIZZATO === */
     .cursor {
       position: fixed;
-      top: 0; left: 0;
-      width: 20px; height: 20px;
+      top: 0;
+      left: 0;
+      width: 20px;
+      height: 20px;
       background-color: grey;
       border-radius: 50%;
-      pointer-events: none;
-      z-index: 1001;
+      pointer-events: none; /* Non interagisce con gli eventi del mouse */
+      z-index: 1001; /* Sopra la maggior parte degli elementi */
       transform: translate(-50%, -50%) scale(1);
       transition: background-color 0.3s ease, transform 0.3s ease;
     }
+
     .cursor.cursor-hover-active {
       background-color: white;
-      transform: translate(-50%, -50%) scale(1.3);
+      transform: translate(-50%, -50%) scale(1.3); /* Leggermente più grande su hover di elementi interattivi */
     }
 
-    /* ANIMAZIONI */
+    /* === ANIMAZIONI === */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
+      to { opacity: 1; transform: translateY(0); }
     }
+    
+    @keyframes dropdownFadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .fade-in {
       opacity: 0;
       animation: fadeIn 1s ease-out forwards;
     }
     .label-fade-delay { animation-delay: 0.2s; }
+    .grid-fade-delay { animation-delay: 0.4s; } /* Applicato al .content ora */
+    .item-delay-1 { animation-delay: 0.6s; }
+    .item-delay-2 { animation-delay: 0.8s; }
+    .item-delay-3 { animation-delay: 1.0s; }
+    .item-delay-4 { animation-delay: 1.2s; }
+    .item-delay-5 { animation-delay: 1.4s; }
+    .text-content-fade-delay { animation-delay: 0.5s; } /* Delay per il box di testo */
 
-    /* HEADER FISSO */
+
+    /* === HEADER FISSO === */
     .sticky-header {
       position: fixed;
-      top: 0; left: 0;
+      top: 0;
+      left: 0;
       width: 100%;
       z-index: 1000;
-      background-color: transparent;
+      background-color: transparent; 
+      box-sizing: border-box;
       display: grid;
-      align-items: center;
+      align-items: start;
       padding: clamp(0.8rem, 1.5vw, 1.5rem) clamp(1.5rem, 4vw, 3rem);
       gap: clamp(1rem, 3vw, 2rem);
-      grid-template-columns: 1fr 1fr 1fr;
     }
+
     .grid-label {
       font-family: 'FormaDJRDisplay', sans-serif;
       font-size: clamp(1.5rem, 2vw, 2.5rem);
     }
-    .grid-label-samuele { grid-column: 2; justify-self: start; }
-    .grid-label-about   { grid-column: 3; justify-self: start; }
-    .grid-label-about:hover {
+
+    .grid-label-about:hover,
+    .header-sub-nav a:hover {
       opacity: 0.7;
       transition: opacity 0.3s;
     }
 
-    /* CONTENUTO PRINCIPALE */
-    .content {
-      padding: clamp(6rem, 12vw, 10rem) clamp(1.5rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3rem);
+    .grid-label-samuele {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    #samuele-dropdown-toggle {
+      cursor: pointer;
+      display: inline-block;
     }
 
-    /* RESPONSIVE */
-    @media (max-width: 1024px) {
-      .sticky-header { grid-template-columns: 1fr 1fr; }
-      .grid-label-samuele { grid-column: 1; }
-      .grid-label-about   { grid-column: 2; }
-      .back-svg           { grid-column: 1; justify-self: end; }
+    .header-sub-nav {
+      width: 100%;
+      margin-top: calc(0.35em + 1px + 0.35em);
+      display: none; /* Nascosto di default, mostrato con JS */
+      opacity: 0;
     }
+
+    .header-sub-nav a {
+      display: block;
+      font-family: 'FormaDJRDisplay', sans-serif;
+      line-height: 1.3;
+    }
+    
+    .screen-wide-internal-line {
+      position: fixed;
+      left: clamp(1.5rem, 4vw, 3rem);  
+      right: clamp(1.5rem, 4vw, 3rem);  
+      height: 1px;
+      background-color: rgb(255, 255, 255);
+      z-index: 999;
+      top: calc(
+        clamp(0.8rem, 1.5vw, 1.5rem) +
+        (clamp(1.5rem, 2vw, 2.5rem) * 1.2) +
+        0.35em
+      );
+      opacity: 0;
+      animation: fadeIn 1s ease-out forwards;
+      animation-delay: 0.25s;
+    }
+    
+    .divider {
+      position: fixed;
+      left: clamp(1.5rem, 4vw, 3rem);
+      right: clamp(1.5rem, 4vw, 3rem);
+      height: 1px;
+      background-color: rgb(255, 255, 255);
+      z-index: 999;
+      display: none;
+      opacity: 0;      
+      animation: none;
+    }
+
+    /* === STILI DROPDOWN === */
+    .dropdown-item-attivo {
+      display: block !important;
+      animation: dropdownFadeIn 0.4s ease-out forwards;
+    }
+
+    /* === CONTENUTO PRINCIPALE === */
+    .content {
+      padding-left: clamp(1.5rem, 4vw, 3rem);
+      padding-right: clamp(1.5rem, 4vw, 3rem);
+      padding-bottom: clamp(1.5rem, 4vw, 3rem);
+      /* padding-top sarà gestito da JavaScript */
+      display: flex; /* Aggiunto per layout flessibile */
+      gap: clamp(1rem, 3vw, 2rem); /* Spazio tra griglia immagini e testo */
+    }
+
+    /* === GRIGLIA IMMAGINI === */
+    .image-grid {
+      /* column-count iniziale gestito per 3 colonne totali (2 img, 1 testo) */
+      column-count: 2; 
+      column-gap: clamp(1rem, 3vw, 2rem);
+      width: 66.66%; /* Occupa 2/3 dello spazio */
+      flex-shrink: 0; /* Non si restringe */
+    }
+    .image-grid a {
+      display: inline-block;
+      width: 100%;
+      margin-bottom: clamp(0.5rem, 2vw, 1rem);
+      break-inside: avoid;
+      position: relative;
+      overflow: hidden;
+    }
+    .image-grid img {
+      width: 100%;
+      display: block;
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+    .image-grid img:hover {
+      transform: scale(1.03);
+      filter: brightness(1.2);
+    }
+    .project-title {
+      font-family: 'FormaDJRDisplay', sans-serif;
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(0, 0, 0, 0);
+      color: white;
+      padding-bottom: clamp(1.5rem, 2vw, 2.5rem);
+      padding-left: clamp(1.5rem, 2vw, 2.5rem);
+      box-sizing: border-box;
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      font-size:  clamp(1.5rem, 2vw, 2.5rem);
+    }
+    .project-name {
+      line-height: 1.3;
+      display: block;
+    }
+    .project-type {
+      font-size: clamp(0.8rem, 1.5vw, 1.6rem);
+      opacity: 1;
+      font-family: 'FormaDJRDisplay', sans-serif;
+      display: block;
+      margin-top: 0.2em;
+    }
+    .image-grid a:hover .project-title {
+      opacity: 1;
+    }
+
+    /* === COLONNA DI TESTO === */
+    .text-content-column {
+      width: 33.33%; /* Occupa 1/3 dello spazio */
+      flex-shrink: 0; /* Non si restringe */
+      /* font-family e font-size di default per la colonna sono stati rimossi/commentati 
+         se si vuole che TUTTO il testo (inclusi elementi non p o h2) 
+         erediti o abbia stili specifici, ma la richiesta è per p e h2.
+         Il font base del body è 'FormaDJRText'. Se si vuole un altro default qui, 
+         si può specificare, altrimenti p e h2 avranno i loro stili specifici.
+      */
+      /* font-family: 'FormaDJRText', sans-serif; */ /* Rimosso o commentato */
+      /* font-size: clamp(1rem, 1.5vw, 1.2rem); */  /* Rimosso o commentato */
+      line-height: 1.6; /* Mantenuto per la leggibilità dei paragrafi */
+      padding-top: 0; 
+    }
+
+    .text-content-column h2 {
+        font-family: 'FormaDJRDisplay', sans-serif; /* Già come l'header */
+        font-size: clamp(1.5rem, 2vw, 2.5rem);    /* Già come l'header */
+        margin-bottom: 1em;
+    }
+    .text-content-column p {
+        font-family: 'FormaDJRDisplay', sans-serif; /* MODIFICATO: Stesso font dell'header */
+        font-size: clamp(1.5rem, 2vw, 2.5rem);    /* MODIFICATO: Stessa dimensione dell'header */
+        margin-bottom: 1em;
+        /* line-height: 1.6; è ereditato da .text-content-column, che è generalmente buono per il testo lungo */
+    }
+
+
+    /* === LAYOUT RESPONSIVE === */
+    .sticky-header {
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    .grid-label-samuele {
+      grid-column: 2 / span 1;
+      grid-row: 1;
+      justify-self: start;
+    }
+    .grid-label-about {
+      grid-column: 3 / span 1;
+      grid-row: 1;
+      justify-self: start;
+    }
+    /* Schermi medi - 2 colonne (1 img, 1 testo) */
+    @media (max-width: 1024px) {
+      .sticky-header {
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(1rem, 3vw, 2rem);
+      }
+      .grid-label-samuele { grid-column: 1 / span 1; }
+      .grid-label-about { grid-column: 2 / span 1; }
+      
+      .image-grid { 
+        column-count: 1; /* Una colonna di immagini */
+        width: 50%;      /* Occupa metà spazio */
+      }
+      .text-content-column {
+        width: 50%;      /* Occupa metà spazio */
+      }
+    }
+
+    /* Schermi piccoli - 1 colonna (testo sopra, immagini sotto) */
     @media (max-width: 600px) {
       .sticky-header {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto;
-        gap: 5px clamp(0.8rem, 2.5vw, 1.5rem);
+        grid-template-columns: 1fr; 
+        grid-template-rows: auto auto; 
+        gap: 5px clamp(0.8rem, 2.5vw, 1.5rem); 
+        padding-top: clamp(0.5rem, 1.5vw, 1rem);
+        padding-bottom: clamp(0.5rem, 1.5vw, 1rem); 
       }
-      .grid-label-samuele { grid-row: 1; }
-      .grid-label-about   { grid-row: 2; }
-      .back-svg           { grid-row: 2; justify-self: end; }
-      .grid-label {
-        font-size: clamp(1.2rem, 5vw, 1.8rem);
+      .grid-label-samuele {
+        grid-column: 1; 
+        grid-row: 1;    
       }
+      .grid-label-about { /* "Galleria" */
+        grid-column: 1; 
+        grid-row: 2;    
+        margin-top: 10px; /* Aggiunge spazio sopra "Galleria" */
+      }
+      
       .content {
-        padding-top: clamp(5rem, 18vw, 8rem);
+        flex-direction: column; /* Elementi impilati verticalmente */
+      }
+      .text-content-column {
+        width: 100%; /* Occupa tutta la larghezza */
+        order: 1;    /* Testo prima */
+        margin-bottom: clamp(1rem, 3vw, 2rem); /* Spazio sotto il testo */
+      }
+      .image-grid { 
+        column-count: 1; 
+        width: 100%; /* Occupa tutta la larghezza */
+        order: 2;    /* Immagini dopo */
+      } 
+      
+      .grid-label { font-size: clamp(1.2rem, 5vw, 1.8rem); }
+      
+      .screen-wide-internal-line {
+        left: clamp(0.8rem, 2.5vw, 1.5rem);
+        right: clamp(0.8rem, 2.5vw, 1.5rem);
+        top: calc( 
+          clamp(0.5rem, 1.5vw, 1rem) +  
+          (clamp(1.2rem, 5vw, 1.8rem) * 1.2) + 
+          0.35em 
+        );
+      }
+
+      .header-sub-nav {
+        margin-top: calc(0.35em + 1px + 0.35em);
+      }
+
+      .divider {
+        left: clamp(0.8rem, 2.5vw, 1.5rem);
+        right: clamp(0.8rem, 2.5vw, 1.5rem);
       }
     }
   </style>
@@ -141,47 +352,164 @@
 
 <body>
 
-  <!-- CURSORE PERSONALIZZATO -->
   <div class="cursor" id="customCursor"></div>
 
-  <!-- HEADER UNICO -->
   <header class="sticky-header">
-    <span class="grid-label grid-label-samuele fade-in label-fade-delay">
-      Samuele De March
-    </span>
-
-    <a href="javascript:history.back()" class="back-svg fade-in label-fade-delay">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
-        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-      </svg>
-    </a>
-
-    <a href="#about" class="grid-label grid-label-about fade-in label-fade-delay">
-      About
-    </a>
+    <div class="grid-label grid-label-samuele fade-in label-fade-delay">
+        <span id="samuele-dropdown-toggle">Samuele De March</span>
+        <div class="header-sub-nav">
+          <a href="/portfolio/index.html">Home</a>
+          <a href="/portfolio/Bio/index.html">Bio</a>
+        </div>
+    </div>
+    <a href="/portfolio/index.html" class="grid-label grid-label-about fade-in label-fade-delay">Galleria</a>
+    
+    <div class="screen-wide-internal-line"></div>
   </header>
 
-  <!-- CONTENUTO DELLA PAGINA -->
-  <div class="content">
-    <!-- … -->
+  <div class="divider"></div>
+
+  <div class="content grid-fade-delay">
+    <div class="image-grid">
+      <a href="/portfolio/progetti/konn.html" class="fade-in item-delay-1">
+        <img src="/portfolio/img/imgPreview/kon glass.gif" alt="Progetto Konn 1">
+        <div class="project-title">
+          <span class="project-name">Konn</span>
+          <span class="project-type">Illustrazione</span>
+        </div>
+      </a>
+      <a href="/portfolio/progetti/konn.html" class="fade-in item-delay-2">
+        <img src="/portfolio/img/imgPreview/konn2.JPG" alt="Progetto Konn 2">
+        <div class="project-title">
+            <span class="project-name">Konn</span>
+            <span class="project-type">Illustrazione</span>
+        </div>
+      </a>
+      <a href="/portfolio/progetti/konn.html" class="fade-in item-delay-3">
+        <img src="/portfolio/img/imgPreview/konn3.JPG" alt="Progetto Konn 3">
+        <div class="project-title">
+            <span class="project-name">Konn</span>
+            <span class="project-type">Illustrazione</span>
+        </div>
+      </a>
+      <a href="/portfolio/progetti/konn.html" class="fade-in item-delay-4">
+        <img src="/portfolio/img/imgPreview/konn4.png" alt="Progetto Konn 4">
+        <div class="project-title">
+            <span class="project-name">Konn</span>
+            <span class="project-type">Illustrazione</span>
+        </div>
+      </a>
+      <a href="/portfolio/progetti/konn.html" class="fade-in item-delay-5"> <img src="/portfolio/img/imgPreview/prova%205.png" alt="Progetto Prova 5">
+        <div class="project-title">
+          <span class="project-name">Prova</span>
+          <span class="project-type">Grafica</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="text-content-column fade-in text-content-fade-delay">
+        <h2>Descrizione Progetti</h2>
+        <p>Questa è una colonna di testo che apparirà accanto alle immagini. Puoi inserire qui una descrizione generale dei tuoi lavori, una breve biografia artistica, o qualsiasi altra informazione tu voglia mettere in evidenza.</p>
+        <p>Quando la finestra del browser si restringe, questo testo si adatterà al layout. Su schermi molto piccoli, apparirà sopra la galleria di immagini.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
   </div>
 
   <script>
-    const cursor = document.getElementById('customCursor');
-    const interactive = document.querySelectorAll('a');
+    // --- SCRIPT CURSORE PERSONALIZZATO ---
+    const customCursorElement = document.getElementById('customCursor');
+    const interactiveElements = document.querySelectorAll('a, #samuele-dropdown-toggle');
 
-    document.addEventListener('mousemove', e => {
-      window.requestAnimationFrame(() => {
-        cursor.style.top  = `${e.clientY}px`;
-        cursor.style.left = `${e.clientX}px`;
-      });
+    if (customCursorElement) {
+        document.addEventListener('mousemove', (e) => {
+            window.requestAnimationFrame(() => {
+                customCursorElement.style.top = `${e.clientY}px`;
+                customCursorElement.style.left = `${e.clientX}px`;
+            });
+        });
+
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                customCursorElement.classList.add('cursor-hover-active');
+            });
+            el.addEventListener('mouseleave', () => {
+                customCursorElement.classList.remove('cursor-hover-active');
+            });
+        });
+    }
+
+    // --- SCRIPT PER LAYOUT DINAMICO HEADER E CONTENT PADDING ---
+    function updateDynamicHeaderLayout() {
+        const header = document.querySelector('.sticky-header');
+        const subNav = document.querySelector('.header-sub-nav');
+        const mainDivider = document.querySelector('.divider');
+        const content = document.querySelector('.content');
+
+        if (!header || !subNav || !mainDivider || !content) {
+            console.warn("Elementi chiave per il layout dinamico dell'header non trovati.");
+            return;
+        }
+
+        const spacingSubNavToDivider = 10;      // Spazio in px tra sottomenu e linea divisoria
+        const spacingDividerToContent = 20;   // Spazio in px tra linea divisoria e contenuto
+        const spacingHeaderToContentDefault = 20; // Spazio in px tra header (dropdown chiuso) e contenuto
+
+        // Calcola l'altezza effettiva dell'header, tenendo conto del dropdown
+        let headerEffectiveBottom = header.getBoundingClientRect().bottom;
+
+        if (subNav.classList.contains('dropdown-item-attivo')) {
+            // Dropdown è aperto
+            const subNavRect = subNav.getBoundingClientRect();
+            let newDividerTop = subNavRect.bottom + spacingSubNavToDivider;
+            mainDivider.style.top = newDividerTop + 'px';
+            mainDivider.style.display = 'block'; // Mostra il divisore principale
+            // screenWideInternalLine.style.display = 'none'; // Nasconde la linea interna fissa
+
+            headerEffectiveBottom = newDividerTop + mainDivider.offsetHeight;
+        } else {
+            // Dropdown è chiuso
+            mainDivider.style.top = '';
+            mainDivider.style.display = 'none'; // Nasconde il divisore principale
+            // screenWideInternalLine.style.display = 'block'; // Mostra la linea interna fissa
+        }
+        
+        let newContentPaddingTop = headerEffectiveBottom + spacingDividerToContent;
+        content.style.paddingTop = newContentPaddingTop + 'px';
+    }
+
+
+    // --- SCRIPT MENU A TENDINA (MODIFICATO PER INCLUDERE AGGIORNAMENTO LAYOUT) ---
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleElement = document.getElementById('samuele-dropdown-toggle');
+        const subNav = document.querySelector('.header-sub-nav');
+        const mainDivider = document.querySelector('.divider');  
+        const screenWideInternalLine = document.querySelector('.screen-wide-internal-line');
+
+
+        if (toggleElement && subNav && mainDivider && screenWideInternalLine) {
+            toggleElement.addEventListener('click', function(event) {
+                event.preventDefault();
+                
+                subNav.classList.toggle('dropdown-item-attivo');
+                // mainDivider.classList.toggle('dropdown-item-attivo'); // La logica di visibilità del divider è ora in updateDynamicHeaderLayout
+
+                // Toggle della visibilità della linea fissa interna
+                if (subNav.classList.contains('dropdown-item-attivo')) {
+                    screenWideInternalLine.style.opacity = '0'; // Nasconde la linea interna
+                    mainDivider.style.opacity = '1'; // Mostra il divisore dinamico
+                } else {
+                    screenWideInternalLine.style.opacity = '1'; // Mostra la linea interna
+                    mainDivider.style.opacity = '0'; // Nasconde il divisore dinamico
+                }
+                
+                requestAnimationFrame(updateDynamicHeaderLayout);
+            });
+        }
+        requestAnimationFrame(updateDynamicHeaderLayout); // Chiamata iniziale
     });
 
-    interactive.forEach(el => {
-      el.addEventListener('mouseenter', () =>
-        cursor.classList.add('cursor-hover-active'));
-      el.addEventListener('mouseleave', () =>
-        cursor.classList.remove('cursor-hover-active'));
+    window.addEventListener('resize', () => {
+        requestAnimationFrame(updateDynamicHeaderLayout);
     });
   </script>
 
