@@ -116,7 +116,7 @@
     }
     
     #samuele-dropdown-toggle {
-      cursor: pointer;
+      cursor: pointer; /* Mantieni pointer qui se vuoi che sembri cliccabile per il dropdown */
       display: inline-block;
     }
 
@@ -176,7 +176,7 @@
       /* padding-top sarà gestito da JavaScript */
       display: flex; 
       gap: clamp(1rem, 3vw, 2rem); 
-      align-items: flex-start; /* MODIFICATO: Allinea gli item (griglia e colonna testo) in alto */
+      align-items: flex-start;
     }
 
     /* === GRIGLIA IMMAGINI === */
@@ -186,34 +186,35 @@
       width: 66.66%; 
       flex-shrink: 0; 
     }
-    .image-grid a {
+    .image-item-wrapper { /* MODIFICATO: Era .image-grid a */
       display: inline-block;
       width: 100%;
       margin-bottom: clamp(0.5rem, 2vw, 1rem);
       break-inside: avoid;
-      position: relative;
-      overflow: hidden;
+      position: relative; /* Mantenuto per il posizionamento di .project-title */
+      overflow: hidden; /* Mantenuto per coerenza, utile se ci fossero trasformazioni sull'img */
     }
     .image-grid img {
       width: 100%;
       display: block;
-      transition: transform 0.3s ease, filter 0.3s ease;
+      transition: transform 0.3s ease, filter 0.3s ease; /* Questa transizione ora non ha un :hover corrispondente, si potrebbe rimuovere */
     }
-    .image-grid img:hover {
+    /* .image-grid img:hover {
       transform: scale(1.03);
       filter: brightness(1.2);
-    }
+    } 
+    */
     .project-title {
       font-family: 'FormaDJRDisplay', sans-serif;
       position: absolute;
       bottom: 0; left: 0; right: 0;
-      background: rgba(0, 0, 0, 0);
+      background: rgba(0, 0, 0, 0); 
       color: white;
       padding-bottom: clamp(1.5rem, 2vw, 2.5rem);
       padding-left: clamp(1.5rem, 2vw, 2.5rem);
       box-sizing: border-box;
-      opacity: 0;
-      transition: all 0.3s ease;
+      opacity: 1; /* MODIFICATO: Titolo sempre visibile */
+      /* transition: all 0.3s ease; MODIFICATO: Transizione non più necessaria per opacità */
       pointer-events: none;
       font-size:  clamp(1.5rem, 2vw, 2.5rem);
     }
@@ -228,9 +229,11 @@
       display: block;
       margin-top: 0.2em;
     }
-    .image-grid a:hover .project-title {
+    /*
+    .image-grid a:hover .project-title {  MODIFICATO: Selettore non più valido e effetto non desiderato
       opacity: 1;
     }
+    */
 
     /* === COLONNA DI TESTO === */
     .text-content-column {
@@ -244,14 +247,13 @@
         font-family: 'FormaDJRDisplay', sans-serif; 
         font-size: clamp(1.5rem, 2vw, 2.5rem);    
         margin-bottom: 1em;
-        font-weight: normal; /* MODIFICATO: Imposta la pesantezza a "normal" (Regular) */
-        margin-top: 0;       /* MODIFICATO: Rimuove il margine superiore per l'allineamento */
+        font-weight: normal;
+        margin-top: 0;    
     }
     .text-content-column p {
         font-family: 'FormaDJRDisplay', sans-serif; 
         font-size: clamp(1.5rem, 2vw, 2.5rem);    
         margin-bottom: 1em;
-        /* font-weight: normal; è già il default per <p> e userà FormaDJRDisplay-Regular */
     }
 
 
@@ -308,8 +310,6 @@
       
       .content {
         flex-direction: column; 
-        /* align-items: flex-start; non è più rilevante allo stesso modo in layout a colonna,
-           ma non dovrebbe causare problemi. Su schermi piccoli, l'ordine è gestito con 'order'. */
       }
       .text-content-column {
         width: 100%; 
@@ -354,8 +354,8 @@
     <div class="grid-label grid-label-samuele fade-in label-fade-delay">
         <span id="samuele-dropdown-toggle">Samuele De March</span>
         <div class="header-sub-nav">
-          <a href="/index.html">Home</a>
-          <a href="/portfolio/Bio/index.html">Bio</a>
+        <a href="/portfolio/index.html">Home</a>          
+        <a href="/portfolio/Bio/index.html">Bio</a>
         </div>
     </div>
     <a href="/portfolio/index.html" class="grid-label grid-label-about fade-in label-fade-delay">Galleria</a>
@@ -367,40 +367,36 @@
 
   <div class="content grid-fade-delay">
     <div class="image-grid">
-      <a href="/portfolio/progetti/konn.html" class="fade-in item-delay-1">
-        <img src="/portfolio/img/imgPreview/kon glass.gif" alt="Progetto Konn 1">
+      <div class="image-item-wrapper fade-in item-delay-1"> <img src="/portfolio/img/imgPreview/kon glass.gif" alt="Progetto Konn 1">
         <div class="project-title">
           <span class="project-name">Konn</span>
           <span class="project-type">Illustrazione</span>
         </div>
-      </a>
-      <a href="/portfolio/progetti/konn.html" class="fade-in item-delay-2">
-        <img src="/portfolio/img/imgPreview/konn2.JPG" alt="Progetto Konn 2">
+      </div>
+      <div class="image-item-wrapper fade-in item-delay-2"> <img src="/portfolio/img/imgPreview/konn2.JPG" alt="Progetto Konn 2">
         <div class="project-title">
             <span class="project-name">Konn</span>
             <span class="project-type">Illustrazione</span>
         </div>
-      </a>
-      <a href="/portfolio/progetti/konn.html" class="fade-in item-delay-3">
-        <img src="/portfolio/img/imgPreview/konn3.JPG" alt="Progetto Konn 3">
+      </div>
+      <div class="image-item-wrapper fade-in item-delay-3"> <img src="/portfolio/img/imgPreview/konn3.JPG" alt="Progetto Konn 3">
         <div class="project-title">
             <span class="project-name">Konn</span>
             <span class="project-type">Illustrazione</span>
         </div>
-      </a>
-      <a href="/portfolio/progetti/konn.html" class="fade-in item-delay-4">
-        <img src="/portfolio/img/imgPreview/konn4.png" alt="Progetto Konn 4">
+      </div>
+      <div class="image-item-wrapper fade-in item-delay-4"> <img src="/portfolio/img/imgPreview/konn4.png" alt="Progetto Konn 4">
         <div class="project-title">
             <span class="project-name">Konn</span>
             <span class="project-type">Illustrazione</span>
         </div>
-      </a>
-      <a href="/portfolio/progetti/konn.html" class="fade-in item-delay-5"> <img src="/portfolio/img/imgPreview/prova%205.png" alt="Progetto Prova 5">
+      </div>
+      <div class="image-item-wrapper fade-in item-delay-5"> <img src="/portfolio/img/imgPreview/prova%205.png" alt="Progetto Prova 5">
         <div class="project-title">
           <span class="project-name">Prova</span>
           <span class="project-type">Grafica</span>
         </div>
-      </a>
+      </div>
     </div>
 
     <div class="text-content-column fade-in text-content-fade-delay">
@@ -414,7 +410,8 @@
   <script>
     // --- SCRIPT CURSORE PERSONALIZZATO ---
     const customCursorElement = document.getElementById('customCursor');
-    const interactiveElements = document.querySelectorAll('a, #samuele-dropdown-toggle');
+    // Gli elementi 'a' rimossi dalle immagini non saranno più inclusi qui, il che è corretto per la richiesta.
+    const interactiveElements = document.querySelectorAll('a, #samuele-dropdown-toggle'); 
 
     if (customCursorElement) {
         document.addEventListener('mousemove', (e) => {
@@ -448,7 +445,7 @@
 
         const spacingSubNavToDivider = 10;      
         const spacingDividerToContent = 20;   
-        const spacingHeaderToContentDefault = 20; 
+        // const spacingHeaderToContentDefault = 20; // Questa variabile non sembra usata
 
         let headerEffectiveBottom = header.getBoundingClientRect().bottom;
 
