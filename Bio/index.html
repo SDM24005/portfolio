@@ -75,8 +75,12 @@
     }
     .label-fade-delay { animation-delay: 0.2s; }
     .grid-fade-delay { animation-delay: 0.4s; } 
-    .text-fade-delay { animation-delay: 0.6s; } /* Nuovo delay per il testo */
-    .image-fade-delay { animation-delay: 0.8s; } /* Nuovo delay per l'immagine */
+    .item-delay-1 { animation-delay: 0.6s; }
+    .item-delay-2 { animation-delay: 0.8s; }
+    .item-delay-3 { animation-delay: 1.0s; }
+    .item-delay-4 { animation-delay: 1.2s; }
+    .item-delay-5 { animation-delay: 1.4s; }
+    .text-content-fade-delay { animation-delay: 0.5s; }
 
 
     /* === HEADER FISSO === */
@@ -112,7 +116,7 @@
     }
     
     #samuele-dropdown-toggle {
-      cursor: pointer; 
+      cursor: pointer; /* Mantieni pointer qui se vuoi che sembri cliccabile per il dropdown */
       display: inline-block;
     }
 
@@ -138,12 +142,12 @@
       z-index: 999;
       top: calc(
         clamp(0.8rem, 1.5vw, 1.5rem) +
-        (clamp(1.5rem, 2vw, 2.5rem) * 1.2) + /* Altezza approssimativa di .grid-label */
-        0.35em /* Spaziatura */
+        (clamp(1.5rem, 2vw, 2.5rem) * 1.2) +
+        0.35em
       );
-      opacity: 0; /* Inizia trasparente */
+      opacity: 0;
       animation: fadeIn 1s ease-out forwards;
-      animation-delay: 0.25s; /* Leggero ritardo per apparire dopo l'header */
+      animation-delay: 0.25s;
     }
     
     .divider {
@@ -152,10 +156,10 @@
       right: clamp(1.5rem, 4vw, 3rem);
       height: 1px;
       background-color: rgb(255, 255, 255);
-      z-index: 999; /* Sotto l'header ma sopra il contenuto se necessario */
-      display: none; /* Inizialmente nascosto */
+      z-index: 999;
+      display: none;
       opacity: 0;      
-      animation: none; /* Gestita da JS */
+      animation: none;
     }
 
     /* === STILI DROPDOWN === */
@@ -172,89 +176,124 @@
       /* padding-top sarà gestito da JavaScript */
       display: flex; 
       gap: clamp(1rem, 3vw, 2rem); 
-      align-items: flex-start; /* Allinea gli elementi all'inizio del loro asse trasversale */
+      align-items: flex-start;
     }
 
-    /* === BOX DI TESTO === */
-    .text-content-box {
-      width: 66.66%; /* Occupa 2/3 per il layout a 3 colonne */
+    /* === GRIGLIA IMMAGINI === */
+    .image-grid {
+      column-count: 2; 
+      column-gap: clamp(1rem, 3vw, 2rem);
+      width: 66.66%; 
+      flex-shrink: 0; 
+    }
+    .image-item-wrapper { /* MODIFICATO: Era .image-grid a */
+      display: inline-block;
+      width: 100%;
+      margin-bottom: clamp(0.5rem, 2vw, 1rem);
+      break-inside: avoid;
+      position: relative; /* Mantenuto per il posizionamento di .project-title */
+      overflow: hidden; /* Mantenuto per coerenza, utile se ci fossero trasformazioni sull'img */
+    }
+    .image-grid img {
+      width: 100%;
+      display: block;
+      transition: transform 0.3s ease, filter 0.3s ease; /* Questa transizione ora non ha un :hover corrispondente, si potrebbe rimuovere */
+    }
+    /* .image-grid img:hover {
+      transform: scale(1.03);
+      filter: brightness(1.2);
+    } 
+    */
+    .project-title {
+      font-family: 'FormaDJRDisplay', sans-serif;
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: rgba(0, 0, 0, 0); 
+      color: white;
+      padding-bottom: clamp(1.5rem, 2vw, 2.5rem);
+      padding-left: clamp(1.5rem, 2vw, 2.5rem);
+      box-sizing: border-box;
+      opacity: 1; /* MODIFICATO: Titolo sempre visibile */
+      /* transition: all 0.3s ease; MODIFICATO: Transizione non più necessaria per opacità */
+      pointer-events: none;
+      font-size:  clamp(1.5rem, 2vw, 2.5rem);
+    }
+    .project-name {
+      line-height: 1.3;
+      display: block;
+    }
+    .project-type {
+      font-size: clamp(0.8rem, 1.5vw, 1.6rem);
+      opacity: 1;
+      font-family: 'FormaDJRDisplay', sans-serif;
+      display: block;
+      margin-top: 0.2em;
+    }
+    /*
+    .image-grid a:hover .project-title {  MODIFICATO: Selettore non più valido e effetto non desiderato
+      opacity: 1;
+    }
+    */
+
+    /* === COLONNA DI TESTO === */
+    .text-content-column {
+      width: 33.33%; 
       flex-shrink: 0; 
       line-height: 1.6; 
-      padding-top: 0; /* Il padding-top del .content gestisce la distanza dall'header */
-      /* Esempio di stili per il box di testo come richiesto: */
-      /* background-color: rgba(20, 20, 20, 0.8); */ /* Sfondo leggermente trasparente */
-      /* padding: clamp(1rem, 1.5vw, 2rem); */ /* Padding interno al box */
-      /* border: 1px solid #333; */ /* Bordo sottile */
-      /* border-radius: 5px; */ /* Angoli arrotondati */
+      padding-top: 0; 
     }
 
-    .text-content-box h2 {
+    .text-content-column h2 {
         font-family: 'FormaDJRDisplay', sans-serif; 
         font-size: clamp(1.5rem, 2vw, 2.5rem);    
         margin-bottom: 1em;
-        font-weight: normal; /* Come da stile originale */
-        margin-top: 0;    /* Come da stile originale */
+        font-weight: normal;
+        margin-top: 0;    
     }
-    .text-content-box p {
-        font-family: 'FormaDJRDisplay', sans-serif; /* Era FormaDJRText, cambiato per coerenza con h2 se desiderato */
-        font-size: clamp(1.5rem, 2vw, 2.5rem);    /* Era diverso, unificato per esempio */
+    .text-content-column p {
+        font-family: 'FormaDJRDisplay', sans-serif; 
+        font-size: clamp(1.5rem, 2vw, 2.5rem);    
         margin-bottom: 1em;
     }
 
-    /* === COLONNA IMMAGINE === */
-    .image-column {
-      width: 33.33%; /* Occupa 1/3 per il layout a 3 colonne */
-      flex-shrink: 0;
-    }
 
-    .image-column img {
-      width: 100%;
-      display: block; /* Rimuove spazio extra sotto l'immagine */
-      height: auto; /* Mantiene le proporzioni */
-      /* Potresti aggiungere stili come object-fit se le immagini hanno proporzioni diverse */
-      /* Esempio: border-radius: 5px; */
-    }
-    
-
-    /* === LAYOUT RESPONSIVE HEADER === */
+    /* === LAYOUT RESPONSIVE === */
     .sticky-header {
-      grid-template-columns: 1fr 1fr 1fr; /* 3 colonne per schermi grandi */
+      grid-template-columns: 1fr 1fr 1fr;
     }
     .grid-label-samuele {
-      /* Occupa la seconda colonna dell'header su schermi grandi */
-      grid-column: 2 / span 1; 
+      grid-column: 2 / span 1;
       grid-row: 1;
-      justify-self: start; /* Allineato a sinistra nella sua cella */
+      justify-self: start;
     }
     .grid-label-about {
-      /* Occupa la terza colonna dell'header su schermi grandi */
       grid-column: 3 / span 1;
       grid-row: 1;
-      justify-self: start; /* Allineato a sinistra nella sua cella */
+      justify-self: start;
     }
-
-
-    /* Media Query per layout a 2 COLONNE (Testo | Immagine) */
+    /* Schermi medi - 2 colonne (1 img, 1 testo) */
     @media (max-width: 1024px) {
       .sticky-header {
-        grid-template-columns: 1fr 1fr; /* Header a due colonne */
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(1rem, 3vw, 2rem);
       }
       .grid-label-samuele { grid-column: 1 / span 1; }
       .grid-label-about { grid-column: 2 / span 1; }
       
-      .text-content-box { 
+      .image-grid { 
+        column-count: 1; 
         width: 50%;      
       }
-      .image-column {
+      .text-content-column {
         width: 50%;      
       }
     }
 
-    /* Media Query per layout a 1 COLONNA (Testo sopra Immagine) */
+    /* Schermi piccoli - 1 colonna (testo sopra, immagini sotto) */
     @media (max-width: 600px) {
       .sticky-header {
-        grid-template-columns: 1fr; /* Header a una colonna */
-        grid-template-rows: auto auto; /* Due righe per i label */
+        grid-template-columns: 1fr; 
+        grid-template-rows: auto auto; 
         gap: 5px clamp(0.8rem, 2.5vw, 1.5rem); 
         padding-top: clamp(0.5rem, 1.5vw, 1rem);
         padding-bottom: clamp(0.5rem, 1.5vw, 1rem); 
@@ -266,40 +305,40 @@
       .grid-label-about { 
         grid-column: 1; 
         grid-row: 2;    
-        margin-top: 10px; /* Spazio tra i due label nell'header */
+        margin-top: 10px; 
       }
       
       .content {
-        flex-direction: column; /* Contenuto principale in colonna */
+        flex-direction: column; 
       }
-      .text-content-box {
+      .text-content-column {
         width: 100%; 
-        order: 1;  /* Testo prima */
-        margin-bottom: clamp(1rem, 3vw, 2rem); /* Spazio tra testo e immagine */
+        order: 1;    
+        margin-bottom: clamp(1rem, 3vw, 2rem); 
       }
-      .image-column { 
+      .image-grid { 
+        column-count: 1; 
         width: 100%; 
-        order: 2;  /* Immagine dopo */
+        order: 2;    
       } 
       
-      /* Stili aggiuntivi per schermi piccoli se necessario */
-      .grid-label { font-size: clamp(1.2rem, 5vw, 1.8rem); } /* Adatta font header */
+      .grid-label { font-size: clamp(1.2rem, 5vw, 1.8rem); }
       
       .screen-wide-internal-line {
         left: clamp(0.8rem, 2.5vw, 1.5rem);
         right: clamp(0.8rem, 2.5vw, 1.5rem);
-        top: calc( /* Adatta posizione linea */
-          clamp(0.5rem, 1.5vw, 1rem) +  /* Padding top header */
-          (clamp(1.2rem, 5vw, 1.8rem) * 1.2) + /* Altezza primo label */
-          0.35em /* Spaziatura */
+        top: calc( 
+          clamp(0.5rem, 1.5vw, 1rem) +  
+          (clamp(1.2rem, 5vw, 1.8rem) * 1.2) + 
+          0.35em 
         );
       }
 
       .header-sub-nav {
-        margin-top: calc(0.35em + 1px + 0.35em); /* Adatta margine per il dropdown */
+        margin-top: calc(0.35em + 1px + 0.35em);
       }
 
-      .divider { /* Adatta posizione divider per schermi piccoli */
+      .divider {
         left: clamp(0.8rem, 2.5vw, 1.5rem);
         right: clamp(0.8rem, 2.5vw, 1.5rem);
       }
@@ -315,30 +354,63 @@
     <div class="grid-label grid-label-samuele fade-in label-fade-delay">
         <span id="samuele-dropdown-toggle">Samuele De March</span>
         <div class="header-sub-nav">
-          <a href="/portfolio/index.html">Home</a>        
-          <a href="/portfolio/Galleria/index.html">Galleria</a>
+        <a href="/portfolio/index.html">Home</a>          
+        <a href="/portfolio/Bio/index.html">Bio</a>
         </div>
     </div>
-    <a href="/portfolio/index.html" class="grid-label grid-label-about fade-in label-fade-delay">Bio</a> <div class="screen-wide-internal-line"></div>
+    <a href="/portfolio/index.html" class="grid-label grid-label-about fade-in label-fade-delay">Galleria</a>
+    
+    <div class="screen-wide-internal-line"></div>
   </header>
 
-  <div class="divider"></div> <div class="content grid-fade-delay">
-    <div class="text-content-box fade-in text-fade-delay">
-        <h2>Titolo del Testo</h2>
-        <p>Questo è il box di testo. Su schermi grandi, occuperà due terzi dello spazio, con l'immagine alla sua destra. Puoi applicare qui gli stili specifici del "box già presente" modificando la classe `.text-content-box` nel CSS (es. `background-color`, `padding`, `border-radius`).</p>
-        <p>Su schermi medi, il testo e l'immagine si divideranno lo spazio a metà. Su schermi piccoli, il testo apparirà sopra l'immagine, occupando l'intera larghezza.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+  <div class="divider"></div>
+
+  <div class="content grid-fade-delay">
+    <div class="image-grid">
+      <div class="image-item-wrapper fade-in item-delay-1"> <img src="/portfolio/img/imgPreview/kon glass.gif" alt="">
+        <div class="project-title">
+          <span class="project-name">progetto</span>
+          <span class="project-type">Illustrazione</span>
+        </div>
+      </div>
+      <div class="image-item-wrapper fade-in item-delay-2"> <img src="/portfolio/img/imgPreview/konn2.JPG" alt="">
+        <div class="project-title">
+            <span class="project-name">progetto</span>
+            <span class="project-type">Illustrazione</span>
+        </div>
+      </div>
+      <div class="image-item-wrapper fade-in item-delay-3"> <img src="/portfolio/img/imgPreview/konn3.JPG" alt="">
+        <div class="project-title">
+            <span class="project-name">progetto</span>
+            <span class="project-type">Illustrazione</span>
+        </div>
+      </div>
+      <div class="image-item-wrapper fade-in item-delay-4"> <img src="/portfolio/img/imgPreview/konn4.png" alt="">
+        <div class="project-title">
+            <span class="project-name">progetto</span>
+            <span class="project-type">Illustrazione</span>
+        </div>
+      </div>
+      <div class="image-item-wrapper fade-in item-delay-5"> <img src="/portfolio/img/imgPreview/prova%205.png" alt="Progetto Prova 5">
+        <div class="project-title">
+          <span class="project-name">Prova</span>
+          <span class="project-type">Grafica</span>
+        </div>
+      </div>
     </div>
 
-    <div class="image-column fade-in image-fade-delay">
-      <img src="/portfolio/img/imgPreview/kon%20glass.gif" alt="Descrizione dell'immagine singola">
-      </div>
+    <div class="text-content-column fade-in text-content-fade-delay">
+        <h2>Descrizione Progetti</h2>
+        <p>Questa è una colonna di testo che apparirà accanto alle immagini. Puoi inserire qui una descrizione generale dei tuoi lavori, una breve biografia artistica, o qualsiasi altra informazione tu voglia mettere in evidenza.</p>
+        <p>Quando la finestra del browser si restringe, questo testo si adatterà al layout. Su schermi molto piccoli, apparirà sopra la galleria di immagini.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
   </div>
 
   <script>
     // --- SCRIPT CURSORE PERSONALIZZATO ---
     const customCursorElement = document.getElementById('customCursor');
-    // Aggiorna questo selettore se hai altri elementi interattivi che necessitano dell'effetto hover del cursore
+    // Gli elementi 'a' rimossi dalle immagini non saranno più inclusi qui, il che è corretto per la richiesta.
     const interactiveElements = document.querySelectorAll('a, #samuele-dropdown-toggle'); 
 
     if (customCursorElement) {
@@ -365,44 +437,36 @@
         const subNav = document.querySelector('.header-sub-nav');
         const mainDivider = document.querySelector('.divider');
         const content = document.querySelector('.content');
-        const screenWideInternalLine = document.querySelector('.screen-wide-internal-line');
 
-
-        if (!header || !subNav || !mainDivider || !content || !screenWideInternalLine) {
+        if (!header || !subNav || !mainDivider || !content) {
             console.warn("Elementi chiave per il layout dinamico dell'header non trovati.");
             return;
         }
 
-        const spacingSubNavToDivider = 10; // Spazio tra sub-nav e divider 
-        const spacingDividerToContent = 20; // Spazio tra divider e contenuto
-        const spacingDefaultLineToContent = 20; // Spazio tra linea normale e contenuto
+        const spacingSubNavToDivider = 10;      
+        const spacingDividerToContent = 20;   
+        // const spacingHeaderToContentDefault = 20; // Questa variabile non sembra usata
 
-        let headerEffectiveBottom;
+        let headerEffectiveBottom = header.getBoundingClientRect().bottom;
 
         if (subNav.classList.contains('dropdown-item-attivo')) {
             const subNavRect = subNav.getBoundingClientRect();
             let newDividerTop = subNavRect.bottom + spacingSubNavToDivider;
             mainDivider.style.top = newDividerTop + 'px';
-            // mainDivider.style.display = 'block'; // Già gestito dal click
+            mainDivider.style.display = 'block'; 
 
             headerEffectiveBottom = newDividerTop + mainDivider.offsetHeight;
         } else {
-            // mainDivider.style.display = 'none'; // Già gestito dal click
-            const screenWideLineRect = screenWideInternalLine.getBoundingClientRect();
-            headerEffectiveBottom = screenWideLineRect.bottom;
+            mainDivider.style.top = '';
+            mainDivider.style.display = 'none'; 
         }
         
-        let newContentPaddingTop;
-        if (subNav.classList.contains('dropdown-item-attivo')) {
-            newContentPaddingTop = headerEffectiveBottom + spacingDividerToContent;
-        } else {
-            newContentPaddingTop = headerEffectiveBottom + spacingDefaultLineToContent;
-        }
+        let newContentPaddingTop = headerEffectiveBottom + spacingDividerToContent;
         content.style.paddingTop = newContentPaddingTop + 'px';
     }
 
 
-    // --- SCRIPT MENU A TENDINA ---
+    // --- SCRIPT MENU A TENDINA (MODIFICATO PER INCLUDERE AGGIORNAMENTO LAYOUT) ---
     document.addEventListener('DOMContentLoaded', function() {
         const toggleElement = document.getElementById('samuele-dropdown-toggle');
         const subNav = document.querySelector('.header-sub-nav');
@@ -418,26 +482,15 @@
 
                 if (subNav.classList.contains('dropdown-item-attivo')) {
                     screenWideInternalLine.style.opacity = '0'; 
-                    mainDivider.style.display = 'block'; // Mostra il divisore
-                    requestAnimationFrame(() => { // Forza reflow per animazione opacità
-                        mainDivider.style.opacity = '1'; 
-                    });
+                    mainDivider.style.opacity = '1'; 
                 } else {
                     screenWideInternalLine.style.opacity = '1'; 
                     mainDivider.style.opacity = '0'; 
-                    // Aspetta la fine della transizione di opacità per nascondere
-                    mainDivider.addEventListener('transitionend', () => {
-                        if (!subNav.classList.contains('dropdown-item-attivo')) {
-                             mainDivider.style.display = 'none'; 
-                        }
-                    }, { once: true });
                 }
                 
-                // Aggiorna il layout dopo un breve ritardo per permettere alle animazioni CSS di iniziare
                 requestAnimationFrame(updateDynamicHeaderLayout);
             });
         }
-        // Chiamata iniziale per impostare il padding e il layout
         requestAnimationFrame(updateDynamicHeaderLayout); 
     });
 
