@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Portfolio Samuele De March</title>
+
   <style>
     /* === DEFINIZIONE FONT === */
     @font-face {
@@ -24,12 +25,12 @@
       margin: 0;
       padding: 0;
       font-family: 'FormaDJRText', sans-serif;
-      background-color: #000000; 
+      background-color: #000000;
       color: rgb(255, 255, 255);
-      cursor: none; 
-      min-height: 100vh; 
-      overflow: hidden; 
-      position: relative; 
+      cursor: none;
+      min-height: 100vh;
+      overflow: hidden; /* Considera se vuoi davvero nascondere lo scroll sempre */
+      position: relative;
     }
 
     body::before {
@@ -37,41 +38,41 @@
       position: fixed;
       top: 0;
       left: 0;
-      width: 100vw; 
-      height: 100vh; 
-      z-index: -1; 
-      background-image: url('img/imgPreview/kon glass.gif'); /* Assicurati che il percorso sia corretto */
-      background-size: cover; 
-      background-position: center center; 
-      background-repeat: no-repeat; 
-      opacity: 0; 
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      background-image: url('img/imgPreview/kon glass.gif');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      opacity: 0;
       animation: fadeInBackground 1.5s ease-out forwards;
-      animation-delay: 0s; 
+      animation-delay: 0s;
     }
 
     a {
       color: rgb(255, 255, 255);
       text-decoration: none;
-      cursor: none; 
+      cursor: none;
     }
 
     /* === CURSORE PERSONALIZZATO === */
     .cursor {
       position: fixed;
-      top: 0; 
-      left: 0; 
-      width: 20px; 
+      top: 0;
+      left: 0;
+      width: 20px;
       height: 20px;
-      background-color: grey; 
+      background-color: grey;
       border-radius: 50%;
-      pointer-events: none; 
-      z-index: 1001; 
-      transform: translate(-50%, -50%) scale(1); 
-      transition: background-color 0.3s ease, transform 0.3s ease; 
+      pointer-events: none;
+      z-index: 1001;
+      transform: translate(-50%, -50%) scale(1);
+      transition: background-color 0.3s ease, transform 0.3s ease;
     }
     .cursor.cursor-hover-active {
-      background-color: white; 
-      transform: translate(-50%, -50%) scale(1.3); 
+      background-color: white;
+      transform: translate(-50%, -50%) scale(1.3);
     }
 
     /* === ANIMAZIONI === */
@@ -84,94 +85,92 @@
       from { opacity: 0; }
       to { opacity: 1; }
     }
-    
-    @keyframes dropdownFadeIn { /* Definito ma non usato attivamente */
+
+    @keyframes dropdownFadeIn {
       from { opacity: 0; transform: translateY(-5px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .fade-in { 
-      opacity: 0; 
+    .fade-in {
+      opacity: 0;
       animation: fadeIn 1s ease-out forwards;
     }
 
     /* Classi di ritardo per animazioni */
-    .label-fade-delay     { animation-delay: 0.4s; }
+    .label-fade-delay   { animation-delay: 0.4s; }
     .submenu-item-delay-1 { animation-delay: 0.7s; } /* Bio */
     .submenu-item-delay-2 { animation-delay: 0.9s; } /* Galleria */
-    .item-delay-1         { animation-delay: 0.8s; } /* screen-wide-internal-line */
-    .item-delay-2         { animation-delay: 1.0s; } /* .divider */
-    /* Definizioni non usate attualmente nell'HTML fornito */
-    .grid-fade-delay      { animation-delay: 0.6s; }
-    .item-delay-3         { animation-delay: 1.2s; }
-    .item-delay-4         { animation-delay: 1.4s; }
-    .item-delay-5         { animation-delay: 1.6s; }
+    .item-delay-1       { animation-delay: 0.8s; } /* screen-wide-internal-line */
+    .item-delay-2       { animation-delay: 1.0s; } /* .divider */
+    .grid-fade-delay    { animation-delay: 0.6s; }
+    .item-delay-3       { animation-delay: 1.2s; }
+    .item-delay-4       { animation-delay: 1.4s; }
+    .item-delay-5       { animation-delay: 1.6s; }
 
 
     /* === HEADER FISSO === */
     .sticky-header {
       position: fixed;
-      top: 0; 
+      top: 0;
       left: 0;
       width: 100%;
-      z-index: 1000; 
-      background-color: transparent; 
+      z-index: 1000;
+      background-color: transparent;
       box-sizing: border-box;
       display: grid;
-      align-items: start; 
-      padding: clamp(0.8rem, 1.5vw, 1.5rem) clamp(1.5rem, 4vw, 3rem); 
-      gap: clamp(1rem, 3vw, 2rem); 
+      align-items: start;
+      padding: clamp(0.8rem, 1.5vw, 1.5rem) clamp(1.5rem, 4vw, 3rem);
+      gap: clamp(1rem, 3vw, 2rem);
     }
 
     .grid-label {
       font-family: 'FormaDJRDisplay', sans-serif;
-      font-size: clamp(1.5rem, 2vw, 2.5rem); 
+      font-size: clamp(1.5rem, 2vw, 2.5rem);
     }
 
-    .grid-label-about:hover, /* Link "About/Home" */
-    .header-sub-nav a:hover { 
+    .grid-label-about:hover, /* Link "Home" */
+    .header-sub-nav a:hover {
       opacity: 0.7;
-      transition: opacity 0.3s; 
+      transition: opacity 0.3s;
     }
 
     .grid-label-samuele { /* Contenitore per "Samuele De March", "Bio", "Galleria" */
       display: flex;
-      flex-direction: column; 
-      align-items: flex-start; 
-    }
-    
-    #samuele-dropdown-toggle {
-      display: inline-block; 
+      flex-direction: column;
+      align-items: flex-start;
     }
 
-    .header-sub-nav { 
-      width: 100%; 
-      margin-top: calc(0.35em + 1px + 0.35em); 
+    #samuele-dropdown-toggle {
+      display: inline-block;
+    }
+
+    .header-sub-nav {
+      width: 100%;
+      margin-top: calc(0.35em + 1px + 0.35em);
     }
 
     .header-sub-nav a {
-      display: block; 
+      display: block;
       font-family: 'FormaDJRDisplay', sans-serif;
-      line-height: 1.3; 
+      line-height: 1.3;
     }
-    
-    .screen-wide-internal-line { 
+
+    .screen-wide-internal-line {
       position: fixed;
-      left: clamp(1.5rem, 4vw, 3rem);   
-      right: clamp(1.5rem, 4vw, 3rem);  
+      left: clamp(1.5rem, 4vw, 3rem);
+      right: clamp(1.5rem, 4vw, 3rem);
       height: 1px;
       background-color: rgb(255, 255, 255);
-      z-index: 999; 
-      top: calc( 
-        clamp(0.8rem, 1.5vw, 1.5rem) +  
-        (clamp(1.5rem, 2vw, 2.5rem) * 1.2) +  
-        0.4em                                   
+      z-index: 999;
+      top: calc(
+        clamp(0.8rem, 1.5vw, 1.5rem) +
+        (clamp(1.5rem, 2vw, 2.5rem) * 1.2) +
+        0.4em
       );
     }
-    
+
     .divider { /* Seconda linea di separazione, posizionata da JS */
       position: fixed;
-      /* 'top' è impostato da JavaScript */
       left: clamp(1.5rem, 4vw, 3rem);
       right: clamp(1.5rem, 4vw, 3rem);
       height: 1px;
@@ -181,72 +180,70 @@
 
     /* === LAYOUT RESPONSIVE === */
     /* Default (Desktop) */
-    .sticky-header { 
-      grid-template-columns: 1fr 1fr 1fr; 
+    .sticky-header {
+      grid-template-columns: 1fr 1fr 1fr;
     }
-    .grid-label-samuele { 
-      grid-column: 2 / span 1; 
-      grid-row: 1; 
-      justify-self: start; 
+    .grid-label-samuele {
+      grid-column: 2 / span 1;
+      grid-row: 1;
+      justify-self: start;
     }
-    .grid-label-about { /* Link "About/Home" */
-      grid-column: 3 / span 1; 
-      grid-row: 1; 
-      justify-self: start; 
-      position: relative; /* Mantenuto per coerenza con mobile, JS lo gestirà */
-      top: 0px; /* Default per schermi larghi */
+    .grid-label-about { /* Link "Home" */
+      grid-column: 3 / span 1;
+      grid-row: 1;
+      justify-self: start;
+      position: relative;
+      top: 0px;
     }
 
     /* Medium screens (Tablet) */
     @media (max-width: 1024px) {
-      .sticky-header { 
-        grid-template-columns: 1fr 1fr; 
-        gap: clamp(1rem, 3vw, 2rem); 
+      .sticky-header {
+        grid-template-columns: 1fr 1fr;
+        gap: clamp(1rem, 3vw, 2rem);
       }
-      .grid-label-samuele { grid-column: 1 / span 1; } 
-      .grid-label-about { /* Link "About/Home" */
-        grid-column: 2 / span 1; 
-        position: relative; /* Mantenuto per coerenza */
-        top: 0px; /* Default per schermi medi */
-      }    
-      /* .divider 'top' è gestito da JS */
+      .grid-label-samuele { grid-column: 1 / span 1; }
+      .grid-label-about { /* Link "Home" */
+        grid-column: 2 / span 1;
+        position: relative;
+        top: 0px;
+      }
     }
 
     /* Small screens (Mobile) */
     @media (max-width: 600px) {
       .sticky-header {
-        grid-template-columns: 1fr; 
-        grid-template-rows: auto auto; /* Concettualmente: Fila 1 Samuele, Fila 2 About/Home */
-        gap: 5px clamp(0.8rem, 2.5vw, 1.5rem); 
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        gap: 5px clamp(0.8rem, 2.5vw, 1.5rem); /* row-gap è 5px */
         padding-top: clamp(0.5rem, 1.5vw, 1rem);
         padding-bottom: clamp(0.5rem, 1.5vw, 1rem);
       }
-      .grid-label-samuele { grid-column: 1; grid-row: 1; } 
-      .grid-label-about { /* Link "About/Home" */
-        grid-column: 1; 
-        grid-row: 2; /* Occupa la seconda area di riga definita da grid-template-rows */
-        position: relative; /* Cruciale per permettere a 'style.top' di JS di spostarlo visivamente */
-        /* 'top' sarà impostato dinamicamente da JavaScript per questa vista */
-      } 
-      
-      .grid-label { font-size: clamp(1.2rem, 5vw, 1.8rem); } 
-      
-      .screen-wide-internal-line { 
-        left: clamp(0.8rem, 2.5vw, 1.5rem);  
-        right: clamp(0.8rem, 2.5vw, 1.5rem); 
-        top: calc( 
-          clamp(0.5rem, 1.5vw, 1rem) +        
-          (clamp(1.2rem, 5vw, 1.8rem) * 1.2) + 
-          0.4em                                 
+      .grid-label-samuele { grid-column: 1; grid-row: 1; }
+      .grid-label-about { /* Link "Home" */
+        grid-column: 1;
+        grid-row: 2;
+        position: relative;
+        /* top: 0px; -- Rimosso per evitare conflitti, gestito da JS o lasciato auto */
+      }
+
+      .grid-label { font-size: clamp(1.2rem, 5vw, 1.8rem); }
+
+      .screen-wide-internal-line {
+        left: clamp(0.8rem, 2.5vw, 1.5rem);
+        right: clamp(0.8rem, 2.5vw, 1.5rem);
+        top: calc(
+          clamp(0.5rem, 1.5vw, 1rem) +
+          (clamp(1.2rem, 5vw, 1.8rem) * 1.2) +
+          0.4em
         );
       }
 
-      .header-sub-nav { 
-        margin-top: calc(0.35em + 1px + 0.35em); 
+      .header-sub-nav {
+        margin-top: calc(0.35em + 1px + 0.35em);
       }
 
-      .divider { 
-        /* 'top' è gestito da JS */
+      .divider {
         left: clamp(0.8rem, 2.5vw, 1.5rem);
         right: clamp(0.8rem, 2.5vw, 1.5rem);
       }
@@ -259,27 +256,27 @@
 
   <header class="sticky-header">
     <div class="grid-label grid-label-samuele fade-in label-fade-delay">
-        <span id="samuele-dropdown-toggle">Samuele De March</span> 
-        <div class="header-sub-nav"> 
-            <a href="Bio/index.html" class="fade-in submenu-item-delay-1">Bio</a>
-            <a href="Galleria/index.html" id="galleria-link" class="fade-in submenu-item-delay-2">Galleria</a>
+        <span id="samuele-dropdown-toggle">Samuele De March</span>
+        <div class="header-sub-nav">
+            <a href="Bio/Bio.html" class="fade-in submenu-item-delay-1">Bio</a>
+            <a href="Galleria/Galleria.html" id="galleria-link" class="fade-in submenu-item-delay-2">Galleria</a>
         </div>
     </div>
-    <div class="grid-label grid-label-about fade-in label-fade-delay">Home</a></div> 
-    
-    <div class="screen-wide-internal-line fade-in item-delay-1"></div> 
+    <a href="index.html" class="grid-label grid-label-about fade-in label-fade-delay">Home</a>
+
+    <div class="screen-wide-internal-line fade-in item-delay-1"></div>
   </header>
 
   <div class="divider fade-in item-delay-2"></div>
 
   <script>
     // --- SCRIPT CURSORE PERSONALIZZATO ---
-    const customCursorElement = document.getElementById('customCursor'); 
-    const interactiveElements = document.querySelectorAll('a'); 
+    const customCursorElement = document.getElementById('customCursor');
+    const interactiveElements = document.querySelectorAll('a');
 
-    if (customCursorElement) { 
+    if (customCursorElement) {
         document.addEventListener('mousemove', (e) => {
-            window.requestAnimationFrame(() => { 
+            window.requestAnimationFrame(() => {
                 customCursorElement.style.left = `${e.clientX}px`;
                 customCursorElement.style.top = `${e.clientY}px`;
             });
@@ -295,51 +292,61 @@
     function updateDynamicLayout() {
         const galleriaLink = document.getElementById('galleria-link');
         const dividerElement = document.querySelector('.divider');
-        const aboutLinkElement = document.querySelector('.grid-label-about'); // Link "About/Home"
+        const aboutLinkElement = document.querySelector('.grid-label-about'); // Questo è il link "Home"
 
         if (!galleriaLink || !dividerElement || !aboutLinkElement) {
-            // È buona pratica avvisare se gli elementi non vengono trovati,
-            // ma potrebbe essere normale durante il caricamento iniziale o se l'HTML cambia.
             // console.warn("Elementi chiave per il layout dinamico non trovati.");
-            return; 
+            return;
         }
 
-        const NARROW_SCREEN_BREAKPOINT_PX = 600; // Deve corrispondere al breakpoint CSS
+        const NARROW_SCREEN_BREAKPOINT_PX = 600;
         const IS_NARROW_SCREEN = window.innerWidth < NARROW_SCREEN_BREAKPOINT_PX;
 
-        // 1. Posiziona .divider sotto "Galleria"
-        let dividerOffsetPx = IS_NARROW_SCREEN ? 10 : 20; // Offset per .divider: 10px su stretto, 20px su largo
+        let dividerOffsetPx = IS_NARROW_SCREEN ? 10 : 20;
 
         const galleriaRect = galleriaLink.getBoundingClientRect();
+        // galleriaLink è in un header fisso, getBoundingClientRect().bottom è relativo al viewport.
+        // window.scrollY non è necessario qui.
         const newDividerTop = galleriaRect.bottom + dividerOffsetPx;
         dividerElement.style.top = newDividerTop + 'px';
 
-        // 2. Posiziona il link "About/Home"
         if (IS_NARROW_SCREEN) {
-            // Su schermi stretti, posiziona "About/Home" sotto .divider
-            const SPACING_BELOW_DIVIDER_PX = 15; // Spazio desiderato tra .divider e "About/Home"
+            const SPACING_BELOW_DIVIDER_PX = 15;
+            const dividerRect = dividerElement.getBoundingClientRect(); // .divider è position:fixed
+            // dividerRect.bottom è relativo al viewport
+            const targetAboutLinkVisualTop = dividerRect.bottom + SPACING_BELOW_DIVIDER_PX;
             
-            // Prendiamo la posizione visuale inferiore del .divider appena posizionato
-            const dividerVisualBottom = dividerElement.getBoundingClientRect().bottom; 
+            // Calcola il 'top' necessario per aboutLinkElement (Home)
+            // per posizionarlo correttamente sotto il divisore.
+            // Per evitare oscillazioni, calcoliamo l'offset dalla sua posizione "naturale"
+            // (cioè, come sarebbe se style.top fosse '0px' o non impostato).
+
+            const currentStyleTopValue = parseFloat(aboutLinkElement.style.top || '0'); // Valore numerico di style.top attuale
+            const currentAboutLinkRect = aboutLinkElement.getBoundingClientRect(); // Posizione visiva attuale
+
+            // La posizione "naturale" nel viewport sarebbe la sua posizione visiva attuale MENO l'offset già applicato da style.top
+            const naturalTopPositionInViewport = currentAboutLinkRect.top - currentStyleTopValue;
+
+            // Il nuovo style.top è la differenza tra dove vogliamo che sia (targetAboutLinkVisualTop)
+            // e dove sarebbe naturalmente (naturalTopPositionInViewport).
+            const newRequiredStyleTopOffset = targetAboutLinkVisualTop - naturalTopPositionInViewport;
             
-            const targetAboutLinkVisualTop = dividerVisualBottom + SPACING_BELOW_DIVIDER_PX;
-            const currentAboutLinkVisualTop = aboutLinkElement.getBoundingClientRect().top;
-            
-            // Calcola lo spostamento necessario per 'top' relativo alla sua posizione visuale corrente.
-            // Questo sposta l'elemento rispetto alla sua posizione naturale nel grid.
-            aboutLinkElement.style.top = (targetAboutLinkVisualTop - currentAboutLinkVisualTop) + 'px';
+            aboutLinkElement.style.top = newRequiredStyleTopOffset + 'px';
+
         } else {
-            // Su schermi più larghi, resetta la posizione di "About/Home" (se modificata)
-            aboutLinkElement.style.top = '0px'; 
+            // Per schermi più larghi, resetta 'top' a 0px come definito nel CSS o per default.
+            aboutLinkElement.style.top = '0px';
         }
     }
 
     window.addEventListener('load', updateDynamicLayout);
     window.addEventListener('resize', updateDynamicLayout);
-    
-    // Se ci fossero problemi di timing con le animazioni che influenzano getBoundingClientRect(),
-    // si potrebbe considerare un piccolo delay o l'uso di 'animationend' per il primo 'updateDynamicLayout'.
-    // Per ora, 'load' e 'resize' dovrebbero coprire la maggior parte dei casi.
+
+    // (Il resto dello script per il dropdown, se presente, rimarrebbe invariato)
+    // const dropdownToggle = document.getElementById('samuele-dropdown-toggle');
+    // if(dropdownToggle) {
+    //   // ...
+    // }
   </script>
 </body>
 </html>
