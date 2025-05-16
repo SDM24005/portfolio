@@ -6,7 +6,7 @@
   <title>Portfolio Samuele De March</title>
 
   <style>
-    /* === DEFINIZIONE FONT === (invariato) === */
+    /* === DEFINIZIONE FONT === */
     @font-face {
       font-family: 'FormaDJRText';
       src: url('fonts/FormaDJRText-Medium-Testing.otf') format('opentype');
@@ -20,7 +20,7 @@
       src: url('fonts/FormaDJRDisplay-Regular-Testing.otf') format('opentype');
     }
 
-    /* === RESET BASE E STILI GLOBALI === (invariato) === */
+    /* === RESET BASE E STILI GLOBALI === */
     body {
       margin: 0;
       padding: 0;
@@ -35,7 +35,7 @@
       cursor: none;
     }
 
-    /* === CURSORE PERSONALIZZATO === (invariato) === */
+    /* === CURSORE PERSONALIZZATO === */
     .cursor {
       position: fixed; top: 0; left: 0; width: 20px; height: 20px;
       background-color: grey; border-radius: 50%; pointer-events: none;
@@ -46,13 +46,13 @@
       background-color: white; transform: translate(-50%, -50%) scale(1.3);
     }
 
-    /* === ANIMAZIONI KEYFRAMES UNIFICATE === (invariato) === */
+    /* === ANIMAZIONI KEYFRAMES UNIFICATE === */
     @keyframes initialContentLoadedAnimation {
       from { opacity: 0; transform: translateY(15px); }
       to { opacity: 1; transform: translateY(0); }
     }
     .content-fade-in {
-      opacity: 0; /* Stato iniziale prima dell'animazione (importante!) */
+      opacity: 0; /* Stato iniziale prima dell'animazione */
       animation: initialContentLoadedAnimation 1s ease-out forwards;
     }
     @keyframes dropdownOpenUnifiedAnimation {
@@ -64,7 +64,7 @@
       to { opacity: 0; transform: translateY(15px); }
     }
 
-    /* === HEADER FISSO === (invariato) */
+    /* === HEADER FISSO === */
     .sticky-header {
       position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
       background-color: transparent;
@@ -85,7 +85,7 @@
     }
     #samuele-dropdown-toggle { cursor: pointer; display: inline-block; }
 
-    /* STILI BASE PER ELEMENTI DROPDOWN (invariato) */
+    /* STILI BASE PER ELEMENTI DROPDOWN */
     .header-sub-nav {
       width: 100%;
       margin-top: calc(0.35em + 1px + 0.35em);
@@ -97,7 +97,7 @@
       display: block; font-family: 'FormaDJRDisplay', sans-serif; line-height: 1.3;
     }
 
-    /* LINEA ORIZZONTALE HEADER (PRINCIPALE) (invariato) */
+    /* LINEA ORIZZONTALE HEADER (PRINCIPALE) */
     .screen-wide-internal-line {
       position: fixed;
       left: clamp(1.5rem, 4vw, 3rem);
@@ -106,7 +106,7 @@
       opacity: 0; /* Animata con .content-fade-in */
     }
 
-    /* DIVIDER SOTTO IL DROPDOWN (invariato) */
+    /* DIVIDER SOTTO IL DROPDOWN */
     .divider {
       position: fixed;
       left: clamp(1.5rem, 4vw, 3rem);
@@ -117,7 +117,7 @@
       transform: translateY(15px);
     }
 
-    /* CLASSI DI STATO E ANIMAZIONE PER IL DROPDOWN (APPLICATE A .header-sub-nav E .divider) (invariato) */
+    /* CLASSI DI STATO E ANIMAZIONE PER IL DROPDOWN */
     .dropdown-state-open {
       display: block !important;
       opacity: 1;
@@ -132,19 +132,17 @@
       animation: dropdownCloseUnifiedAnimation 0.4s ease-out forwards;
     }
 
-    /* === CLASSI DI RITARDO === (invariato, ma l'uso per la griglia sarà gestito da JS) === */
+    /* === CLASSI DI RITARDO (per l'header) === */
     .initial-anim-delay-1 { animation-delay: 0.2s; }
     .initial-anim-delay-2 { animation-delay: 0.3s; }
-    /* .initial-anim-delay-3 e successivi non verranno usati staticamente per la griglia */
 
-
-    /* === CONTENUTO PRINCIPALE === (invariato) === */
+    /* === CONTENUTO PRINCIPALE === */
     .content {
       padding-left: clamp(1.5rem, 4vw, 3rem); padding-right: clamp(1.5rem, 4vw, 3rem);
       padding-bottom: clamp(1.5rem, 4vw, 3rem);
     }
 
-    /* === GRIGLIA IMMAGINI === (MODIFICATO per opacità iniziale) === */
+    /* === GRIGLIA IMMAGINI === */
     .image-grid {
       column-count: 3; column-gap: clamp(1rem, 3vw, 2rem); width: 100%;
       opacity: 0; /* Nascosto inizialmente, animato da JS */
@@ -172,7 +170,7 @@
     }
     .image-grid a:hover .project-title { opacity: 1; }
 
-    /* === LAYOUT RESPONSIVE === (invariato) === */
+    /* === LAYOUT RESPONSIVE === */
     .sticky-header { grid-template-columns: 1fr 1fr 1fr; }
     .grid-label-samuele { grid-column: 2 / span 1; grid-row: 1; justify-self: start; }
     .grid-label-about { grid-column: 3 / span 1; grid-row: 1; justify-self: start; }
@@ -254,7 +252,7 @@
   </div>
 
 <script>
-  // --- SCRIPT CURSORE PERSONALIZZATO --- (invariato)
+  // --- SCRIPT CURSORE PERSONALIZZATO ---
   const customCursorElement = document.getElementById('customCursor');
   const interactiveElements = document.querySelectorAll('a, #samuele-dropdown-toggle');
   if (customCursorElement) {
@@ -270,25 +268,26 @@
       });
   }
 
-  // --- Variabile globale per l'altezza misurata del subNav --- (invariato)
+  // --- Variabile globale per l'altezza misurata del subNav ---
   let measuredSubNavHeight = 0;
 
-  // --- Funzione per misurare l'altezza del subNav --- (invariato)
+  // --- Funzione per misurare l'altezza del subNav ---
   function measureSubNavOnce() {
     const subNavToMeasure = document.querySelector('.header-sub-nav');
     if (!subNavToMeasure) return 0;
-    if (measuredSubNavHeight > 0 && window.innerWidth > 600) {
-        // return measuredSubNavHeight; // Permetti rimisurazione per sicurezza
-    }
+    // Rimuoviamo la cache aggressiva per permettere ricalcoli se necessario, es. su resize
+    // if (measuredSubNavHeight > 0 && window.innerWidth > 600) {
+    //     return measuredSubNavHeight;
+    // }
     const clone = subNavToMeasure.cloneNode(true);
     clone.style.visibility = 'hidden';
     clone.style.position = 'absolute';
     clone.style.top = '-9999px';
     clone.style.left = '-9999px';
-    clone.style.display = 'block';
+    clone.style.display = 'block'; // Assicura che sia visibile per il calcolo
     clone.style.opacity = '1';
     clone.style.transform = 'translateY(0)';
-    clone.classList.remove('dropdown-anim-opening', 'dropdown-anim-closing');
+    clone.classList.remove('dropdown-anim-opening', 'dropdown-anim-closing'); // Rimuovi stati di animazione
     document.body.appendChild(clone);
     measuredSubNavHeight = clone.offsetHeight;
     document.body.removeChild(clone);
@@ -296,7 +295,7 @@
   }
 
 
-  // --- SCRIPT PER LAYOUT DINAMICO HEADER E CONTENT PADDING --- (invariato nella logica di calcolo)
+  // --- SCRIPT PER LAYOUT DINAMICO HEADER E CONTENT PADDING ---
   function updateDynamicHeaderLayout() {
       const header = document.querySelector('.sticky-header');
       const samueleLabel = document.querySelector('.grid-label-samuele');
@@ -321,11 +320,11 @@
 
       const subNavComputedStyle = window.getComputedStyle(subNav);
       const subNavTopMargin = parseFloat(subNavComputedStyle.marginTop) || 0;
-      const subNavHeight = measuredSubNavHeight > 0 ? measuredSubNavHeight : 50;
+      const subNavHeight = measuredSubNavHeight > 0 ? measuredSubNavHeight : 50; // Fallback se misurazione fallisce
 
       const spacingSubNavToDivider = 10;
       const mainDividerHeight = 1;
-      const finalSpacingBeforeContent = 80;
+      const finalSpacingBeforeContent = 80; // Aumentato da 40 a 80 per abbassare la griglia
 
       let samueleToggleBottomGlobalY = mainTextRectGlobal.bottom;
       let dropdownStackHeight = subNavTopMargin + subNavHeight + spacingSubNavToDivider + mainDividerHeight;
@@ -335,7 +334,10 @@
       if (isMobile) {
           headerStaticBottomGlobalY = galleriaLabel.getBoundingClientRect().bottom;
       } else {
-          headerStaticBottomGlobalY = screenWideLine.getBoundingClientRect().bottom;
+          // Considera il fondo della linea orizzontale principale come parte statica dell'header
+          // se la linea è visibile e posizionata
+          const screenLineRect = screenWideLine.getBoundingClientRect();
+          headerStaticBottomGlobalY = screenLineRect.bottom > 0 ? screenLineRect.bottom : samueleToggleBottomGlobalY;
       }
       let requiredContentPaddingTop = Math.max(dropdownAreaBottomGlobalY, headerStaticBottomGlobalY) + finalSpacingBeforeContent;
       content.style.paddingTop = requiredContentPaddingTop + 'px';
@@ -350,33 +352,32 @@
       } else if (isDropdownClosing) {
           let lastKnownDividerTopGlobal = samueleToggleBottomGlobalY + subNavTopMargin + subNavHeight + spacingSubNavToDivider;
           mainDropdownDivider.style.top = lastKnownDividerTopGlobal + 'px';
-      } else {
+      } else { // Dropdown chiuso
           let initialDividerTopGlobal = samueleToggleBottomGlobalY + subNavTopMargin + subNavHeight + spacingSubNavToDivider;
-          mainDropdownDivider.style.top = initialDividerTopGlobal + 'px';
+          // Quando è chiuso, il divider non dovrebbe essere posizionato come se il subNav fosse espanso.
+          // Dovrebbe essere nascosto o posizionato in modo coerente con lo stato chiuso.
+          // La gestione display:none e opacity:0 via CSS per .divider quando non in stato open/opening è più adatta.
+          // Qui, se è chiuso, il suo top può essere calcolato per l'animazione 'from' se necessario,
+          // ma il CSS dovrebbe gestirne la visibilità.
+          // Per ora, il CSS già gestisce display:none e opacity:0 per .divider.
+          // Il top qui è per l'animazione translateY.
+           mainDropdownDivider.style.top = initialDividerTopGlobal + 'px'; // Posizione 'nascosta' da cui animare
       }
   }
 
-  // --- NUOVA FUNZIONE PER ATTIVARE L'ANIMAZIONE DELLA GRIGLIA IMMAGINI ---
+  // --- FUNZIONE PER ATTIVARE L'ANIMAZIONE DELLA GRIGLIA IMMAGINI ---
   function activateImageGridAnimation() {
     const imageGrid = document.querySelector('.image-grid');
     if (imageGrid) {
-        // Rimuove l'opacità 0 impostata via CSS di base per permettere all'animazione di controllarla
-        // imageGrid.style.opacity = ''; // Non necessario se .content-fade-in gestisce l'opacità da 0
         imageGrid.classList.add('content-fade-in');
-        // Applica un ritardo per l'inizio dell'animazione del contenitore della griglia
-        imageGrid.style.animationDelay = '0.2s'; // La griglia inizia ad animarsi 0.2s dopo questa chiamata
+        imageGrid.style.animationDelay = '0.2s'; // Griglia inizia ad animarsi 0.2s dopo questa chiamata
 
         const imageGridItems = imageGrid.querySelectorAll('a');
         const baseDelayForGridContainer = 0.2; // Corrisponde al ritardo sopra
         const itemDelayIncrement = 0.1;      // Scaglionamento di 0.1s tra gli item
 
         imageGridItems.forEach((item, index) => {
-            // item.style.opacity = ''; // Non necessario
             item.classList.add('content-fade-in');
-            // Calcola il ritardo per ogni item in modo che sia scaglionato
-            // dopo l'inizio dell'animazione del contenitore della griglia.
-            // Il primo item (index 0) parte a 0.2s (base) + 0.1s = 0.3s da ora.
-            // Il secondo item (index 1) parte a 0.2s (base) + 0.2s = 0.4s da ora.
             const calculatedDelay = baseDelayForGridContainer + ((index + 1) * itemDelayIncrement);
             item.style.animationDelay = `${calculatedDelay}s`;
         });
@@ -398,7 +399,7 @@
       const ANIMATION_DURATION = 400;
       let isDropdownAnimating = false;
       const DROPDOWN_INITIAL_OPEN_DELAY = 400;
-      let imageGridAnimated = false; // Flag per controllare se l'animazione della griglia è già partita
+      let imageGridAnimated = false; // Flag per animazione griglia
 
       function applyClassesToElements(elements, classesToAdd, classesToRemove) {
           elements.forEach(el => {
@@ -409,7 +410,6 @@
           });
       }
 
-      // MODIFICATO openDropdown per accettare isInitialOpening e attivare l'animazione della griglia
       function openDropdown(forceOpen = false, isInitialOpening = false) {
           if (isDropdownAnimating && !forceOpen) return;
           if ((subNav.classList.contains('dropdown-state-open') || subNav.classList.contains('dropdown-anim-opening')) && !forceOpen) {
@@ -417,13 +417,11 @@
           }
           isDropdownAnimating = true;
           applyClassesToElements([subNav, mainDropdownDivider], ['dropdown-anim-opening'], ['dropdown-anim-closing', 'dropdown-state-open']);
-          requestAnimationFrame(updateDynamicHeaderLayout);
+          requestAnimationFrame(updateDynamicHeaderLayout); // Aggiorna layout durante animazione
           setTimeout(() => {
               applyClassesToElements([subNav, mainDropdownDivider], ['dropdown-state-open'], ['dropdown-anim-opening']);
               isDropdownAnimating = false;
-              requestAnimationFrame(updateDynamicHeaderLayout);
-
-              // Se è l'apertura iniziale e la griglia non è ancora stata animata, attivala
+              requestAnimationFrame(updateDynamicHeaderLayout); // Aggiorna layout finale
               if (isInitialOpening && !imageGridAnimated) {
                   activateImageGridAnimation();
                   imageGridAnimated = true;
@@ -433,25 +431,27 @@
 
       function closeDropdown(forceClose = false) {
           if (isDropdownAnimating && !forceClose) return;
-          if ((!subNav.classList.contains('dropdown-state-open') && !subNav.classList.contains('dropdown-anim-opening')) && !subNav.classList.contains('dropdown-anim-closing') && !forceClose) {
+          // Non chiudere se è già chiuso e non in animazione di chiusura
+          if (!subNav.classList.contains('dropdown-state-open') &&
+              !subNav.classList.contains('dropdown-anim-opening') &&
+              !subNav.classList.contains('dropdown-anim-closing') && !forceClose) {
               return;
           }
           isDropdownAnimating = true;
           applyClassesToElements([subNav, mainDropdownDivider], ['dropdown-anim-closing'], ['dropdown-anim-opening', 'dropdown-state-open']);
-          requestAnimationFrame(updateDynamicHeaderLayout);
+          requestAnimationFrame(updateDynamicHeaderLayout); // Aggiorna layout durante animazione
           setTimeout(() => {
               applyClassesToElements([subNav, mainDropdownDivider], null, ['dropdown-anim-closing', 'dropdown-state-open']);
               isDropdownAnimating = false;
-              requestAnimationFrame(updateDynamicHeaderLayout);
+              requestAnimationFrame(updateDynamicHeaderLayout); // Aggiorna layout finale
           }, ANIMATION_DURATION);
       }
 
-      // MODIFICATO initializeLayoutAndMenu per passare il flag a openDropdown
       function initializeLayoutAndMenu() {
-          measureSubNavOnce();
-          requestAnimationFrame(updateDynamicHeaderLayout);
+          measureSubNavOnce(); // Misura subito
+          requestAnimationFrame(updateDynamicHeaderLayout); // Calcola layout iniziale
           setTimeout(() => {
-              openDropdown(false, true); // Passa true per isInitialOpening
+              openDropdown(false, true); // Apri menu con ritardo e flag per animazione griglia
           }, DROPDOWN_INITIAL_OPEN_DELAY);
       }
 
@@ -461,36 +461,46 @@
           window.addEventListener('load', initializeLayoutAndMenu, { once: true });
       }
 
-      const handleInitialScroll = () => {
-          if (isDropdownAnimating) return;
-          const isOpenOrOpening = subNav.classList.contains('dropdown-state-open') || subNav.classList.contains('dropdown-anim-opening');
-          if (isOpenOrOpening && window.scrollY > 20) {
-              closeDropdown();
-              window.removeEventListener('scroll', handleInitialScroll);
-          } else if (window.scrollY > 20) {
-              window.removeEventListener('scroll', handleInitialScroll);
-          }
-      };
-      window.addEventListener('scroll', handleInitialScroll, { passive: true });
-
       let lastScrollY = window.scrollY;
       let pageJustLoadedOrMenuInteracted = true;
+
       setTimeout(() => {
-        pageJustLoadedOrMenuInteracted = false;
-        lastScrollY = window.scrollY;
-      }, DROPDOWN_INITIAL_OPEN_DELAY + ANIMATION_DURATION + 300);
+        // Resetta il flag se l'utente non ha scrollato via durante l'apertura iniziale
+        if (window.scrollY <= 20) {
+            pageJustLoadedOrMenuInteracted = false;
+        }
+      }, DROPDOWN_INITIAL_OPEN_DELAY + ANIMATION_DURATION + 700); // Timeout leggermente più lungo
 
 
       window.addEventListener('scroll', function() {
-          if (pageJustLoadedOrMenuInteracted || isDropdownAnimating) {
-            if (window.scrollY > 0) pageJustLoadedOrMenuInteracted = false;
-            return;
-          }
           const currentScrollY = window.scrollY;
-          const isScrollingUp = currentScrollY < lastScrollY;
-          if (currentScrollY === 0 && isScrollingUp) {
-              if (!subNav.classList.contains('dropdown-state-open') && !subNav.classList.contains('dropdown-anim-opening')) {
-                  openDropdown(); // Non è l'apertura iniziale, quindi non passa il flag
+          const isOpen = subNav.classList.contains('dropdown-state-open');
+          const isOpening = subNav.classList.contains('dropdown-anim-opening');
+          const isOpenOrOpening = isOpen || isOpening;
+
+          if (pageJustLoadedOrMenuInteracted) {
+              if (currentScrollY > 20) {
+                  pageJustLoadedOrMenuInteracted = false;
+              }
+              lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
+              return;
+          }
+
+          if (isDropdownAnimating) {
+              // Se il menu si sta aprendo e l'utente scrolla giù, permetti alla logica di chiusura di intervenire
+              if (!(isOpening && currentScrollY > 20)) {
+                  lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
+                  return;
+              }
+          }
+
+          if (currentScrollY > 20 && isOpenOrOpening) {
+              if (!subNav.classList.contains('dropdown-anim-closing')) {
+                  closeDropdown();
+              }
+          } else if (currentScrollY === 0 && currentScrollY < lastScrollY) { // Implica scroll verso l'alto
+              if (!isOpenOrOpening && !isOpening) {
+                  openDropdown(false, false); // isInitialOpening = false
               }
           }
           lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
@@ -503,20 +513,23 @@
           if (subNav.classList.contains('dropdown-state-open') || subNav.classList.contains('dropdown-anim-opening')) {
               closeDropdown();
           } else {
-              openDropdown(); // Non è l'apertura iniziale
+              openDropdown(false, false); // isInitialOpening = false
           }
-          setTimeout(() => { pageJustLoadedOrMenuInteracted = false; }, ANIMATION_DURATION + 100);
+          setTimeout(() => { pageJustLoadedOrMenuInteracted = false; }, ANIMATION_DURATION + 200);
       });
   });
 
   window.addEventListener('resize', () => {
-      measureSubNavOnce();
-      requestAnimationFrame(updateDynamicHeaderLayout);
+      measureSubNavOnce(); // Ricalcola altezza subNav
+      requestAnimationFrame(updateDynamicHeaderLayout); // Aggiorna padding e posizioni
   });
 
+  // Assicura che il layout sia ricalcolato dopo che tutto è caricato, inclusi i font.
   window.addEventListener('load', () => {
       measureSubNavOnce();
       requestAnimationFrame(updateDynamicHeaderLayout);
+      // Un ulteriore piccolo ritardo per assicurarsi che i font siano renderizzati
+      // e che le dimensioni siano stabili prima di un ultimo calcolo.
       setTimeout(() => {
           measureSubNavOnce();
           requestAnimationFrame(updateDynamicHeaderLayout);
