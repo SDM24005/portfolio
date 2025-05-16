@@ -70,7 +70,8 @@
     /* === HEADER FISSO === */
     .sticky-header {
       position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
-      background-color: transparent; box-sizing: border-box; display: grid;
+      background-color: transparent; /* o #000000 se deve avere sfondo solido */
+      box-sizing: border-box; display: grid;
       align-items: start;
       padding: clamp(0.8rem, 1.5vw, 1.5rem) clamp(1.5rem, 4vw, 3rem);
       gap: clamp(1rem, 3vw, 2rem);
@@ -90,57 +91,50 @@
     /* STILI BASE PER ELEMENTI DROPDOWN */
     .header-sub-nav {
       width: 100%;
-      margin-top: calc(0.35em + 1px + 0.35em);
-      display: none; 
+      margin-top: calc(0.35em + 1px + 0.35em); /* Spazio tra "Samuele De March" e il sub-nav */
+      display: none;
       opacity: 0;
       transform: translateY(15px); /* Posizione iniziale per animazione coerente */
     }
     .header-sub-nav a {
       display: block; font-family: 'FormaDJRDisplay', sans-serif; line-height: 1.3;
     }
-    .divider { 
-      position: fixed; left: clamp(1.5rem, 4vw, 3rem); right: clamp(1.5rem, 4vw, 3rem);
+
+    /* LINEA ORIZZONTALE HEADER (SOTTO "Samuele De March" / "Galleria") */
+    .screen-wide-internal-line {
+      position: fixed;
+      left: clamp(1.5rem, 4vw, 3rem);
+      right: clamp(1.5rem, 4vw, 3rem);
       height: 1px; background-color: rgb(255, 255, 255); z-index: 999;
-      display: none; 
+      opacity: 0; /* Stato iniziale, l'animazione è gestita da .content-fade-in */
+      /* 'top' sarà gestito da JS */
+    }
+
+    /* DIVIDER SOTTO IL DROPDOWN (VISIBILE SOLO QUANDO DROPDOWN È APERTO/IN APERTURA) */
+    .divider {
+      position: fixed;
+      left: clamp(1.5rem, 4vw, 3rem);
+      right: clamp(1.5rem, 4vw, 3rem);
+      height: 1px; background-color: rgb(255, 255, 255); z-index: 999;
+      display: none;
       opacity: 0;
       transform: translateY(15px); /* Posizione iniziale per animazione coerente */
       /* Il 'top' sarà gestito da JS */
     }
-    
-    /* LINEA ORIZZONTALE HEADER */
-    .screen-wide-internal-line {
-  position: fixed; 
-  left: clamp(1.5rem, 4vw, 3rem); /* Default per schermi più grandi */
-  right: clamp(1.5rem, 4vw, 3rem); /* Default per schermi più grandi */
-  height: 1px; background-color: rgb(255, 255, 255); z-index: 999;
-  /* La proprietà 'top' è impostata da JavaScript. */
-  opacity: 0; /* Stato iniziale, l'animazione è gestita da .content-fade-in */
-}
 
-.divider { 
-  position: fixed; 
-  left: clamp(1.5rem, 4vw, 3rem); /* Valori globali, usati anche su mobile */
-  right: clamp(1.5rem, 4vw, 3rem); /* Valori globali, usati anche su mobile */
-  height: 1px; background-color: rgb(255, 255, 255); z-index: 999;
-  display: none; 
-  opacity: 0;
-  transform: translateY(15px); /* Posizione iniziale per animazione coerente */
-  /* Il 'top' sarà gestito da JS */
-}
-
-    /* CLASSI DI STATO E ANIMAZIONE PER IL DROPDOWN */
-    .dropdown-state-open { 
-      display: block !important; 
-      opacity: 1; 
-      transform: translateY(0); 
+    /* CLASSI DI STATO E ANIMAZIONE PER IL DROPDOWN (APPLICATE SIA A .header-sub-nav CHE A .divider) */
+    .dropdown-state-open {
+      display: block !important;
+      opacity: 1;
+      transform: translateY(0);
     }
     .dropdown-anim-opening {
-      display: block !important; 
-      animation: dropdownOpenUnifiedAnimation 0.4s ease-out forwards; 
+      display: block !important;
+      animation: dropdownOpenUnifiedAnimation 0.4s ease-out forwards;
     }
     .dropdown-anim-closing {
-      display: block !important; 
-      animation: dropdownCloseUnifiedAnimation 0.4s ease-out forwards; 
+      display: block !important;
+      animation: dropdownCloseUnifiedAnimation 0.4s ease-out forwards;
     }
 
     /* === CLASSI DI RITARDO PER LE ANIMAZIONI INIZIALI === */
@@ -157,7 +151,7 @@
     .content {
       padding-left: clamp(1.5rem, 4vw, 3rem); padding-right: clamp(1.5rem, 4vw, 3rem);
       padding-bottom: clamp(1.5rem, 4vw, 3rem);
-      /* padding-top sarà gestito da JavaScript */
+      /* padding-top sarà gestito da JavaScript per assicurare che sia sempre sotto l'header + dropdown potenziale */
     }
     /* === GRIGLIA IMMAGINI === */
     .image-grid {
@@ -196,23 +190,20 @@
       .image-grid { column-count: 2; }
     }
     @media (max-width: 600px) {
-  .sticky-header {
-    grid-template-columns: 1fr; grid-template-rows: auto auto;
-    gap: 5px clamp(0.8rem, 2.5vw, 1.5rem);
-    padding-top: clamp(0.5rem, 1.5vw, 1rem); padding-bottom: clamp(0.5rem, 1.5vw, 1rem);
-    /* Il padding laterale dell'header resta clamp(1.5rem, 4vw, 3rem) ereditato */
-  }
-  .grid-label-samuele { grid-column: 1; grid-row: 1; }
-  .grid-label-about { grid-column: 1; grid-row: 2; margin-top: 10px; }
-  .image-grid { column-count: 1; }
-  .grid-label { font-size: clamp(1.2rem, 5vw, 1.8rem); }
-  
-  .screen-wide-internal-line {
-    /* Aggiornato per corrispondere ai valori di .divider (e al padding dell'header) */
-    left: clamp(1.5rem, 4vw, 3rem); 
-    right: clamp(1.5rem, 4vw, 3rem);
-    /* 'top' è gestito da JS */
-  }
+      .sticky-header {
+        grid-template-columns: 1fr; grid-template-rows: auto auto;
+        gap: 5px clamp(0.8rem, 2.5vw, 1.5rem);
+        padding-top: clamp(0.5rem, 1.5vw, 1rem); padding-bottom: clamp(0.5rem, 1.5vw, 1rem);
+      }
+      .grid-label-samuele { grid-column: 1; grid-row: 1; }
+      .grid-label-about { grid-column: 1; grid-row: 2; margin-top: 10px; }
+      .image-grid { column-count: 1; }
+      .grid-label { font-size: clamp(1.2rem, 5vw, 1.8rem); }
+
+      .screen-wide-internal-line {
+        left: clamp(1.5rem, 4vw, 3rem);
+        right: clamp(1.5rem, 4vw, 3rem);
+      }
     }
   </style>
 </head>
@@ -228,12 +219,11 @@
         </div>
     </div>
     <a href="/portfolio/index.html" class="grid-label grid-label-about content-fade-in initial-anim-delay-1">Galleria</a>
-    
+
     <div class="screen-wide-internal-line content-fade-in initial-anim-delay-2"></div>
   </header>
 
-  <div class="divider"></div>
-  <div class="content">
+  <div class="divider"></div> <div class="content">
     <div class="image-grid content-fade-in initial-anim-delay-3">
       <a href="/portfolio/progetti/konn.html" class="content-fade-in initial-anim-delay-4">
         <img src="/portfolio/img/imgPreview/kon glass.gif" alt="Progetto 1">
@@ -263,7 +253,7 @@
             <span class="project-type">Illustrazione</span>
         </div>
       </a>
-      <a href="/portfolio/progetti/konn.html" class="content-fade-in initial-anim-delay-8"> 
+      <a href="/portfolio/progetti/konn.html" class="content-fade-in initial-anim-delay-8">
         <img src="/portfolio/img/imgPreview/prova%205.png" alt="Progetto Prova 5">
         <div class="project-title">
           <span class="project-name">Prova</span>
@@ -290,69 +280,112 @@
       });
   }
 
+  // --- Variabile globale per l'altezza misurata del subNav ---
+  let measuredSubNavHeight = 0;
+
+  // --- Funzione per misurare l'altezza del subNav ---
+  function measureSubNavOnce() {
+    if (measuredSubNavHeight > 0) return measuredSubNavHeight; // Già misurata
+
+    const subNavToMeasure = document.querySelector('.header-sub-nav');
+    if (!subNavToMeasure) return 0;
+
+    const clone = subNavToMeasure.cloneNode(true);
+    clone.style.visibility = 'hidden';
+    clone.style.position = 'absolute';
+    clone.style.top = '-9999px';
+    clone.style.left = '-9999px';
+    clone.style.display = 'block'; // Forza visualizzazione
+    clone.style.opacity = '1';
+    clone.style.transform = 'translateY(0)';
+    clone.classList.remove('dropdown-anim-opening', 'dropdown-anim-closing');
+    // Rimuovi margin-top specifico se interferisce con la misurazione dell'altezza pura
+    // clone.style.marginTop = '0'; // Dipende se il margin-top è parte dell'altezza che vuoi considerare
+
+    document.body.appendChild(clone);
+    measuredSubNavHeight = clone.offsetHeight; // Altezza del contenuto del subNav
+    document.body.removeChild(clone);
+    return measuredSubNavHeight;
+  }
+
+
   // --- SCRIPT PER LAYOUT DINAMICO HEADER E CONTENT PADDING ---
   function updateDynamicHeaderLayout() {
       const header = document.querySelector('.sticky-header');
       const subNav = document.querySelector('.header-sub-nav');
-      const mainDivider = document.querySelector('.divider');
+      const mainDropdownDivider = document.querySelector('.divider'); // Il divider sotto il sub-nav
       const content = document.querySelector('.content');
-      const screenWideLine = document.querySelector('.screen-wide-internal-line'); // Seleziona la linea
+      const screenWideLine = document.querySelector('.screen-wide-internal-line'); // Linea fissa dell'header
+      const mainHeaderTextElement = document.getElementById('samuele-dropdown-toggle');
 
-      if (!header || !subNav || !mainDivider || !content || !screenWideLine) {
-          // console.warn("Elementi chiave per il layout dinamico dell'header non trovati.");
+      if (!header || !subNav || !mainDropdownDivider || !content || !screenWideLine || !mainHeaderTextElement) {
           return;
       }
 
-      // Calcola e imposta il 'top' di .screen-wide-internal-line
-      const mainHeaderTextElement = document.getElementById('samuele-dropdown-toggle');
-      if (mainHeaderTextElement && mainHeaderTextElement.offsetParent !== null) { // Verifica che l'elemento sia renderizzato e parte del layout
+      // 1. Posiziona .screen-wide-internal-line (linea principale dell'header)
+      if (mainHeaderTextElement.offsetParent !== null) {
           const mainTextRect = mainHeaderTextElement.getBoundingClientRect();
-          const gridLabelElement = mainHeaderTextElement.parentElement; // .grid-label-samuele
-          
+          const gridLabelElement = mainHeaderTextElement.parentElement;
           if (gridLabelElement && gridLabelElement.offsetParent !== null) {
-            const gridLabelStyle = window.getComputedStyle(gridLabelElement);
-            // L'offset di 0.35em del CSS originale era probabilmente relativo al font-size del .grid-label (parent del toggle)
-            const emBasedOffset = parseFloat(gridLabelStyle.fontSize) * 0.35;
-            
-            // Il top della linea è: la posizione Y del fondo del testo "Samuele De March" + un piccolo offset.
-            // mainTextRect.bottom è già la coordinata Y rispetto al viewport.
-            let calculatedLineTop = mainTextRect.bottom + emBasedOffset;
-            screenWideLine.style.top = calculatedLineTop + 'px';
+              const gridLabelStyle = window.getComputedStyle(gridLabelElement);
+              const emBasedOffset = parseFloat(gridLabelStyle.fontSize) * 0.35; // come da CSS .header-sub-nav margin-top
+              let calculatedLineTop = mainTextRect.bottom + emBasedOffset;
+              screenWideLine.style.top = calculatedLineTop + 'px';
           }
       }
 
-      const spacingSubNavToDivider = 10;
-      const spacingDividerToContent = 20;
-      const spacingHeaderToContentDefault = 20;
+      // 2. Calcola il padding-top PERMANENTE per .content
+      // Questo padding deve tener conto dell'header fino alla screenWideLine,
+      // più lo spazio per il subNav completamente espanso, più il suo divider, più lo spacing.
 
+      const samueleToggleRect = mainHeaderTextElement.getBoundingClientRect();
+      // Il subNav parte da sotto il toggle "Samuele De March"
+      let subNavPotentialTop = samueleToggleRect.bottom;
+
+      // Aggiungi il margin-top effettivo del .header-sub-nav (dal CSS)
+      const subNavComputedStyle = window.getComputedStyle(subNav);
+      const subNavTopMargin = parseFloat(subNavComputedStyle.marginTop) || 0;
+
+      // Altezza del subNav (usa quella misurata)
+      const subNavHeight = measuredSubNavHeight > 0 ? measuredSubNavHeight : 50; // Fallback a 50px se non misurata
+
+      const spacingSubNavToDivider = 10; // Spazio tra fine subNav e inizio divider
+      const mainDividerHeight = 1;       // Altezza del .divider
+      const spacingDividerToContent = 20; // Spazio tra fine divider e inizio effettivo del content
+
+      // Il padding-top del content è la somma di:
+      // Posizione Y del fondo del toggle "Samuele De March" (rispetto al viewport, ma l'header è fisso in alto)
+      // + margin-top del subNav
+      // + altezza del subNav
+      // + spazio fino al divider
+      // + altezza del divider
+      // + spazio fino al content
+      let requiredContentPaddingTop = subNavPotentialTop + subNavTopMargin + subNavHeight + spacingSubNavToDivider + mainDividerHeight + spacingDividerToContent;
+      content.style.paddingTop = requiredContentPaddingTop + 'px';
+
+
+      // 3. Posiziona .divider (quello SOTTO il subNav) SOLO se il subNav è aperto o in animazione
       const isDropdownOpen = subNav.classList.contains('dropdown-state-open');
       const isDropdownOpening = subNav.classList.contains('dropdown-anim-opening');
       const isDropdownClosing = subNav.classList.contains('dropdown-anim-closing');
-      
-      // Il divider e il padding del content cambiano se il dropdown è aperto, in apertura, o in chiusura
-      const isDropdownActiveForLayout = isDropdownOpen || isDropdownOpening || isDropdownClosing;
 
-      if (isDropdownActiveForLayout && subNav.offsetParent !== null) {
-          const subNavRect = subNav.getBoundingClientRect();
-          // Solo se subNavRect.height è un valore sensato (es. > 0)
-          // e non stiamo chiudendo al punto che è già nascosto (anche se le classi ci sono ancora)
-          if (subNavRect.height > 0 && (isDropdownOpen || isDropdownOpening)) {
-            let newDividerTop = subNavRect.bottom + spacingSubNavToDivider;
-            mainDivider.style.top = newDividerTop + 'px';
-            let newContentPaddingTop = newDividerTop + mainDivider.offsetHeight + spacingDividerToContent;
-            content.style.paddingTop = newContentPaddingTop + 'px';
-          } else if (!isDropdownOpen && !isDropdownOpening) { 
-            // Se è solo in animazione di chiusura o le classi sono stale ma è nascosto, usa il default
-            const headerRect = header.getBoundingClientRect();
-            let defaultContentPaddingTop = headerRect.bottom + spacingHeaderToContentDefault;
-            content.style.paddingTop = defaultContentPaddingTop + 'px';
-            if (!isDropdownClosing) mainDivider.style.top = ''; // Nascondi il divider se non è in chiusura
-          }
+      if ((isDropdownOpen || isDropdownOpening) && subNav.offsetParent !== null) {
+          // Usa l'altezza reale del subNav perché è (o sta diventando) visibile
+          const subNavRectReal = subNav.getBoundingClientRect(); // Posizione e dimensioni attuali
+          let newDividerTop = subNavRectReal.bottom + spacingSubNavToDivider;
+          mainDropdownDivider.style.top = newDividerTop + 'px';
+      } else if (isDropdownClosing) {
+          // Durante la chiusura, il divider si animerà via con la classe CSS.
+          // Potrebbe essere necessario assicurarsi che il suo 'top' non cambi bruscamente.
+          // Se l'animazione 'dropdownCloseUnifiedAnimation' gestisce transform e opacity,
+          // il 'top' potrebbe rimanere quello dell'ultimo stato aperto.
+          // Per sicurezza, ricalcoliamolo come se fosse ancora aperto, l'animazione farà il resto.
+          let lastKnownDividerTop = subNavPotentialTop + subNavTopMargin + subNavHeight + spacingSubNavToDivider;
+          mainDropdownDivider.style.top = lastKnownDividerTop + 'px';
       } else {
-          mainDivider.style.top = ''; // Resetta/nascondi il divider
-          const headerRect = header.getBoundingClientRect();
-          let defaultContentPaddingTop = headerRect.bottom + spacingHeaderToContentDefault;
-          content.style.paddingTop = defaultContentPaddingTop + 'px';
+          // Non visibile, non serve impostare il top (le classi CSS gestiscono display:none)
+          // mainDropdownDivider.style.top = ''; // Potrebbe causare flicker se rimosso e riaggiunto.
+                                             // Le classi di animazione dovrebbero gestire la scomparsa.
       }
   }
 
@@ -360,14 +393,14 @@
   document.addEventListener('DOMContentLoaded', function() {
       const toggleElement = document.getElementById('samuele-dropdown-toggle');
       const subNav = document.querySelector('.header-sub-nav');
-      const mainDivider = document.querySelector('.divider'); 
+      const mainDropdownDivider = document.querySelector('.divider'); // Il divider sotto il subNav
 
-      if (!toggleElement || !subNav || !mainDivider) {
-          console.error("Elementi chiave (toggle, subNav, mainDivider) non trovati per il menu.");
+      if (!toggleElement || !subNav || !mainDropdownDivider) {
+          console.error("Elementi chiave (toggle, subNav, mainDropdownDivider) non trovati per il menu.");
           return;
       }
 
-      const ANIMATION_DURATION = 400; 
+      const ANIMATION_DURATION = 400;
       let isDropdownAnimating = false;
       const DROPDOWN_INITIAL_OPEN_DELAY = 400;
 
@@ -379,80 +412,127 @@
               }
           });
       }
-      
-      function openDropdown() {
-          if (isDropdownAnimating) return;
-          isDropdownAnimating = true;
 
-          applyClassesToElements([subNav, mainDivider], ['dropdown-anim-opening'], ['dropdown-anim-closing', 'dropdown-state-open']);
-          requestAnimationFrame(updateDynamicHeaderLayout);
+      function openDropdown(forceOpen = false) {
+          if (isDropdownAnimating && !forceOpen) return;
+          if ((subNav.classList.contains('dropdown-state-open') || subNav.classList.contains('dropdown-anim-opening')) && !forceOpen) {
+              return;
+          }
+
+          isDropdownAnimating = true;
+          applyClassesToElements([subNav, mainDropdownDivider], ['dropdown-anim-opening'], ['dropdown-anim-closing', 'dropdown-state-open']);
+          requestAnimationFrame(updateDynamicHeaderLayout); // Aggiorna posizioni
 
           setTimeout(() => {
-              applyClassesToElements([subNav, mainDivider], ['dropdown-state-open'], ['dropdown-anim-opening']);
+              applyClassesToElements([subNav, mainDropdownDivider], ['dropdown-state-open'], ['dropdown-anim-opening']);
               isDropdownAnimating = false;
-              requestAnimationFrame(updateDynamicHeaderLayout); 
+              requestAnimationFrame(updateDynamicHeaderLayout); // Riequilibra dopo animazione
           }, ANIMATION_DURATION);
       }
 
-      function closeDropdown() {
-          if (isDropdownAnimating) return;
-          isDropdownAnimating = true;
+      function closeDropdown(forceClose = false) {
+          if (isDropdownAnimating && !forceClose) return;
+          if ((!subNav.classList.contains('dropdown-state-open') && !subNav.classList.contains('dropdown-anim-opening')) && !subNav.classList.contains('dropdown-anim-closing') && !forceClose) {
+              return; // Già chiuso o non in uno stato da cui chiudere
+          }
 
-          applyClassesToElements([subNav, mainDivider], ['dropdown-anim-closing'], ['dropdown-anim-opening', 'dropdown-state-open']);
-          requestAnimationFrame(updateDynamicHeaderLayout);
-          
+          isDropdownAnimating = true;
+          applyClassesToElements([subNav, mainDropdownDivider], ['dropdown-anim-closing'], ['dropdown-anim-opening', 'dropdown-state-open']);
+          requestAnimationFrame(updateDynamicHeaderLayout); // Aggiorna posizioni
+
           setTimeout(() => {
-              applyClassesToElements([subNav, mainDivider], null, ['dropdown-anim-closing', 'dropdown-state-open']);
+              applyClassesToElements([subNav, mainDropdownDivider], null, ['dropdown-anim-closing', 'dropdown-state-open']);
               isDropdownAnimating = false;
-              requestAnimationFrame(updateDynamicHeaderLayout); 
+              requestAnimationFrame(updateDynamicHeaderLayout); // Riequilibra dopo animazione
           }, ANIMATION_DURATION);
       }
 
-      setTimeout(() => {
-          openDropdown();
-      }, DROPDOWN_INITIAL_OPEN_DELAY);
+      // Misura l'altezza del subNav una volta che il DOM è pronto e i font potrebbero essere caricati
+      // Lo facciamo qui prima dell'apertura iniziale per avere una misura per updateDynamicHeaderLayout
+      if (document.readyState === 'complete') {
+          measureSubNavOnce();
+          requestAnimationFrame(updateDynamicHeaderLayout); // Prima chiamata per impostare il padding corretto
+      } else {
+          window.addEventListener('load', () => { // Assicura che tutto sia caricato, inclusi i font
+              measureSubNavOnce();
+              requestAnimationFrame(updateDynamicHeaderLayout);
+              // Apertura iniziale del dropdown
+              setTimeout(() => {
+                  openDropdown();
+              }, DROPDOWN_INITIAL_OPEN_DELAY);
+          }, { once: true });
+      }
 
+
+      // Logica per chiudere il dropdown allo scroll iniziale
       const handleInitialScroll = () => {
           if (isDropdownAnimating) return;
-          
           const isOpenOrOpening = subNav.classList.contains('dropdown-state-open') || subNav.classList.contains('dropdown-anim-opening');
-          const isClosing = subNav.classList.contains('dropdown-anim-closing');
-
-          if (isOpenOrOpening && !isClosing && window.scrollY > 20) {
+          if (isOpenOrOpening && window.scrollY > 20) {
               closeDropdown();
               window.removeEventListener('scroll', handleInitialScroll);
-          } else if (window.scrollY > 20 && !(isOpenOrOpening || isClosing)) { 
+          } else if (window.scrollY > 20) { // Se non era aperto ma l'utente scrolla, non serve più questo listener
               window.removeEventListener('scroll', handleInitialScroll);
           }
       };
       window.addEventListener('scroll', handleInitialScroll, { passive: true });
 
+      // NUOVA Logica per riaprire il dropdown scorrendo in cima
+      let lastScrollY = window.scrollY;
+      let pageJustLoaded = true; // Flag per ignorare il primo evento scroll se la pagina carica non in cima
+
+      // Dopo un breve ritardo, considera la pagina "caricata" per la logica di scroll to top.
+      setTimeout(() => {
+        pageJustLoaded = false;
+        lastScrollY = window.scrollY; // Aggiorna lastScrollY dopo il caricamento/apertura iniziale
+      }, DROPDOWN_INITIAL_OPEN_DELAY + ANIMATION_DURATION + 200);
+
+
+      window.addEventListener('scroll', function() {
+          if (pageJustLoaded || isDropdownAnimating) {
+            if (window.scrollY > 0) pageJustLoaded = false; // Se l'utente scrolla, la pagina non è più "appena caricata"
+            return;
+          }
+
+          const currentScrollY = window.scrollY;
+          const isScrollingUp = currentScrollY < lastScrollY;
+
+          if (currentScrollY === 0 && isScrollingUp) {
+              if (!subNav.classList.contains('dropdown-state-open') && !subNav.classList.contains('dropdown-anim-opening')) {
+                  openDropdown();
+              }
+          }
+          lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
+      }, { passive: true });
+
       toggleElement.addEventListener('click', function(event) {
           event.preventDefault();
           if (isDropdownAnimating) return;
-
           if (subNav.classList.contains('dropdown-state-open') || subNav.classList.contains('dropdown-anim-opening')) {
               closeDropdown();
           } else {
               openDropdown();
           }
       });
-
-      // Chiamata iniziale per impostare il layout (es. padding-top del content)
-      requestAnimationFrame(updateDynamicHeaderLayout);
   });
 
   window.addEventListener('resize', () => {
+      measureSubNavOnce(); // Ricalcola se dimensioni font/elementi cambiano con resize
       requestAnimationFrame(updateDynamicHeaderLayout);
   });
 
+  // Chiamata finale su load per assicurare che tutto sia allineato,
+  // specialmente se measureSubNavOnce non è ancora stata chiamata o se i font hanno tardato.
   window.addEventListener('load', () => {
+      measureSubNavOnce();
       requestAnimationFrame(updateDynamicHeaderLayout);
       // Ulteriore chiamata ritardata per massima sicurezza con i font rendering
       setTimeout(() => {
-        requestAnimationFrame(updateDynamicHeaderLayout);
-      }, 100); 
-  });
+          measureSubNavOnce();
+          requestAnimationFrame(updateDynamicHeaderLayout);
+      }, 250);
+  }, { once: true }); // Esegui solo una volta questo listener specifico di 'load'
+
 </script>
 
 </body>
