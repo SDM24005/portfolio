@@ -121,8 +121,8 @@
     .header-sub-nav {
       width: 100%;
       margin-top: calc(0.35em + 1px + 0.35em);
-      display: none; /* Nascosto di default, mostrato con JS */
-      opacity: 0;
+      display: none; /* Nascosto di default, mostrato con JS o con la classe .dropdown-item-attivo */
+      opacity: 0;   /* Opacità iniziale per animazione fade-in */
     }
 
     .header-sub-nav a {
@@ -155,14 +155,15 @@
       height: 1px;
       background-color: rgb(255, 255, 255);
       z-index: 999;
-      display: none;
-      opacity: 0;      
-      animation: none;
+      display: none; /* Nascosto di default, mostrato con JS o con la classe .dropdown-item-attivo */
+      opacity: 0;       
+      animation: none; /* L'animazione viene gestita da .dropdown-item-attivo */
     }
 
     /* === STILI DROPDOWN === */
     .dropdown-item-attivo {
       display: block !important;
+      opacity: 1; /* Assicura che sia visibile */
       animation: dropdownFadeIn 0.4s ease-out forwards;
     }
 
@@ -352,86 +353,122 @@
     </div>
   </div>
 
-  <script>
-    // --- SCRIPT CURSORE PERSONALIZZATO ---
-    const customCursorElement = document.getElementById('customCursor');
-    const interactiveElements = document.querySelectorAll('a, #samuele-dropdown-toggle');
+<script>
+  // --- SCRIPT CURSORE PERSONALIZZATO ---
+  const customCursorElement = document.getElementById('customCursor');
+  const interactiveElements = document.querySelectorAll('a, #samuele-dropdown-toggle');
 
-    if (customCursorElement) {
-        document.addEventListener('mousemove', (e) => {
-            window.requestAnimationFrame(() => {
-                customCursorElement.style.top = `${e.clientY}px`;
-                customCursorElement.style.left = `${e.clientX}px`;
-            });
-        });
+  if (customCursorElement) {
+      document.addEventListener('mousemove', (e) => {
+          window.requestAnimationFrame(() => {
+              customCursorElement.style.top = `${e.clientY}px`;
+              customCursorElement.style.left = `${e.clientX}px`;
+          });
+      });
 
-        interactiveElements.forEach(el => {
-            el.addEventListener('mouseenter', () => {
-                customCursorElement.classList.add('cursor-hover-active');
-            });
-            el.addEventListener('mouseleave', () => {
-                customCursorElement.classList.remove('cursor-hover-active');
-            });
-        });
-    }
+      interactiveElements.forEach(el => {
+          el.addEventListener('mouseenter', () => {
+              customCursorElement.classList.add('cursor-hover-active');
+          });
+          el.addEventListener('mouseleave', () => {
+              customCursorElement.classList.remove('cursor-hover-active');
+          });
+      });
+  }
 
-    // --- SCRIPT PER LAYOUT DINAMICO HEADER E CONTENT PADDING ---
-    function updateDynamicHeaderLayout() {
-        const header = document.querySelector('.sticky-header');
-        const subNav = document.querySelector('.header-sub-nav');
-        const mainDivider = document.querySelector('.divider');
-        const content = document.querySelector('.content');
+  // --- SCRIPT PER LAYOUT DINAMICO HEADER E CONTENT PADDING ---
+  // Questa funzione è definita globalmente per essere accessibile da DOMContentLoaded e resize listener
+  function updateDynamicHeaderLayout() {
+      const header = document.querySelector('.sticky-header');
+      const subNav = document.querySelector('.header-sub-nav');
+      const mainDivider = document.querySelector('.divider');
+      const content = document.querySelector('.content');
 
-        if (!header || !subNav || !mainDivider || !content) {
-            console.warn("Elementi chiave per il layout dinamico dell'header non trovati.");
-            return;
-        }
+      if (!header || !subNav || !mainDivider || !content) {
+          // console.warn("Elementi chiave per il layout dinamico dell'header non trovati in updateDynamicHeaderLayout.");
+          return;
+      }
 
-        const spacingSubNavToDivider = 10;    // Spazio in px tra sottomenu e linea divisoria
-        const spacingDividerToContent = 20;   // Spazio in px tra linea divisoria e contenuto
-        const spacingHeaderToContentDefault = 20; // Spazio in px tra header (dropdown chiuso) e contenuto
+      const spacingSubNavToDivider = 10;
+      const spacingDividerToContent = 20;
+      const spacingHeaderToContentDefault = 20;
 
-        if (subNav.classList.contains('dropdown-item-attivo')) {
-            // Dropdown è aperto: JS controlla il posizionamento
-            const subNavRect = subNav.getBoundingClientRect();
-            let newDividerTop = subNavRect.bottom + spacingSubNavToDivider;
-            mainDivider.style.top = newDividerTop + 'px';
+      if (subNav.classList.contains('dropdown-item-attivo')) {
+          const subNavRect = subNav.getBoundingClientRect();
+          let newDividerTop = subNavRect.bottom + spacingSubNavToDivider;
+          mainDivider.style.top = newDividerTop + 'px';
 
-            let newContentPaddingTop = newDividerTop + mainDivider.offsetHeight + spacingDividerToContent;
-            content.style.paddingTop = newContentPaddingTop + 'px';
-        } else {
-            // Dropdown è chiuso
-            mainDivider.style.top = '';
-            
-            const headerRect = header.getBoundingClientRect();
-            let defaultContentPaddingTop = headerRect.bottom + spacingHeaderToContentDefault;
-            content.style.paddingTop = defaultContentPaddingTop + 'px';
-        }
-    }
+          let newContentPaddingTop = newDividerTop + mainDivider.offsetHeight + spacingDividerToContent;
+          content.style.paddingTop = newContentPaddingTop + 'px';
+      } else {
+          mainDivider.style.top = ''; 
+          
+          const headerRect = header.getBoundingClientRect();
+          let defaultContentPaddingTop = headerRect.bottom + spacingHeaderToContentDefault;
+          content.style.paddingTop = defaultContentPaddingTop + 'px';
+      }
+  }
 
-    // --- SCRIPT MENU A TENDINA (MODIFICATO PER INCLUDERE AGGIORNAMENTO LAYOUT) ---
-    document.addEventListener('DOMContentLoaded', function() {
-        const toggleElement = document.getElementById('samuele-dropdown-toggle');
-        const subNav = document.querySelector('.header-sub-nav');
-        const mainDivider = document.querySelector('.divider');  
 
-        if (toggleElement && subNav && mainDivider) {
-            toggleElement.addEventListener('click', function(event) {
-                event.preventDefault();
-                
-                subNav.classList.toggle('dropdown-item-attivo');
-                mainDivider.classList.toggle('dropdown-item-attivo');
-                
-                requestAnimationFrame(updateDynamicHeaderLayout);
-            });
-        }
-        requestAnimationFrame(updateDynamicHeaderLayout); // Chiamata iniziale
-    });
+  // --- SCRIPT MENU A TENDINA E SCROLL ---
+  document.addEventListener('DOMContentLoaded', function() {
+      const toggleElement = document.getElementById('samuele-dropdown-toggle');
+      const subNav = document.querySelector('.header-sub-nav');
+      const mainDivider = document.querySelector('.divider');
 
-    window.addEventListener('resize', () => {
-        requestAnimationFrame(updateDynamicHeaderLayout);
-    });
-  </script>
+      if (!toggleElement || !subNav || !mainDivider) {
+          console.error("Elementi chiave (toggle, subNav, mainDivider) non trovati per l'inizializzazione del menu.");
+          return;
+      }
+
+      // 1. APRIRE LA TENDINA INIZIALMENTE
+      subNav.classList.add('dropdown-item-attivo');
+      mainDivider.classList.add('dropdown-item-attivo');
+      
+      // Aggiorna il layout DOPO aver aperto la tendina.
+      // Usiamo requestAnimationFrame per assicurarci che il browser abbia processato
+      // l'aggiunta delle classi prima di calcolare il layout.
+      requestAnimationFrame(() => {
+          updateDynamicHeaderLayout();
+
+          // 2. LOGICA DI CHIUSURA ALLO SCROLL INIZIALE
+          // Definiamo la funzione di gestione dello scroll qui per avere accesso
+          // a subNav e mainDivider tramite closure.
+          const handleInitialScroll = () => {
+              // Controlla se il dropdown è ancora aperto e se l'utente ha scrollato un po'
+              // (es. più di 20px per evitare chiusure troppo sensibili al minimo movimento)
+              if (subNav.classList.contains('dropdown-item-attivo') && window.scrollY > 20) {
+                  subNav.classList.remove('dropdown-item-attivo');
+                  mainDivider.classList.remove('dropdown-item-attivo');
+                  
+                  requestAnimationFrame(updateDynamicHeaderLayout); // Aggiorna il layout dopo la chiusura
+
+                  // Rimuovi l'event listener dello scroll per evitare che si attivi di nuovo
+                  // e per permettere al toggle manuale di funzionare senza interferenze.
+                  window.removeEventListener('scroll', handleInitialScroll);
+              }
+          };
+          // Aggiungiamo l'event listener per lo scroll.
+          // { passive: true } è una best practice per la performance se l'handler non chiama preventDefault().
+          window.addEventListener('scroll', handleInitialScroll, { passive: true });
+      });
+
+
+      // --- GESTORE DEL TOGGLE MANUALE (come nel codice originale) ---
+      toggleElement.addEventListener('click', function(event) {
+          event.preventDefault();
+          
+          subNav.classList.toggle('dropdown-item-attivo');
+          mainDivider.classList.toggle('dropdown-item-attivo'); 
+          
+          requestAnimationFrame(updateDynamicHeaderLayout);
+      });
+  });
+
+  window.addEventListener('resize', () => {
+      requestAnimationFrame(updateDynamicHeaderLayout);
+  });
+</script>
 
 </body>
 </html>
