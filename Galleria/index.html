@@ -1,540 +1,434 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Portfolio Samuele De March</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galleria Immagini - Header con Menu a Tendina</title>
+<style>
+@font-face {
+font-family: 'FormaDJRDisplay';
+src: url('/fonts/FormaDJRDisplay-Regular-Testing.otf') format('opentype');
+font-weight: normal;
+font-style: normal;
+}
 
-  <style>
-    /* === DEFINIZIONE FONT === */
-    @font-face {
-      font-family: 'FormaDJRText';
-      src: url('fonts/FormaDJRText-Medium-Testing.otf') format('opentype');
-    }
-    @font-face {
-      font-family: 'PPEditorialOld';
-      src: url('fonts/PPEditorialOld-ThinItalic.woff') format('woff');
-    }
-    @font-face {
-      font-family: 'FormaDJRDisplay';
-      src: url('fonts/FormaDJRDisplay-Regular-Testing.otf') format('opentype');
-    }
-
-    /* === RESET BASE E STILI GLOBALI === */
     body {
-      margin: 0;
-      padding: 0;
-      font-family: 'FormaDJRText', sans-serif;
-      background-color: #000000;
-      color: rgb(255, 255, 255);
-      cursor: none;
-    }
-    a {
-      color: rgb(255, 255, 255);
-      text-decoration: none;
-      cursor: none;
+        margin: 0;
+        font-family: sans-serif;
+        background-color: #000000;
+        cursor: none !important; /* Hide system cursor for the body */
     }
 
-    /* === CURSORE PERSONALIZZATO === */
-    .cursor {
-      position: fixed; top: 0; left: 0; width: 20px; height: 20px;
-      background-color: grey; border-radius: 50%; pointer-events: none;
-      z-index: 1001; transform: translate(-50%, -50%) scale(1);
-      transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-    .cursor.cursor-hover-active {
-      background-color: white; transform: translate(-50%, -50%) scale(1.3);
+    /* Ensure common interactive elements also hide their default cursors */
+    a, button, input[type="button"], input[type="submit"], select, textarea, label[for], #menu-trigger,
+    .title-gallery {
+        cursor: none !important;
     }
 
-    /* === ANIMAZIONI KEYFRAMES UNIFICATE === */
-    @keyframes initialContentLoadedAnimation {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .content-fade-in {
-      opacity: 0; /* Stato iniziale prima dell'animazione */
-      animation: initialContentLoadedAnimation 1s ease-out forwards;
-    }
-    @keyframes dropdownOpenUnifiedAnimation {
-      from { opacity: 0; transform: translateY(15px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes dropdownCloseUnifiedAnimation {
-      from { opacity: 1; transform: translateY(0); }
-      to { opacity: 0; transform: translateY(15px); }
+    #custom-cursor {
+        position: fixed;
+        width: 12px;
+        height: 12px;
+        background-color: grey;
+        border-radius: 50%;
+        pointer-events: none; /* Cursor div does not intercept mouse events */
+        transform: translate(-50%, -50%);
+        transition: width 0.15s ease-out, height 0.15s ease-out, background-color 0.15s ease-out;
+        z-index: 99999; /* Very high z-index */
+        display: none; /* Initially hidden, shown on first mousemove */
     }
 
-    /* === HEADER FISSO === */
-    .sticky-header {
-      position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
-      background-color: transparent;
-      box-sizing: border-box; display: grid;
-      align-items: start;
-      padding: clamp(0.8rem, 1.5vw, 1.5rem) clamp(1.5rem, 4vw, 3rem);
-      gap: clamp(1rem, 3vw, 2rem);
-    }
-    .grid-label {
-      font-family: 'FormaDJRDisplay', sans-serif;
-      font-size: clamp(1.5rem, 2vw, 2.5rem);
-    }
-    .grid-label-about:hover, .header-sub-nav a:hover {
-      opacity: 0.7; transition: opacity 0.3s;
-    }
-    .grid-label-samuele {
-      display: flex; flex-direction: column; align-items: flex-start;
-    }
-    #samuele-dropdown-toggle { cursor: pointer; display: inline-block; }
-
-    /* STILI BASE PER ELEMENTI DROPDOWN */
-    .header-sub-nav {
-      width: 100%;
-      margin-top: calc(0.35em + 1px + 0.35em);
-      display: none;
-      opacity: 0;
-      transform: translateY(15px);
-    }
-    .header-sub-nav a {
-      display: block; font-family: 'FormaDJRDisplay', sans-serif; line-height: 1.3;
+    #custom-cursor.hover {
+        width: 24px;
+        height: 24px;
+        background-color: white;
     }
 
-    /* LINEA ORIZZONTALE HEADER (PRINCIPALE) */
-    .screen-wide-internal-line {
-      position: fixed;
-      left: clamp(1.5rem, 4vw, 3rem);
-      right: clamp(1.5rem, 4vw, 3rem);
-      height: 1px; background-color: rgb(255, 255, 255); z-index: 998;
-      opacity: 0; /* Animata con .content-fade-in */
+    .fixed-header {
+        /* Contenitore semantico */
     }
 
-    /* DIVIDER SOTTO IL DROPDOWN */
-    .divider {
-      position: fixed;
-      left: clamp(1.5rem, 4vw, 3rem);
-      right: clamp(1.5rem, 4vw, 3rem);
-      height: 1px; background-color: rgb(255, 255, 255); z-index: 999;
-      display: none;
-      opacity: 0;
-      transform: translateY(15px);
+    .header-text {
+        font-family: 'FormaDJRDisplay', sans-serif;
+        font-size: 20px;
+        font-weight: normal;
+        color: white;
+        line-height: 1.2; /* Altezza riga effettiva ~24px */
+        margin: 0;
+        text-decoration: none;
+        display: block;
     }
 
-    /* CLASSI DI STATO E ANIMAZIONE PER IL DROPDOWN */
-    .dropdown-state-open {
-      display: block !important;
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .dropdown-anim-opening {
-      display: block !important;
-      animation: dropdownOpenUnifiedAnimation 0.4s ease-out forwards;
-    }
-    .dropdown-anim-closing {
-      display: block !important;
-      animation: dropdownCloseUnifiedAnimation 0.4s ease-out forwards;
+    .main-title-name {
+        position: fixed;
+        top: 15px;
+        z-index: 1001;
+        /* cursor: pointer;  Will be managed by JS, now overridden by global rule */
     }
 
-    /* === CLASSI DI RITARDO (per l'header) === */
-    .initial-anim-delay-1 { animation-delay: 0.2s; }
-    .initial-anim-delay-2 { animation-delay: 0.3s; }
-
-    /* === CONTENUTO PRINCIPALE === */
-    .content {
-      padding-left: clamp(1.5rem, 4vw, 3rem); padding-right: clamp(1.5rem, 4vw, 3rem);
-      padding-bottom: clamp(1.5rem, 4vw, 3rem);
-      /* padding-top sarà gestito dal JS per desktop e dal CSS per mobile */
+    .header-line {
+        position: fixed;
+        background-color: white;
+        height: 1px;
+        z-index: 1000;
     }
 
-    /* === GRIGLIA IMMAGINI === */
-    .image-grid {
-      column-count: 3; column-gap: clamp(1rem, 3vw, 2rem); width: 100%;
-      opacity: 0; /* Nascosto inizialmente, animato da JS */
+    #line-1 {
+        top: calc(15px + (20px * 1.2) + 10px); /* 49px */
     }
-    .image-grid a {
-      display: inline-block; width: 100%; margin-bottom: clamp(0.5rem, 2vw, 1rem);
-      break-inside: avoid; position: relative; overflow: hidden;
-      opacity: 0; /* Nascosto inizialmente, animato da JS */
-    }
-    .image-grid img {
-      width: 100%; display: block; transition: transform 0.3s ease, filter 0.3s ease;
-    }
-    .image-grid img:hover { transform: scale(1.03); filter: brightness(1.2); }
-    .project-title {
-      font-family: 'FormaDJRDisplay', sans-serif; position: absolute;
-      bottom: 0; left: 0; right: 0; background: rgba(0, 0, 0, 0); color: white;
-      padding-bottom: clamp(1.5rem, 2vw, 2.5rem); padding-left: clamp(1.5rem, 2vw, 2.5rem);
-      box-sizing: border-box; opacity: 0; transition: all 0.3s ease;
-      pointer-events: none; font-size: clamp(1.5rem, 2vw, 2.5rem);
-    }
-    .project-name { line-height: 1.3; display: block; }
-    .project-type {
-      font-size: clamp(0.8rem, 1.5vw, 1.6rem); opacity: 1;
-      font-family: 'FormaDJRDisplay', sans-serif; display: block; margin-top: 0.2em;
-    }
-    .image-grid a:hover .project-title { opacity: 1; }
 
-    /* === LAYOUT RESPONSIVE === */
-    .sticky-header { grid-template-columns: 1fr 1fr 1fr; }
-    .grid-label-samuele { grid-column: 2 / span 1; grid-row: 1; justify-self: start; }
-    .grid-label-about { grid-column: 3 / span 1; grid-row: 1; justify-self: start; }
-
-    @media (max-width: 1024px) { /* Tablet */
-      .sticky-header { grid-template-columns: 1fr 1fr; gap: clamp(1rem, 3vw, 2rem); }
-      .grid-label-samuele { grid-column: 1 / span 1; }
-      .grid-label-about { grid-column: 2 / span 1; }
-      .image-grid { column-count: 2; }
+    .sub-links-block {
+        position: fixed;
+        top: calc( (15px + (20px * 1.2) + 10px) + 1px + 10px ); /* 60px */
+        z-index: 1001;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        display: none;
     }
-    @media (max-width: 600px) { /* Mobile (Layout a una colonna) */
-      .sticky-header {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto;
-        gap: 5px clamp(0.8rem, 2.5vw, 1.5rem); /* Il primo valore è row-gap */
-        padding-top: clamp(0.5rem, 1.5vw, 1rem);
-        padding-bottom: clamp(0.5rem, 1.5vw, 1rem);
-      }
-      .grid-label-samuele { grid-column: 1; grid-row: 1; }
-      .grid-label-about { grid-column: 1; grid-row: 2; margin-top: 0; /* JS imposterà margin-top */ }
-      .image-grid { column-count: 1; }
-      .grid-label { font-size: clamp(1.2rem, 5vw, 1.8rem); }
 
-      /* NUOVA REGOLA per il padding-top fisso del content in mobile */
-      .content {
-        padding-top: 230px; /* REGOLA QUESTO VALORE se necessario (es. 200px, 250px) */
-      }
+    #line-2 { /* Updated for 2 links */
+        top: calc(
+            ( (15px + (20px * 1.2) + 10px) + 1px + 10px ) /* 60px */
+            + (20px * 1.2)  /* Home = 24px */
+            + 8px           /* Gap */
+            + (20px * 1.2)  /* Bio = 24px */
+            /* Progetti link removed */
+            + 10px          /* Padding sotto i link prima della linea 2 */
+        ); /* 126px */
+        display: none;
     }
-  </style>
+
+    .title-gallery {
+        position: fixed;
+        top: 15px;
+        z-index: 1001;
+        display: block;
+        cursor: default; /* Prevent text selection cursor */
+    }
+
+    /* --- Default Alignments (3 Columns) --- */
+    .main-title-name,
+    .sub-links-block {
+        left: calc(8px + (100vw - 32px) / 3 + 8px);
+    }
+    .title-gallery {
+        left: calc(8px + 2 * ((100vw - 32px) / 3) + 2 * 8px);
+    }
+    .header-line {
+        left: 8px;
+        right: 8px;
+    }
+
+    .masonry-container {
+        column-count: 3;
+        column-gap: 8px;
+        padding: 8px; /* Base padding */
+        width: 100%;
+        box-sizing: border-box;
+        padding-top: 150px; /* Adjusted for 2-link menu: 126px (line-2 top) + 24px (approx for title/gap) */
+        transition: padding-top 0.6s ease-out; /* For smooth transition with menu */
+    }
+    .masonry-item { display: inline-block; width: 100%; margin-bottom: 4px; overflow: hidden; break-inside: avoid; -webkit-column-break-inside: avoid; page-break-inside: avoid; position: relative; }
+    .masonry-item a { display: block; text-decoration: none; }
+    .masonry-item img { width: 100%; height: auto; display: block; transition: transform 0.3s ease, filter 0.3s ease; }
+    .masonry-item:hover img { transform: scale(1.05); filter: brightness(115%); }
+    .image-hover-text { position: absolute; bottom: 8px; left: 8px; font-family: 'FormaDJRDisplay', sans-serif; font-size: 20px; color: white; line-height: 1.2; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; pointer-events: none; z-index: 2; }
+    .masonry-item:hover .image-hover-text { opacity: 1; visibility: visible; }
+
+    /* --- Media Query @ 992px (2 Columns) --- */
+    @media (max-width: 992px) {
+        .main-title-name,
+        .sub-links-block {
+            left: 10px;
+        }
+        .title-gallery {
+            left: calc(10px + (100vw - 28px) / 2 + 8px);
+        }
+        .header-line {
+            left: 10px;
+            right: 10px;
+        }
+        .masonry-container {
+            column-count: 2;
+            padding: 10px; /* Page padding */
+            padding-top: 150px; /* Consistent with default for 2-link menu */
+        }
+    }
+
+    /* --- Media Query @ 576px (1 Column) --- */
+    @media (max-width: 576px) {
+        .main-title-name,
+        .sub-links-block {
+            left: 10px;
+        }
+        .title-gallery {
+            top: calc(
+                ( (15px + (20px * 1.2) + 10px) + 1px + 10px )  /* 60px */
+                + (20px * 1.2 * 2) /* Altezza dei due link = 48px */
+                + (8px * 1)        /* Gap tra i link = 8px */
+                + 10px             /* Spazio sotto i link (prima di line-2) */
+                + 1px              /* Altezza di line-2 */
+                + 10px             /* Spazio aggiuntivo prima di "Galleria" */
+            ); /* 60 + 48 + 8 + 10 + 1 + 10 = 137px */
+            left: 10px;
+            transition: top 0.6s ease-out;
+        }
+
+        .masonry-container {
+            column-count: 1;
+            padding: 10px; /* Page padding */
+            padding-top: calc(
+                137px            /* .title-gallery top (new) */
+                + (20px * 1.2)   /* Altezza di "Galleria" stessa = 24px */
+                + 15px           /* Spazio aggiuntivo sotto "Galleria" (original gap) */
+            ); /* 137 + 24 + 15 = 176px (menu open) */
+        }
+
+        .title-gallery.menu-closed {
+            top: calc( (15px + (20px * 1.2) + 10px) + 1px + 10px); /* 60px */
+        }
+
+        .masonry-container.menu-closed {
+            /* padding-top when menu is closed, should match open state to prevent jump */
+            padding-top: 176px; /* Adjusted to new open state height */
+        }
+    }
+
+    /* Animazioni */
+    @keyframes fadeInFromTop { from { opacity: 0; transform: translateY(-25px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-on-load { opacity: 0; animation: fadeInFromTop 0.8s ease-out forwards; }
+    /* .animate-delay- classes can be added to masonry items if needed, not directly part of this copy */
+    @keyframes fadeInFromTopMenu { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeOutToTopMenu { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
+    .sub-links-block.animate-menu-open,
+    #line-2.animate-menu-open { opacity: 0; animation: fadeInFromTopMenu 0.6s ease-out forwards; pointer-events: auto; }
+    .sub-links-block.animate-menu-close,
+    #line-2.animate-menu-close { opacity: 1; animation: fadeOutToTopMenu 0.6s ease-out forwards; pointer-events: none; }
+</style>
 </head>
 <body>
-  <div class="cursor" id="customCursor"></div>
+<div id="custom-cursor"></div>
 
-  <header class="sticky-header">
-    <div class="grid-label grid-label-samuele content-fade-in initial-anim-delay-1">
-        <span id="samuele-dropdown-toggle">Samuele De March</span>
-        <div class="header-sub-nav">
-          <a href="/portfolio/index.html">Home</a>
-          <a href="/portfolio/Bio/index.html">Bio</a>
-        </div>
+<header class="fixed-header">
+    <h1 class="header-text main-title-name animate-on-load" id="menu-trigger">Samuele De March</h1>
+    <div class="header-line animate-on-load" id="line-1"></div>
+
+    <div class="sub-links-block" id="dropdown-links">
+        <a href="/Home/index.html" class="header-text sub-title-link">Home</a>
+        <a href="/Bio/index.html" class="header-text sub-title-link">Bio</a>
+        <!-- Progetti link removed -->
     </div>
-    <a href="/portfolio/index.html" class="grid-label grid-label-about content-fade-in initial-anim-delay-1">Galleria</a>
-  </header>
+    <div class="header-line" id="line-2"></div>
+    <span class="header-text title-gallery animate-on-load">Galleria</span>
+</header>
 
-  <div class="screen-wide-internal-line content-fade-in initial-anim-delay-2"></div>
-  <div class="divider"></div>
-
-  <div class="content">
-    <div class="image-grid">
-      <a href="/portfolio/progetti/konn.html">
-        <img src="/portfolio/img/imgPreview/kon glass.gif" alt="Progetto 1">
-        <div class="project-title">
-          <span class="project-name">Progetto</span>
-          <span class="project-type">Illustrazione</span>
-        </div>
-      </a>
-      <a href="/portfolio/progetti/konn.html">
-        <img src="/portfolio/img/imgPreview/konn2.JPG" alt="Progetto 2">
-        <div class="project-title">
-            <span class="project-name">Progetto</span>
-            <span class="project-type">Illustrazione</span>
-        </div>
-      </a>
-      <a href="/portfolio/progetti/konn.html">
-        <img src="/portfolio/img/imgPreview/konn3.JPG" alt="Progetto 3">
-        <div class="project-title">
-            <span class="project-name">Progetto</span>
-            <span class="project-type">Illustrazione</span>
-        </div>
-      </a>
-      <a href="/portfolio/progetti/konn.html">
-        <img src="/portfolio/img/imgPreview/konn4.png" alt="Progetto 4">
-        <div class="project-title">
-            <span class="project-name">Progetto</span>
-            <span class="project-type">Illustrazione</span>
-        </div>
-      </a>
-      <a href="/portfolio/progetti/konn.html">
-        <img src="/portfolio/img/imgPreview/prova%205.png" alt="Progetto Prova 5">
-        <div class="project-title">
-          <span class="project-name">Prova</span>
-          <span class="project-type">Grafica</span>
-        </div>
-      </a>
-    </div>
-  </div>
+<div class="masonry-container">
+    <div class="masonry-item"><a href="/progetti/konn.html"><img src="/img/imgPreview/konn2.jpg" alt="Img 1"><span class="image-hover-text">Progetto</span></a></div>
+    <div class="masonry-item"><a href="/progetti/konn.html"><img src="/img/imgPreview/konn3.jpg" alt="Img 2"><span class="image-hover-text">Progetto</span></a></div>
+    <div class="masonry-item"><a href="/progetti/konn.html"><img src="/img/imgPreview/konn2.jpg" alt="Img 3"><span class="image-hover-text">Progetto</span></a></div>
+    <div class="masonry-item"><a href="/progetti/konn.html"><img src="/img/imgPreview/konn2.jpg" alt="Img 4"><span class="image-hover-text">Progetto</span></a></div>
+    <div class="masonry-item"><a href="/progetti/konn.html"><img src="/img/imgPreview/konn2.jpg" alt="Img 5"><span class="image-hover-text">Progetto</span></a></div>
+    <div class="masonry-item"><a href="/progetti/konn.html"><img src="/img/imgPreview/konn3.jpg" alt="Img 6"><span class="image-hover-text">Progetto</span></a></div>
+    <div class="masonry-item"><a href="/progetti/konn.html"><img src="/img/imgPreview/konn2.jpg" alt="Img 7"><span class="image-hover-text">Progetto</span></a></div>
+    <div class="masonry-item"><a href="/progetti/konn.html"><img src="/img/imgPreview/konn3.jpg" alt="Img 8"><span class="image-hover-text">Progetto</span></a></div>
+    <div class="masonry-item"><a href="/progetti/konn.html"><img src="/img/imgPreview/konn2.jpg" alt="Img 9"><span class="image-hover-text">Progetto</span></a></div>
+</div>
 
 <script>
-  // --- SCRIPT CURSORE PERSONALIZZATO ---
-  const customCursorElement = document.getElementById('customCursor');
-  const interactiveElementsDOM = document.querySelectorAll('a, #samuele-dropdown-toggle');
-  if (customCursorElement) {
-      document.addEventListener('mousemove', (e) => {
-          window.requestAnimationFrame(() => {
-              customCursorElement.style.top = `${e.clientY}px`;
-              customCursorElement.style.left = `${e.clientX}px`;
-          });
-      });
-      interactiveElementsDOM.forEach(el => {
-          el.addEventListener('mouseenter', () => customCursorElement.classList.add('cursor-hover-active'));
-          el.addEventListener('mouseleave', () => customCursorElement.classList.remove('cursor-hover-active'));
-      });
-  }
+document.addEventListener('DOMContentLoaded', function() {
+    const menuTrigger = document.getElementById('menu-trigger');
+    const dropdownLinks = document.getElementById('dropdown-links');
+    const line2 = document.getElementById('line-2');
+    const titleGallery = document.querySelector('.title-gallery');
+    const masonryContainer = document.querySelector('.masonry-container'); 
+    let menuAnimating = false;
 
-  let measuredSubNavHeight = 0;
+    function updateMenuTriggerCursor() {
+        if (!menuTrigger) return;
+        if (window.scrollY === 0) {
+            menuTrigger.style.cursor = 'default';
+        } else {
+            menuTrigger.style.cursor = 'pointer';
+        }
+    }
 
-  function measureSubNavOnce() {
-    const subNavToMeasure = document.querySelector('.header-sub-nav');
-    if (!subNavToMeasure) return 0;
-    const clone = subNavToMeasure.cloneNode(true);
-    clone.style.visibility = 'hidden';
-    clone.style.position = 'absolute';
-    clone.style.top = '-9999px';
-    clone.style.left = '-9999px';
-    clone.style.display = 'block';
-    clone.style.opacity = '1';
-    clone.style.transform = 'translateY(0)';
-    clone.classList.remove('dropdown-anim-opening', 'dropdown-anim-closing');
-    document.body.appendChild(clone);
-    measuredSubNavHeight = clone.offsetHeight;
-    document.body.removeChild(clone);
-    return measuredSubNavHeight;
-  }
+    function applyOpenStyles(element, displayType) {
+        if (!element) return;
+        element.style.display = displayType;
+        element.classList.remove('animate-menu-close');
+        element.classList.add('animate-menu-open');
+        element.classList.add('is-open');
+        element.style.pointerEvents = 'auto';
+        menuAnimating = true;
+    }
 
-  function updateDynamicHeaderLayout() {
-      const header = document.querySelector('.sticky-header');
-      const samueleLabel = document.querySelector('.grid-label-samuele');
-      const subNav = samueleLabel.querySelector('.header-sub-nav');
-      const mainDropdownDivider = document.querySelector('.divider');
-      const content = document.querySelector('.content');
-      const screenWideLine = document.querySelector('.screen-wide-internal-line');
-      const mainHeaderTextElement = document.getElementById('samuele-dropdown-toggle');
-      const galleriaLabel = document.querySelector('.grid-label-about');
+    function applyCloseStyles(element) {
+        if (!element) return;
+        element.classList.remove('animate-menu-open');
+        element.classList.add('animate-menu-close');
+        element.style.pointerEvents = 'none';
+        menuAnimating = true;
+    }
 
-      if (!header || !samueleLabel || !subNav || !mainDropdownDivider || !content || !screenWideLine || !mainHeaderTextElement || !galleriaLabel) {
-          console.warn("Elementi chiave per il layout dinamico non trovati.");
-          return;
-      }
+    function onOpenAnimationEnd(event) {
+        if ((event.target === dropdownLinks || event.target === line2) && event.animationName === 'fadeInFromTopMenu') {
+            event.target.classList.remove('animate-menu-open');
+            if (dropdownLinks && line2 && !dropdownLinks.classList.contains('animate-menu-open') && !line2.classList.contains('animate-menu-open')) {
+                menuAnimating = false;
+            }
+        }
+    }
+    
+    function updateGalleryPositioning() {
+        if (!titleGallery || !masonryContainer) return; 
 
-      const isMobile = window.matchMedia("(max-width: 600px)").matches;
+        if (window.innerWidth <= 576) {
+            if (dropdownLinks && dropdownLinks.classList.contains('is-open')) {
+                titleGallery.classList.remove('menu-closed');
+                masonryContainer.classList.remove('menu-closed'); 
+            } else {
+                titleGallery.classList.add('menu-closed');
+                masonryContainer.classList.add('menu-closed'); 
+            }
+        } else {
+            titleGallery.classList.remove('menu-closed');
+            masonryContainer.classList.remove('menu-closed'); 
+        }
+    }
 
-      // Posizionamento dinamico delle linee e del divider (necessario per tutte le visualizzazioni)
-      const mainTextRectGlobal = mainHeaderTextElement.getBoundingClientRect();
-      const gridLabelSamueleStyle = window.getComputedStyle(samueleLabel);
-      const emBasedOffsetForScreenLine = parseFloat(gridLabelSamueleStyle.fontSize) * 0.35;
-      screenWideLine.style.top = (mainTextRectGlobal.bottom + emBasedOffsetForScreenLine) + 'px';
+    function refinedOnCloseAnimationEnd(event) {
+        if ((event.target === dropdownLinks || event.target === line2) && event.animationName === 'fadeOutToTopMenu') {
+            event.target.style.display = 'none';
+            event.target.classList.remove('is-open');
+            event.target.classList.remove('animate-menu-close');
+            if (dropdownLinks && line2 && !dropdownLinks.classList.contains('animate-menu-close') && !line2.classList.contains('animate-menu-close')) {
+                menuAnimating = false;
+            }
+            if (dropdownLinks && !dropdownLinks.classList.contains('is-open') && line2 && !line2.classList.contains('is-open')) {
+                updateGalleryPositioning();
+            }
+        }
+    }
 
-      const subNavComputedStyle = window.getComputedStyle(subNav);
-      const subNavTopMargin = parseFloat(subNavComputedStyle.marginTop) || 0;
-      const subNavHeightVal = measuredSubNavHeight > 0 ? measuredSubNavHeight : 50;
-      const spacingSubNavToDivider = 10;
-      const mainDividerHeight = 1;
-      const isOpenOrOpening = subNav.classList.contains('dropdown-state-open') || subNav.classList.contains('dropdown-anim-opening');
-      const isClosing = subNav.classList.contains('dropdown-anim-closing');
-
-      if ((isOpenOrOpening) && subNav.offsetParent !== null) {
-          const subNavRectGlobal = subNav.getBoundingClientRect();
-          mainDropdownDivider.style.top = (subNavRectGlobal.bottom + spacingSubNavToDivider) + 'px';
-      } else if (isClosing) {
-          let lastKnownDividerTopGlobal = mainTextRectGlobal.bottom + subNavTopMargin + subNavHeightVal + spacingSubNavToDivider;
-          mainDropdownDivider.style.top = lastKnownDividerTopGlobal + 'px';
-      } else {
-          let initialDividerTopGlobal = mainTextRectGlobal.bottom + subNavTopMargin + subNavHeightVal + spacingSubNavToDivider;
-          mainDropdownDivider.style.top = initialDividerTopGlobal + 'px';
-      }
-
-      // Posizionamento di galleriaLabel (solo per mobile, per desktop è gestito da grid CSS)
-      if (isMobile) {
-          const desiredMarginTopForGalleria = 25; // Valore per distanziare Galleria in mobile
-          galleriaLabel.style.transform = 'translateY(0px)'; // Resetta transform
-          galleriaLabel.style.marginTop = `${desiredMarginTopForGalleria}px`; // Applica margin-top
-      } else {
-          // Ripristina stili per desktop/tablet
-          galleriaLabel.style.transform = '';
-          galleriaLabel.style.marginTop = '';
-      }
-
-      // Calcolo del padding-top del content
-      if (isMobile) {
-          // In modalità mobile, il padding-top del .content è gestito dalla regola CSS.
-          // Rimuoviamo qualsiasi stile inline per assicurarci che il CSS venga applicato.
-          content.style.paddingTop = '';
-      } else {
-          // Logica per Desktop/Tablet (non mobile) per calcolare dinamicamente il padding-top del content.
-          const finalSpacingBeforeContentDesktop = 80; // Spazio desiderato sotto l'header per desktop
-          let headerStaticBottomGlobalY;
-
-          // Determina il bordo inferiore di riferimento per l'header in desktop.
-          // Considera la linea sotto "Samuele De March" o il testo stesso.
-          const screenLineRectDesk = screenWideLine.getBoundingClientRect();
-          if (screenLineRectDesk.height > 0 && screenLineRectDesk.bottom > mainTextRectGlobal.bottom) {
-              headerStaticBottomGlobalY = screenLineRectDesk.bottom;
-          } else {
-              headerStaticBottomGlobalY = mainTextRectGlobal.bottom;
-          }
-          
-          // Considera anche il fondo del dropdown se è aperto e più in basso.
-          let dropdownAreaBottomGlobalY = mainTextRectGlobal.bottom + subNavTopMargin + subNavHeightVal + spacingSubNavToDivider + mainDividerHeight;
-          
-          let requiredContentPaddingTop = Math.max(dropdownAreaBottomGlobalY, headerStaticBottomGlobalY) + finalSpacingBeforeContentDesktop;
-          content.style.paddingTop = requiredContentPaddingTop + 'px';
-      }
-  }
-
-  function activateImageGridAnimation() {
-    const imageGrid = document.querySelector('.image-grid');
-    if (imageGrid) {
-        imageGrid.classList.add('content-fade-in');
-        imageGrid.style.animationDelay = '0.2s';
-        const imageGridItems = imageGrid.querySelectorAll('a');
-        const baseDelayForGridContainer = 0.2;
-        const itemDelayIncrement = 0.1;
-        imageGridItems.forEach((item, index) => {
-            item.classList.add('content-fade-in');
-            const calculatedDelay = baseDelayForGridContainer + ((index + 1) * itemDelayIncrement);
-            item.style.animationDelay = `${calculatedDelay}s`;
+    if (dropdownLinks) {
+        dropdownLinks.addEventListener('animationend', (e) => {
+            if (e.animationName === 'fadeInFromTopMenu') onOpenAnimationEnd(e);
+            if (e.animationName === 'fadeOutToTopMenu') refinedOnCloseAnimationEnd(e);
         });
     }
-  }
+    if (line2) {
+        line2.addEventListener('animationend', (e) => {
+            if (e.animationName === 'fadeInFromTopMenu') onOpenAnimationEnd(e);
+            if (e.animationName === 'fadeOutToTopMenu') refinedOnCloseAnimationEnd(e);
+        });
+    }
 
-  document.addEventListener('DOMContentLoaded', function() {
-      const toggleElement = document.getElementById('samuele-dropdown-toggle');
-      const subNav = document.querySelector('.header-sub-nav');
-      const mainDropdownDivider = document.querySelector('.divider');
+    function openMenu() {
+        if (menuAnimating || (dropdownLinks && dropdownLinks.classList.contains('is-open'))) return;
+        applyOpenStyles(dropdownLinks, 'flex');
+        applyOpenStyles(line2, 'block');
+        updateGalleryPositioning();
+    }
 
-      if (!toggleElement || !subNav || !mainDropdownDivider) {
-          console.error("Elementi chiave del menu (toggle, subNav, divider) non trovati.");
-          return;
-      }
+    function closeMenu() {
+        if (menuAnimating || !(dropdownLinks && dropdownLinks.classList.contains('is-open'))) return;
+        applyCloseStyles(dropdownLinks);
+        applyCloseStyles(line2);
 
-      const ANIMATION_DURATION = 400;
-      let isDropdownAnimating = false;
-      const DROPDOWN_INITIAL_OPEN_DELAY = 400;
-      let imageGridAnimated = false;
-
-      function applyClassesToElements(elements, classesToAdd, classesToRemove) {
-          elements.forEach(el => {
-              if (el) {
-                  if (classesToRemove) el.classList.remove(...classesToRemove);
-                  if (classesToAdd) el.classList.add(...classesToAdd);
-              }
-          });
-      }
-
-      function openDropdown(forceOpen = false, isInitialOpening = false) {
-          if (isDropdownAnimating && !forceOpen) return;
-          if ((subNav.classList.contains('dropdown-state-open') || subNav.classList.contains('dropdown-anim-opening')) && !forceOpen) {
-              return;
-          }
-          isDropdownAnimating = true;
-          applyClassesToElements([subNav, mainDropdownDivider], ['dropdown-anim-opening'], ['dropdown-anim-closing', 'dropdown-state-open']);
-          requestAnimationFrame(updateDynamicHeaderLayout);
-          setTimeout(() => {
-              applyClassesToElements([subNav, mainDropdownDivider], ['dropdown-state-open'], ['dropdown-anim-opening']);
-              isDropdownAnimating = false;
-              requestAnimationFrame(updateDynamicHeaderLayout);
-              if (isInitialOpening && !imageGridAnimated) {
-                  activateImageGridAnimation();
-                  imageGridAnimated = true;
-              }
-          }, ANIMATION_DURATION);
-      }
-
-      function closeDropdown(forceClose = false) {
-          if (isDropdownAnimating && !forceClose) return;
-          if (!subNav.classList.contains('dropdown-state-open') &&
-              !subNav.classList.contains('dropdown-anim-opening') &&
-              !subNav.classList.contains('dropdown-anim-closing') && !forceClose) {
-              return;
-          }
-          isDropdownAnimating = true;
-          applyClassesToElements([subNav, mainDropdownDivider], ['dropdown-anim-closing'], ['dropdown-anim-opening', 'dropdown-state-open']);
-          requestAnimationFrame(updateDynamicHeaderLayout);
-          setTimeout(() => {
-              applyClassesToElements([subNav, mainDropdownDivider], null, ['dropdown-anim-closing', 'dropdown-state-open']);
-              isDropdownAnimating = false;
-              requestAnimationFrame(updateDynamicHeaderLayout);
-          }, ANIMATION_DURATION);
-      }
-
-      function initializeLayoutAndMenu() {
-          measureSubNavOnce();
-          requestAnimationFrame(updateDynamicHeaderLayout);
-          setTimeout(() => {
-              openDropdown(false, true);
-          }, DROPDOWN_INITIAL_OPEN_DELAY);
-      }
-
-      if (document.readyState === 'complete') {
-          initializeLayoutAndMenu();
-      } else {
-          window.addEventListener('load', initializeLayoutAndMenu, { once: true });
-      }
-
-      let lastScrollY = window.scrollY;
-      let pageJustLoadedOrMenuInteracted = true;
-
-      setTimeout(() => {
-        if (window.scrollY <= 20) {
-            pageJustLoadedOrMenuInteracted = false;
+        if (window.innerWidth <= 576 && titleGallery) {
+            titleGallery.classList.add('menu-closed');
         }
-      }, DROPDOWN_INITIAL_OPEN_DELAY + ANIMATION_DURATION + 700);
+    }
+    
+    if (dropdownLinks && line2) {
+        const initialMenuLoadDelay = 400;
+        setTimeout(function() {
+            openMenu();
+            updateMenuTriggerCursor(); 
+        }, initialMenuLoadDelay);
+    } else {
+        console.warn('Elementi dropdownLinks o line2 non trovati per apertura iniziale.');
+    }
 
-      window.addEventListener('scroll', function() {
-          const currentScrollY = window.scrollY;
-          const isOpen = subNav.classList.contains('dropdown-state-open');
-          const isOpening = subNav.classList.contains('dropdown-anim-opening');
-          const isOpenOrOpening = isOpen || isOpening;
+    if (menuTrigger && dropdownLinks && line2) {
+        menuTrigger.addEventListener('click', function() {
+            if (dropdownLinks.classList.contains('is-open')) {
+                if (window.scrollY !== 0) {
+                    closeMenu();
+                }
+            } else {
+                openMenu();
+            }
+        });
+    } else {
+        console.error('Elementi del menu (trigger, dropdown, line2) non trovati per il toggle.');
+    }
 
-          if (pageJustLoadedOrMenuInteracted) {
-              if (currentScrollY > 20) {
-                  pageJustLoadedOrMenuInteracted = false;
-              }
-              lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
-              return;
-          }
+    const masonryItems = document.querySelectorAll('.masonry-item');
+    const baseDelayForMasonry = 0.9; 
+    masonryItems.forEach((item, index) => {
+        item.classList.add('animate-on-load');
+        item.style.animationDelay = `${baseDelayForMasonry + index * 0.08}s`; 
+    });
 
-          if (isDropdownAnimating) {
-              if (!(isOpening && currentScrollY > 20)) {
-                  lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
-                  return;
-              }
-          }
+    window.addEventListener('scroll', function() {
+        if (!dropdownLinks || !line2) return;
+        if (menuAnimating) return;
 
-          if (currentScrollY > 20 && isOpenOrOpening) {
-              if (!subNav.classList.contains('dropdown-anim-closing')) {
-                  closeDropdown();
-              }
-          } else if (currentScrollY === 0 && currentScrollY < lastScrollY) {
-              if (!isOpenOrOpening && !isOpening) {
-                  openDropdown(false, false);
-              }
-          }
-          lastScrollY = currentScrollY <= 0 ? 0 : currentScrollY;
-      }, { passive: true });
+        updateMenuTriggerCursor(); 
 
-      toggleElement.addEventListener('click', function(event) {
-          event.preventDefault();
-          if (isDropdownAnimating) return;
-          pageJustLoadedOrMenuInteracted = true;
-          if (subNav.classList.contains('dropdown-state-open') || subNav.classList.contains('dropdown-anim-opening')) {
-              closeDropdown();
-          } else {
-              openDropdown(false, false);
-          }
-          setTimeout(() => { pageJustLoadedOrMenuInteracted = false; }, ANIMATION_DURATION + 200);
-      });
-  });
+        if (window.scrollY === 0) {
+            if (!dropdownLinks.classList.contains('is-open')) {
+                openMenu();
+            }
+        } else {
+            if (dropdownLinks.classList.contains('is-open')) {
+                closeMenu();
+            }
+        }
+    });
 
-  window.addEventListener('resize', () => {
-      measureSubNavOnce();
-      requestAnimationFrame(updateDynamicHeaderLayout);
-  });
+    window.addEventListener('resize', updateGalleryPositioning);
+    updateMenuTriggerCursor(); 
 
-  window.addEventListener('load', () => {
-      measureSubNavOnce();
-      requestAnimationFrame(updateDynamicHeaderLayout);
-      setTimeout(() => {
-          measureSubNavOnce();
-          requestAnimationFrame(updateDynamicHeaderLayout);
-      }, 350);
-  }, { once: true });
+    // --- Custom Cursor Logic ---
+    const customCursorDiv = document.getElementById('custom-cursor');
+
+    if (customCursorDiv) {
+        document.addEventListener('mousemove', function(e) {
+            customCursorDiv.style.display = 'block'; // Show on first move
+            customCursorDiv.style.left = e.clientX + 'px';
+            customCursorDiv.style.top = e.clientY + 'px';
+        });
+
+        document.addEventListener('mouseleave', function() { customCursorDiv.style.display = 'none'; });
+        document.addEventListener('mouseenter', function() { customCursorDiv.style.display = 'block'; });
+
+        const hoverables = document.querySelectorAll('a, button, #menu-trigger');
+
+        hoverables.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                let applyHover = false;
+                if (el.tagName === 'A' || el.tagName === 'BUTTON') {
+                    applyHover = true;
+                } else if (el.id === 'menu-trigger') {
+                    if (window.getComputedStyle(el).cursor === 'pointer') {
+                        applyHover = true;
+                    }
+                }
+                if (applyHover) {
+                    customCursorDiv.classList.add('hover');
+                }
+            });
+
+            el.addEventListener('mouseleave', () => {
+                customCursorDiv.classList.remove('hover');
+            });
+        });
+    }
+    // --- End Custom Cursor Logic ---
+});
 </script>
-
 </body>
 </html>

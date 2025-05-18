@@ -1,345 +1,357 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Portfolio Samuele De March</title>
-  <style>
-    /* === DEFINIZIONE FONT === */
-    @font-face {
-      font-family: 'FormaDJRText';
-      src: url('fonts/FormaDJRText-Medium-Testing.otf') format('opentype');
-    }
-    @font-face {
-      font-family: 'PPEditorialOld';
-      src: url('fonts/PPEditorialOld-ThinItalic.woff') format('woff');
-    }
-    @font-face {
-      font-family: 'FormaDJRDisplay';
-      src: url('fonts/FormaDJRDisplay-Regular-Testing.otf') format('opentype');
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galleria Immagini - Header con Menu a Tendina</title>
+<style>
+@font-face {
+font-family: 'FormaDJRDisplay';
+src: url('/fonts/FormaDJRDisplay-Regular-Testing.otf') format('opentype'); /* Assicurati che il percorso sia corretto */
+font-weight: normal;
+font-style: normal;
+}
 
-    /* === RESET BASE E STILI GLOBALI === */
     body {
-      margin: 0;
-      padding: 0;
-      font-family: 'FormaDJRText', sans-serif;
-      background-color: #000000; 
-      color: rgb(255, 255, 255);
-      cursor: none; 
-      min-height: 100vh; 
-      overflow: hidden; 
-      position: relative; 
+        margin: 0;
+        font-family: sans-serif;
+        background-color: #000000;
+        cursor: none !important; /* Hide system cursor for the body */
     }
 
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw; 
-      height: 100vh; 
-      z-index: -1; 
-      background-image: url('img/imgPreview/kon glass.gif'); /* Assicurati che il percorso sia corretto */
-      background-size: cover; 
-      background-position: center center; 
-      background-repeat: no-repeat; 
-      opacity: 0; 
-      animation: fadeInBackground 1.5s ease-out forwards;
-      animation-delay: 0s; 
+    /* Ensure common interactive elements also hide their default cursors */
+    a, button, input[type="button"], input[type="submit"], select, textarea, label[for], #menu-trigger,
+    .title-gallery {
+        cursor: none !important;
     }
 
-    a {
-      color: rgb(255, 255, 255);
-      text-decoration: none;
-      cursor: none; 
+    #custom-cursor {
+        position: fixed;
+        width: 12px;
+        height: 12px;
+        background-color: grey;
+        border-radius: 50%;
+        pointer-events: none; /* Cursor div does not intercept mouse events */
+        transform: translate(-50%, -50%);
+        transition: width 0.15s ease-out, height 0.15s ease-out, background-color 0.15s ease-out;
+        z-index: 99999; /* Very high z-index */
+        display: none; /* Initially hidden, shown on first mousemove */
     }
 
-    /* === CURSORE PERSONALIZZATO === */
-    .cursor {
-      position: fixed;
-      top: 0; 
-      left: 0; 
-      width: 20px; 
-      height: 20px;
-      background-color: grey; 
-      border-radius: 50%;
-      pointer-events: none; 
-      z-index: 1001; 
-      transform: translate(-50%, -50%) scale(1); 
-      transition: background-color 0.3s ease, transform 0.3s ease; 
-    }
-    .cursor.cursor-hover-active {
-      background-color: white; 
-      transform: translate(-50%, -50%) scale(1.3); 
+    #custom-cursor.hover {
+        width: 24px;
+        height: 24px;
+        background-color: white;
     }
 
-    /* === ANIMAZIONI === */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .fixed-header {
+        /* Contenitore semantico */
     }
 
-    @keyframes fadeInBackground {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    @keyframes dropdownFadeIn { /* Definito ma non usato attivamente */
-      from { opacity: 0; transform: translateY(-5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .fade-in { 
-      opacity: 0; 
-      animation: fadeIn 1s ease-out forwards;
+    .header-text {
+        font-family: 'FormaDJRDisplay', sans-serif;
+        font-size: 20px;
+        font-weight: normal;
+        color: white;
+        line-height: 1.2; /* Altezza riga effettiva ~24px */
+        margin: 0;
+        text-decoration: none;
+        display: block;
     }
 
-    /* Classi di ritardo per animazioni */
-    .label-fade-delay     { animation-delay: 0.4s; }
-    .submenu-item-delay-1 { animation-delay: 0.7s; } /* Bio */
-    .submenu-item-delay-2 { animation-delay: 0.9s; } /* Galleria */
-    .item-delay-1         { animation-delay: 0.8s; } /* screen-wide-internal-line */
-    .item-delay-2         { animation-delay: 1.0s; } /* .divider */
-    /* Definizioni non usate attualmente nell'HTML fornito */
-    .grid-fade-delay      { animation-delay: 0.6s; }
-    .item-delay-3         { animation-delay: 1.2s; }
-    .item-delay-4         { animation-delay: 1.4s; }
-    .item-delay-5         { animation-delay: 1.6s; }
-
-
-    /* === HEADER FISSO === */
-    .sticky-header {
-      position: fixed;
-      top: 0; 
-      left: 0;
-      width: 100%;
-      z-index: 1000; 
-      background-color: transparent; 
-      box-sizing: border-box;
-      display: grid;
-      align-items: start; 
-      padding: clamp(0.8rem, 1.5vw, 1.5rem) clamp(1.5rem, 4vw, 3rem); 
-      gap: clamp(1rem, 3vw, 2rem); 
+    .main-title-name {
+        position: fixed;
+        top: 15px;
+        z-index: 1001;
+        cursor: default;
     }
 
-    .grid-label {
-      font-family: 'FormaDJRDisplay', sans-serif;
-      font-size: clamp(1.5rem, 2vw, 2.5rem); 
+    .header-line {
+        position: fixed;
+        background-color: white;
+        height: 1px;
+        z-index: 1000;
     }
 
-    .grid-label-about:hover, /* Link "About/Home" */
-    .header-sub-nav a:hover { 
-      opacity: 0.7;
-      transition: opacity 0.3s; 
+    #line-1 {
+        top: calc(15px + (20px * 1.2) + 10px); /* 15px (margin) + 24px (text) + 10px (gap) = 49px */
     }
 
-    .grid-label-samuele { /* Contenitore per "Samuele De March", "Bio", "Galleria" */
-      display: flex;
-      flex-direction: column; 
-      align-items: flex-start; 
-    }
-    
-    #samuele-dropdown-toggle {
-      display: inline-block; 
-    }
-
-    .header-sub-nav { 
-      width: 100%; 
-      margin-top: calc(0.35em + 1px + 0.35em); 
+    .sub-links-block {
+        position: fixed;
+        top: calc( (15px + (20px * 1.2) + 10px) + 1px + 10px ); /* Sotto line-1: 49px + 1px + 10px = 60px */
+        z-index: 1001;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        display: none;
     }
 
-    .header-sub-nav a {
-      display: block; 
-      font-family: 'FormaDJRDisplay', sans-serif;
-      line-height: 1.3; 
-    }
-    
-    .screen-wide-internal-line { 
-      position: fixed;
-      left: clamp(1.5rem, 4vw, 3rem);   
-      right: clamp(1.5rem, 4vw, 3rem);  
-      height: 1px;
-      background-color: rgb(255, 255, 255);
-      z-index: 999; 
-      top: calc( 
-        clamp(0.8rem, 1.5vw, 1.5rem) +  
-        (clamp(1.5rem, 2vw, 2.5rem) * 1.2) +  
-        0.4em                                   
-      );
-    }
-    
-    .divider { /* Seconda linea di separazione, posizionata da JS */
-      position: fixed;
-      /* 'top' è impostato da JavaScript */
-      left: clamp(1.5rem, 4vw, 3rem);
-      right: clamp(1.5rem, 4vw, 3rem);
-      height: 1px;
-      background-color: rgb(255, 255, 255);
-      z-index: 999;
+    #line-2 {
+        top: calc(
+            ( (15px + (20px * 1.2) + 10px) + 1px + 10px ) /* Fino a .sub-links-block top = 60px */
+            + (20px * 1.2)  /* Altezza "Home" = 24px */
+            + 8px           /* Gap */
+            + (20px * 1.2)  /* Altezza "Bio" = 24px */
+            + 10px          /* Padding sotto i link prima della linea 2 */
+        ); /* 60 + 24 + 8 + 24 + 10 = 126px */
+        display: none;
     }
 
-    /* === LAYOUT RESPONSIVE === */
-    /* Default (Desktop) */
-    .sticky-header { 
-      grid-template-columns: 1fr 1fr 1fr; 
-    }
-    .grid-label-samuele { 
-      grid-column: 2 / span 1; 
-      grid-row: 1; 
-      justify-self: start; 
-    }
-    .grid-label-about { /* Link "About/Home" */
-      grid-column: 3 / span 1; 
-      grid-row: 1; 
-      justify-self: start; 
-      position: relative; /* Mantenuto per coerenza con mobile, JS lo gestirà */
-      top: 0px; /* Default per schermi larghi */
+    .title-gallery {
+        position: fixed;
+        top: 15px; /* Posizione default per schermi larghi */
+        z-index: 1001;
+        display: block;
+        cursor: default;
+        /* La transizione per 'top' verrà definita specificamente per max-width: 576px */
     }
 
-    /* Medium screens (Tablet) */
-    @media (max-width: 1024px) {
-      .sticky-header { 
-        grid-template-columns: 1fr 1fr; 
-        gap: clamp(1rem, 3vw, 2rem); 
-      }
-      .grid-label-samuele { grid-column: 1 / span 1; } 
-      .grid-label-about { /* Link "About/Home" */
-        grid-column: 2 / span 1; 
-        position: relative; /* Mantenuto per coerenza */
-        top: 0px; /* Default per schermi medi */
-      }    
-      /* .divider 'top' è gestito da JS */
+    /* --- Stili Masonry e Allineamenti Orizzontali di Default (3 Colonne) --- */
+    .main-title-name,
+    .sub-links-block {
+        left: calc(8px + (100vw - 32px) / 3 + 8px);
+    }
+    .title-gallery {
+        left: calc(8px + 2 * ((100vw - 32px) / 3) + 2 * 8px);
+    }
+    .header-line {
+        left: 8px;
+        right: 8px;
     }
 
-    /* Small screens (Mobile) */
-    @media (max-width: 600px) {
-      .sticky-header {
-        grid-template-columns: 1fr; 
-        grid-template-rows: auto auto; /* Concettualmente: Fila 1 Samuele, Fila 2 About/Home */
-        gap: 5px clamp(0.8rem, 2.5vw, 1.5rem); 
-        padding-top: clamp(0.5rem, 1.5vw, 1rem);
-        padding-bottom: clamp(0.5rem, 1.5vw, 1rem);
-      }
-      .grid-label-samuele { grid-column: 1; grid-row: 1; } 
-      .grid-label-about { /* Link "About/Home" */
-        grid-column: 1; 
-        grid-row: 2; /* Occupa la seconda area di riga definita da grid-template-rows */
-        position: relative; /* Cruciale per permettere a 'style.top' di JS di spostarlo visivamente */
-        /* 'top' sarà impostato dinamicamente da JavaScript per questa vista */
-      } 
-      
-      .grid-label { font-size: clamp(1.2rem, 5vw, 1.8rem); } 
-      
-      .screen-wide-internal-line { 
-        left: clamp(0.8rem, 2.5vw, 1.5rem);  
-        right: clamp(0.8rem, 2.5vw, 1.5rem); 
-        top: calc( 
-          clamp(0.5rem, 1.5vw, 1rem) +        
-          (clamp(1.2rem, 5vw, 1.8rem) * 1.2) + 
-          0.4em                                 
-        );
-      }
-
-      .header-sub-nav { 
-        margin-top: calc(0.35em + 1px + 0.35em); 
-      }
-
-      .divider { 
-        /* 'top' è gestito da JS */
-        left: clamp(0.8rem, 2.5vw, 1.5rem);
-        right: clamp(0.8rem, 2.5vw, 1.5rem);
-      }
+    .masonry-container {
+        column-count: 3;
+        column-gap: 8px;
+        padding: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        padding-top: 150px; /* Spazio per l'header fisso (valore di base per 3 e 2 colonne) */
+        /* La transizione per 'padding-top' verrà definita specificamente per max-width: 576px */
     }
-  </style>
+    .masonry-item { display: inline-block; width: 100%; margin-bottom: 4px; overflow: hidden; break-inside: avoid; -webkit-column-break-inside: avoid; page-break-inside: avoid; position: relative; }
+    .masonry-item a { display: block; text-decoration: none; }
+    .masonry-item img { width: 100%; height: auto; display: block; transition: transform 0.3s ease, filter 0.3s ease; }
+    .masonry-item:hover img { transform: scale(1.05); filter: brightness(115%); }
+    .image-hover-text { position: absolute; bottom: 8px; left: 8px; font-family: 'FormaDJRDisplay', sans-serif; font-size: 20px; color: white; line-height: 1.2; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; pointer-events: none; z-index: 2; }
+    .masonry-item:hover .image-hover-text { opacity: 1; visibility: visible; }
+
+    /* --- Media Query per schermi più stretti --- */
+
+    /* Max-width: 992px (Layout a 2 Colonne) - RIPRISTINATO COME DA ORIGINALE */
+    @media (max-width: 992px) {
+        /* Padding pagina: 10px, Gap colonne: 8px */
+        /* Larghezza colonna: (100vw - 2*10px - 8px) / 2 = (100vw - 28px) / 2 */
+
+        .main-title-name,
+        .sub-links-block {
+            /* Allineati alla prima colonna (di 2) */
+            left: 10px;
+        }
+        .title-gallery {
+            /* Allineati alla seconda colonna (di 2) - COME IN ORIGINE */
+            left: calc(10px + (100vw - 28px) / 2 + 8px);
+            display: block; /* Assicura che sia visibile per il riposizionamento */
+            /* top: 15px; implicito, non modificato rispetto al default e non dinamico qui */
+        }
+        .header-line {
+            left: 10px;
+            right: 10px;
+        }
+        .masonry-container {
+            column-count: 2; /* Layout a 2 colonne */
+            padding: 10px; /* Padding pagina aggiornato */
+            padding-top: 150px; /* COME IN ORIGINE, non dinamico qui */
+        }
+    }
+
+    /* Max-width: 576px (Layout a 1 Colonna) - MANTIENE LE MODIFICHE PER IL COMPORTAMENTO DINAMICO */
+    @media (max-width: 576px) {
+        .main-title-name,
+        .sub-links-block {
+            left: 10px;
+        }
+        .title-gallery {
+            /* Posizione di default (menu aperto) */
+            top: calc(
+                ( (15px + (20px * 1.2) + 10px) + 1px + 10px )  /* Posizione di .sub-links-block top = 60px */
+                + (20px * 1.2)  /* Altezza "Home" = 24px */
+                + 8px           /* Gap tra i link */
+                + (20px * 1.2)  /* Altezza "Bio" = 24px */
+                + 10px          /* Spazio sotto i link (prima di line-2) */
+                + 1px           /* Altezza di line-2 */
+                + 10px          /* Spazio aggiuntivo prima di "Galleria" */
+            ); /* 60 + 24 + 8 + 24 + 10 + 1 + 10 = 137px */
+            left: 10px;
+            display: block;
+            transition: top 0.6s ease-out; /* Transizione SOLO per 1 colonna */
+        }
+
+        /* Stili per quando il menu è chiuso (layout a 1 colonna) */
+        .title-gallery.menu-closed {
+            top: calc( (15px + (20px * 1.2) + 10px) + 1px + 10px); /* 60px */
+        }
+    }
+
+    /* Animazioni (invariate) */
+    @keyframes fadeInFromTop { from { opacity: 0; transform: translateY(-25px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-on-load { opacity: 0; animation: fadeInFromTop 0.8s ease-out forwards; }
+    .animate-delay-1 { animation-delay: 0.1s; }
+    .animate-delay-2 { animation-delay: 0.2s; }
+    .animate-delay-3 { animation-delay: 0.3s; }
+    .animate-delay-4 { animation-delay: 0.4s; }
+    .animate-delay-5 { animation-delay: 0.5s; }
+    @keyframes fadeInFromTopMenu { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeOutToTopMenu { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
+    .sub-links-block.animate-menu-open,
+    #line-2.animate-menu-open { opacity: 0; animation: fadeInFromTopMenu 0.6s ease-out forwards; pointer-events: auto; }
+    .sub-links-block.animate-menu-close,
+    #line-2.animate-menu-close { opacity: 1; animation: fadeOutToTopMenu 0.6s ease-out forwards; pointer-events: none; }
+
+    #fullscreen-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: cover; /* This will cover the entire area, cropping if necessary */
+        z-index: -1; /* Place it behind other content */
+    }
+</style>
+
 </head>
 <body>
+<div id="custom-cursor"></div>
+<img src="/img/imgPreview/kon glass.gif" alt="Kon Glass GIF" id="fullscreen-bg">
 
-  <div class="cursor" id="customCursor"></div>
+<header class="fixed-header">
+    <h1 class="header-text main-title-name animate-on-load" id="menu-trigger">Samuele De March</h1>
+    <div class="header-line animate-on-load" id="line-1"></div>
 
-  <header class="sticky-header">
-    <div class="grid-label grid-label-samuele fade-in label-fade-delay">
-        <span id="samuele-dropdown-toggle">Samuele De March</span> 
-        <div class="header-sub-nav"> 
-            <a href="/portfolio/Bio/index.html" class="fade-in submenu-item-delay-1">Bio</a>
-            <a href="/portfolio/Galleria/index.html" id="galleria-link" class="fade-in submenu-item-delay-2">Galleria</a>
-        </div>
+    <div class="sub-links-block" id="dropdown-links">
+        <a href="/Galleria/index.html" class="header-text sub-title-link">Galleria</a>
+        <a href="/Bio/index.html" class="header-text sub-title-link">Bio</a>
     </div>
-    <div class="grid-label grid-label-about fade-in label-fade-delay">Home</a></div> 
+    <div class="header-line" id="line-2"></div>
+    <span class="header-text title-gallery animate-on-load">Home</span>
+</header>
+
+<script>
+// Lo script JS rimane invariato rispetto alla versione precedente,
+// poiché la sua logica per le classi .menu-closed è già condizionata
+// dalla larghezza della finestra (<= 576px).
+document.addEventListener('DOMContentLoaded', function() {
+    const menuTrigger = document.getElementById('menu-trigger');
+    const dropdownLinks = document.getElementById('dropdown-links');
+    const line2 = document.getElementById('line-2');
+    const titleGallery = document.querySelector('.title-gallery');
+    let menuAnimating = false;
+
+    function applyOpenStyles(element, displayType) {
+        if (!element) return;
+        element.style.display = displayType;
+        element.classList.remove('animate-menu-close');
+        element.classList.add('animate-menu-open');
+        element.classList.add('is-open');
+        element.style.pointerEvents = 'auto';
+        menuAnimating = true;
+    }
+
+    function onOpenAnimationEnd(event) {
+        if ((event.target === dropdownLinks || event.target === line2) && event.animationName === 'fadeInFromTopMenu') {
+            event.target.classList.remove('animate-menu-open');
+            if (dropdownLinks && line2 && !dropdownLinks.classList.contains('animate-menu-open') && !line2.classList.contains('animate-menu-open')) {
+                menuAnimating = false;
+            }
+        }
+    }
     
-    <div class="screen-wide-internal-line fade-in item-delay-1"></div> 
-  </header>
+    function updateGalleryPositioning() {
+        if(!titleGallery) return; // Safety check, masonryContainer removed
 
-  <div class="divider fade-in item-delay-2"></div>
+        if (window.innerWidth <= 576) {
+            if (dropdownLinks && dropdownLinks.classList.contains('is-open')) {
+                titleGallery.classList.remove('menu-closed');
+            } else {
+                titleGallery.classList.add('menu-closed');
+            }
+        } else {
+            titleGallery.classList.remove('menu-closed');
+        }
+    }
 
-  <script>
-    // --- SCRIPT CURSORE PERSONALIZZATO ---
-    const customCursorElement = document.getElementById('customCursor'); 
-    const interactiveElements = document.querySelectorAll('a'); 
+    if (dropdownLinks) {
+        dropdownLinks.addEventListener('animationend', (e) => {
+            if (e.animationName === 'fadeInFromTopMenu') onOpenAnimationEnd(e);
+        });
+    }
+    if (line2) {
+        line2.addEventListener('animationend', (e) => {
+            if (e.animationName === 'fadeInFromTopMenu') onOpenAnimationEnd(e);
+        });
+    }
 
-    if (customCursorElement) { 
-        document.addEventListener('mousemove', (e) => {
-            window.requestAnimationFrame(() => { 
-                customCursorElement.style.left = `${e.clientX}px`;
-                customCursorElement.style.top = `${e.clientY}px`;
+    function openMenu() {
+        if (menuAnimating || (dropdownLinks && dropdownLinks.classList.contains('is-open'))) return;
+        applyOpenStyles(dropdownLinks, 'flex');
+        applyOpenStyles(line2, 'block');
+        updateGalleryPositioning();
+    }
+
+    if (dropdownLinks && line2) {
+        const initialMenuLoadDelay = 400;
+        setTimeout(function() {
+            openMenu();
+        }, initialMenuLoadDelay);
+    } else {
+        console.warn('Elementi dropdownLinks o line2 non trovati per apertura iniziale.');
+    }
+
+    window.addEventListener('resize', updateGalleryPositioning);
+    // updateGalleryPositioning(); // Chiamata iniziale è già gestita da openMenu() dopo il delay
+
+    // --- Custom Cursor Logic ---
+    const customCursorDiv = document.getElementById('custom-cursor');
+
+    if (customCursorDiv) {
+        document.addEventListener('mousemove', function(e) {
+            customCursorDiv.style.display = 'block'; // Show on first move
+            customCursorDiv.style.left = e.clientX + 'px';
+            customCursorDiv.style.top = e.clientY + 'px';
+        });
+
+        document.addEventListener('mouseleave', function() { customCursorDiv.style.display = 'none'; });
+        document.addEventListener('mouseenter', function() { customCursorDiv.style.display = 'block'; });
+
+        const hoverables = document.querySelectorAll('a, button, #menu-trigger');
+
+        hoverables.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                let applyHover = false;
+                if (el.tagName === 'A' || el.tagName === 'BUTTON') {
+                    applyHover = true;
+                } else if (el.id === 'menu-trigger') {
+                    // For #menu-trigger, only apply hover if its computed cursor style is 'pointer'.
+                    // This respects its current state (static 'default' in Home.html, dynamic in others).
+                    if (window.getComputedStyle(el).cursor === 'pointer') {
+                        applyHover = true;
+                    }
+                }
+                // Add other specific hoverable elements by ID or class here if needed
+
+                if (applyHover) {
+                    customCursorDiv.classList.add('hover');
+                }
+            });
+
+            el.addEventListener('mouseleave', () => {
+                customCursorDiv.classList.remove('hover');
             });
         });
-
-        interactiveElements.forEach(el => {
-            el.addEventListener('mouseenter', () => customCursorElement.classList.add('cursor-hover-active'));
-            el.addEventListener('mouseleave', () => customCursorElement.classList.remove('cursor-hover-active'));
-        });
     }
+    // --- End Custom Cursor Logic ---
+});
+</script>
 
-    // --- SCRIPT PER POSIZIONARE DINAMICAMENTE ELEMENTI DEL LAYOUT ---
-    function updateDynamicLayout() {
-        const galleriaLink = document.getElementById('galleria-link');
-        const dividerElement = document.querySelector('.divider');
-        const aboutLinkElement = document.querySelector('.grid-label-about'); // Link "About/Home"
-
-        if (!galleriaLink || !dividerElement || !aboutLinkElement) {
-            // È buona pratica avvisare se gli elementi non vengono trovati,
-            // ma potrebbe essere normale durante il caricamento iniziale o se l'HTML cambia.
-            // console.warn("Elementi chiave per il layout dinamico non trovati.");
-            return; 
-        }
-
-        const NARROW_SCREEN_BREAKPOINT_PX = 600; // Deve corrispondere al breakpoint CSS
-        const IS_NARROW_SCREEN = window.innerWidth < NARROW_SCREEN_BREAKPOINT_PX;
-
-        // 1. Posiziona .divider sotto "Galleria"
-        let dividerOffsetPx = IS_NARROW_SCREEN ? 10 : 20; // Offset per .divider: 10px su stretto, 20px su largo
-
-        const galleriaRect = galleriaLink.getBoundingClientRect();
-        const newDividerTop = galleriaRect.bottom + dividerOffsetPx;
-        dividerElement.style.top = newDividerTop + 'px';
-
-        // 2. Posiziona il link "About/Home"
-        if (IS_NARROW_SCREEN) {
-            // Su schermi stretti, posiziona "About/Home" sotto .divider
-            const SPACING_BELOW_DIVIDER_PX = 15; // Spazio desiderato tra .divider e "About/Home"
-            
-            // Prendiamo la posizione visuale inferiore del .divider appena posizionato
-            const dividerVisualBottom = dividerElement.getBoundingClientRect().bottom; 
-            
-            const targetAboutLinkVisualTop = dividerVisualBottom + SPACING_BELOW_DIVIDER_PX;
-            const currentAboutLinkVisualTop = aboutLinkElement.getBoundingClientRect().top;
-            
-            // Calcola lo spostamento necessario per 'top' relativo alla sua posizione visuale corrente.
-            // Questo sposta l'elemento rispetto alla sua posizione naturale nel grid.
-            aboutLinkElement.style.top = (targetAboutLinkVisualTop - currentAboutLinkVisualTop) + 'px';
-        } else {
-            // Su schermi più larghi, resetta la posizione di "About/Home" (se modificata)
-            aboutLinkElement.style.top = '0px'; 
-        }
-    }
-
-    window.addEventListener('load', updateDynamicLayout);
-    window.addEventListener('resize', updateDynamicLayout);
-    
-    // Se ci fossero problemi di timing con le animazioni che influenzano getBoundingClientRect(),
-    // si potrebbe considerare un piccolo delay o l'uso di 'animationend' per il primo 'updateDynamicLayout'.
-    // Per ora, 'load' e 'resize' dovrebbero coprire la maggior parte dei casi.
-  </script>
 </body>
 </html>

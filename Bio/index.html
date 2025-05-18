@@ -1,450 +1,432 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Portfolio Samuele De March</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bio - Samuele De March</title>
+<style>
+@font-face {
+font-family: 'FormaDJRDisplay';
+src: url('/fonts/FormaDJRDisplay-Regular-Testing.otf') format('opentype');
+font-weight: normal;
+font-style: normal;
+}
 
-  <style>
-    /* === DEFINIZIONE FONT === */
-    @font-face {
-      font-family: 'FormaDJRText';
-      src: url('fonts/FormaDJRText-Medium-Testing.otf') format('opentype');
-    }
-
-    @font-face {
-      font-family: 'PPEditorialOld';
-      src: url('fonts/PPEditorialOld-ThinItalic.woff') format('woff');
-    }
-
-    @font-face {
-      font-family: 'FormaDJRDisplay';
-      src: url('fonts/FormaDJRDisplay-Regular-Testing.otf') format('opentype'); /* Unica pesantezza "Regular" caricata */
-    }
-
-    /* === RESET BASE E STILI GLOBALI === */
     body {
-      margin: 0;
-      padding: 0;
-      font-family: 'FormaDJRText', sans-serif;
-      background-color: #000000;
-      color: rgb(255, 255, 255);
-      cursor: none; /* Nasconde il cursore di sistema */
+        margin: 0;
+        font-family: sans-serif;
+        background-color: #000000;
+        cursor: none !important;
     }
 
-    a {
-      color: rgb(255, 255, 255);
-      text-decoration: none;
-      cursor: none; /* Nasconde il cursore di sistema anche per i link */
+    a, button, input[type="button"], input[type="submit"], select, textarea, label[for], #menu-trigger,
+    .title-gallery,
+    .text-column,
+    .image-column { /* Added .image-column for completeness, though not interactive */
+        cursor: none !important;
     }
 
-    /* === CURSORE PERSONALIZZATO === */
-    .cursor {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 20px;
-      height: 20px;
-      background-color: grey;
-      border-radius: 50%;
-      pointer-events: none; /* Non interagisce con gli eventi del mouse */
-      z-index: 1001; /* Sopra la maggior parte degli elementi */
-      transform: translate(-50%, -50%) scale(1);
-      transition: background-color 0.3s ease, transform 0.3s ease;
+    #custom-cursor {
+        position: fixed;
+        width: 12px;
+        height: 12px;
+        background-color: grey;
+        border-radius: 50%;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        transition: width 0.15s ease-out, height 0.15s ease-out, background-color 0.15s ease-out;
+        z-index: 99999;
+        display: none;
     }
 
-    .cursor.cursor-hover-active {
-      background-color: white;
-      transform: translate(-50%, -50%) scale(1.3); /* Leggermente più grande su hover di elementi interattivi */
+    #custom-cursor.hover {
+        width: 24px;
+        height: 24px;
+        background-color: white;
     }
 
-    /* === ANIMAZIONI === */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    @keyframes dropdownFadeIn {
-      from { opacity: 0; transform: translateY(-5px); }
-      to { opacity: 1; transform: translateY(0); }
+    .fixed-header { /* Contenitore semantico */ }
+
+    .header-text {
+        font-family: 'FormaDJRDisplay', sans-serif;
+        font-size: 20px;
+        font-weight: normal;
+        color: white;
+        line-height: 1.2;
+        margin: 0;
+        text-decoration: none;
+        display: block;
     }
 
-    .fade-in {
-      opacity: 0;
-      animation: fadeIn 1s ease-out forwards;
-    }
-    .label-fade-delay { animation-delay: 0.2s; }
-    .grid-fade-delay { animation-delay: 0.4s; } 
-    .text-fade-delay { animation-delay: 0.6s; } /* Nuovo delay per il testo */
-    .image-fade-delay { animation-delay: 0.8s; } /* Nuovo delay per l'immagine */
-
-
-    /* === HEADER FISSO === */
-    .sticky-header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 1000;
-      background-color: transparent; 
-      box-sizing: border-box;
-      display: grid;
-      align-items: start;
-      padding: clamp(0.8rem, 1.5vw, 1.5rem) clamp(1.5rem, 4vw, 3rem);
-      gap: clamp(1rem, 3vw, 2rem);
+    .main-title-name {
+        position: fixed;
+        top: 15px;
+        z-index: 1001;
     }
 
-    .grid-label {
-      font-family: 'FormaDJRDisplay', sans-serif;
-      font-size: clamp(1.5rem, 2vw, 2.5rem);
+    .header-line {
+        position: fixed;
+        background-color: white;
+        height: 1px;
+        z-index: 1000;
     }
 
-    .grid-label-about:hover,
-    .header-sub-nav a:hover {
-      opacity: 0.7;
-      transition: opacity 0.3s;
+    #line-1 {
+        top: calc(15px + (20px * 1.2) + 10px); /* 49px */
     }
 
-    .grid-label-samuele {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-    
-    #samuele-dropdown-toggle {
-      cursor: pointer; 
-      display: inline-block;
-    }
-
-    .header-sub-nav {
-      width: 100%;
-      margin-top: calc(0.35em + 1px + 0.35em);
-      display: none; 
-      opacity: 0;
+    .sub-links-block {
+        position: fixed;
+        top: calc( (15px + (20px * 1.2) + 10px) + 1px + 10px ); /* 60px */
+        z-index: 1001;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        display: none;
     }
 
-    .header-sub-nav a {
-      display: block;
-      font-family: 'FormaDJRDisplay', sans-serif;
-      line-height: 1.3;
-    }
-    
-    .screen-wide-internal-line {
-      position: fixed;
-      left: clamp(1.5rem, 4vw, 3rem);  
-      right: clamp(1.5rem, 4vw, 3rem);  
-      height: 1px;
-      background-color: rgb(255, 255, 255);
-      z-index: 999;
-      top: calc(
-        clamp(0.8rem, 1.5vw, 1.5rem) +
-        (clamp(1.5rem, 2vw, 2.5rem) * 1.2) + /* Altezza approssimativa di .grid-label */
-        0.35em /* Spaziatura */
-      );
-      opacity: 0; /* Inizia trasparente */
-      animation: fadeIn 1s ease-out forwards;
-      animation-delay: 0.25s; /* Leggero ritardo per apparire dopo l'header */
-    }
-    
-    .divider {
-      position: fixed;
-      left: clamp(1.5rem, 4vw, 3rem);
-      right: clamp(1.5rem, 4vw, 3rem);
-      height: 1px;
-      background-color: rgb(255, 255, 255);
-      z-index: 999; /* Sotto l'header ma sopra il contenuto se necessario */
-      display: none; /* Inizialmente nascosto */
-      opacity: 0;      
-      animation: none; /* Gestita da JS */
+    #line-2 { /* For 2 links: Home, Galleria */
+        top: calc(
+            ( (15px + (20px * 1.2) + 10px) + 1px + 10px ) /* 60px */
+            + (20px * 1.2)  /* Link 1 = 24px */
+            + 8px           /* Gap */
+            + (20px * 1.2)  /* Link 2 = 24px */
+            + 10px          /* Padding sotto i link */
+        ); /* 126px */
+        display: none;
     }
 
-    /* === STILI DROPDOWN === */
-    .dropdown-item-attivo {
-      display: block !important;
-      animation: dropdownFadeIn 0.4s ease-out forwards;
+    .title-gallery { /* Will display "Bio" */
+        position: fixed;
+        top: 15px;
+        z-index: 1001;
+        display: block;
+        /* cursor: default; already handled by global rule */
     }
 
-    /* === CONTENUTO PRINCIPALE === */
-    .content {
-      padding-left: clamp(1.5rem, 4vw, 3rem);
-      padding-right: clamp(1.5rem, 4vw, 3rem);
-      padding-bottom: clamp(1.5rem, 4vw, 3rem);
-      /* padding-top sarà gestito da JavaScript */
-      display: flex; 
-      gap: clamp(1rem, 3vw, 2rem); 
-      align-items: flex-start; /* Allinea gli elementi all'inizio del loro asse trasversale */
+    /* Default 3-Column Horizontal Alignments for Header */
+    .main-title-name,
+    .sub-links-block {
+        left: calc(8px + (100vw - 32px) / 3 + 8px);
+    }
+    .title-gallery { /* This will be "Bio" title */
+        left: calc(8px + 2 * ((100vw - 32px) / 3) + 2 * 8px);
+    }
+    .header-line {
+        left: 8px;
+        right: 8px;
     }
 
-    /* === BOX DI TESTO === */
-    .text-content-box {
-      width: 66.66%; /* Occupa 2/3 per il layout a 3 colonne */
-      flex-shrink: 0; 
-      line-height: 1.6; 
-      padding-top: 0; /* Il padding-top del .content gestisce la distanza dall'header */
-      /* Esempio di stili per il box di testo come richiesto: */
-      /* background-color: rgba(20, 20, 20, 0.8); */ /* Sfondo leggermente trasparente */
-      /* padding: clamp(1rem, 1.5vw, 2rem); */ /* Padding interno al box */
-      /* border: 1px solid #333; */ /* Bordo sottile */
-      /* border-radius: 5px; */ /* Angoli arrotondati */
+    .content-wrapper {
+        display: grid;
+        grid-template-columns: 2fr 1fr; /* Text (2/3), Image (1/3) */
+        align-items: start;
+        column-gap: 8px; /* Gap between text and image columns */
+        padding: 8px; /* Overall padding for the content area */
+        padding-top: 150px; /* Adjusted for 2-link menu */
+        box-sizing: border-box;
+        width: 100%;
     }
 
-    .text-content-box h2 {
-        font-family: 'FormaDJRDisplay', sans-serif; 
-        font-size: clamp(1.5rem, 2vw, 2.5rem);    
-        margin-bottom: 1em;
-        font-weight: normal; /* Come da stile originale */
-        margin-top: 0;    /* Come da stile originale */
+    .text-column {
+        font-family: 'FormaDJRDisplay', sans-serif;
+        font-size: 20px;
+        font-weight: normal;
+        color: white;
+        line-height: 1.2;
+        padding: 0px; /* Original style from konn.html */
+        /* cursor: default; already handled by global rule */
+        /* margin-top: -4px; /* Optional: if needed for alignment */
+        box-sizing: border-box;
     }
-    .text-content-box p {
-        font-family: 'FormaDJRDisplay', sans-serif; /* Era FormaDJRText, cambiato per coerenza con h2 se desiderato */
-        font-size: clamp(1.5rem, 2vw, 2.5rem);    /* Era diverso, unificato per esempio */
-        margin-bottom: 1em;
+     .text-column > p:first-child {
+        margin-top: 0; /* Ensure no extra margin at the top of the text */
     }
 
-    /* === COLONNA IMMAGINE === */
     .image-column {
-      width: 33.33%; /* Occupa 1/3 per il layout a 3 colonne */
-      flex-shrink: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .image-column img {
+        width: 100%;
+        height: auto;
+        display: block;
     }
 
-    .image-column img {
-      width: 100%;
-      display: block; /* Rimuove spazio extra sotto l'immagine */
-      height: auto; /* Mantiene le proporzioni */
-      /* Potresti aggiungere stili come object-fit se le immagini hanno proporzioni diverse */
-      /* Esempio: border-radius: 5px; */
+    /* Media Queries for Header Elements (copied from progetti/konn.html and adjusted if needed) */
+    @media (max-width: 992px) {
+        .main-title-name,
+        .sub-links-block { left: 10px; }
+        .title-gallery { left: calc(10px + (100vw - 28px) / 2 + 8px); }
+        .header-line { left: 10px; right: 10px; }
+
+        .content-wrapper {
+            padding-top: 150px; /* Consistent with default for 2-link menu */
+            /* Adjust grid for 2-col view if needed, or let it reflow based on content */
+            /* Example: grid-template-columns: 1fr 1fr; if text/image should be equal */
+            /* Or simply adjust padding and let items stack if going to single column sooner */
+        }
+    }
+
+    @media (max-width: 576px) {
+        .main-title-name,
+        .sub-links-block { left: 10px; }
+        .title-gallery { /* "Bio" title positioning when menu open */
+            top: calc(
+                ( (15px + (20px * 1.2) + 10px) + 1px + 10px )  /* 60px */
+                + (20px * 1.2 * 2) /* 2 links = 48px */
+                + (8px * 1)        /* 1 gap = 8px */
+                + 10px             /* Padding */
+                + 1px              /* line-2 height */
+                + 10px             /* Gap before title */
+            ); /* 137px */
+            left: 10px;
+            transition: top 0.6s ease-out;
+        }
+
+        .content-wrapper {
+            grid-template-columns: 1fr; /* Stack text and image */
+            row-gap: 20px; /* Space between stacked text and image */
+            padding-top: calc(
+                137px            /* .title-gallery top (new) */
+                + (20px * 1.2)   /* "Bio" title height = 24px */
+                + 15px           /* Gap before content (consistent with Galleria 2-link) */
+            ); /* 176px (menu open) */
+            transition: padding-top 0.6s ease-out;
+        }
+        .text-column { grid-row: 1; } /* Text on top */
+        .image-column { grid-row: 2; } /* Image below */
+
+        .title-gallery.menu-closed {
+            top: calc( (15px + (20px * 1.2) + 10px) + 1px + 10px); /* 60px */
+        }
+        .content-wrapper.menu-closed {
+             /* To prevent jump, padding-top should be 176px, same as when menu open */
+             padding-top: 176px;
+        }
+    }
+
+    /* Animazioni */
+    @keyframes fadeInFromTop { from { opacity: 0; transform: translateY(-25px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-on-load { opacity: 0; animation: fadeInFromTop 0.8s ease-out forwards; }
+    .animate-delay-img { animation-delay: 1.2s; } /* Changed from 0.4s to 1.2s */
+    .animate-delay-bio-text { animation-delay: 0.8s; } /* Delay for bio text column */
+
+    @keyframes fadeInFromTopMenu { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeOutToTopMenu { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-20px); } }
+    .sub-links-block.animate-menu-open,
+    #line-2.animate-menu-open { opacity: 0; animation: fadeInFromTopMenu 0.6s ease-out forwards; pointer-events: auto; }
+    .sub-links-block.animate-menu-close,
+    #line-2.animate-menu-close { opacity: 1; animation: fadeOutToTopMenu 0.6s ease-out forwards; pointer-events: none; }
+</style>
+</head>
+<body>
+<div id="custom-cursor"></div>
+
+<header class="fixed-header">
+    <h1 class="header-text main-title-name animate-on-load" id="menu-trigger">Samuele De March</h1>
+    <div class="header-line animate-on-load" id="line-1"></div>
+
+    <div class="sub-links-block" id="dropdown-links">
+        <a href="/Home/index.html" class="header-text sub-title-link">Home</a>
+        <a href="/Galleria/index.html" class="header-text sub-title-link">Galleria</a>
+    </div>
+    <div class="header-line" id="line-2"></div>
+    <span class="header-text title-gallery animate-on-load">Bio</span>
+</header>
+
+<div class="content-wrapper">
+    <div class="text-column animate-on-load animate-delay-bio-text">
+        <p>Questo è un testo di esempio per la pagina Bio. Qui verranno inserite informazioni sulla biografia.</p>
+        <p>Ulteriori dettagli possono essere aggiunti qui, organizzati in paragrafi per una migliore leggibilità.</p>
+        <p>Si possono includere esperienze, studi, filosofia di design, ecc. Questo testo è un po' più lungo per simulare un contenuto reale e vedere come si adatta allo spazio disponibile. Assicuriamoci che la colonna di testo e quella dell'immagine si allineino correttamente e che la responsività sia gestita come previsto nelle media query.</p>
+    </div>
+    <div class="image-column animate-on-load animate-delay-img">
+        <img src="/img/imgPreview/kon glass.gif" alt="Immagine Bio">
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const menuTrigger = document.getElementById('menu-trigger');
+    const dropdownLinks = document.getElementById('dropdown-links');
+    const line2 = document.getElementById('line-2');
+    const titleGallery = document.querySelector('.title-gallery'); // Will select the "Bio" title
+    const contentWrapper = document.querySelector('.content-wrapper');
+    let menuAnimating = false;
+
+    function updateMenuTriggerCursor() {
+        if (!menuTrigger) return;
+        if (window.scrollY === 0) {
+            menuTrigger.style.cursor = 'default'; // Will be overridden by cursor:none !important; but JS logic is fine
+        } else {
+            menuTrigger.style.cursor = 'pointer'; // Will be overridden by cursor:none !important;
+        }
+    }
+
+    function applyOpenStyles(element, displayType) {
+        if (!element) return;
+        element.style.display = displayType;
+        element.classList.remove('animate-menu-close');
+        element.classList.add('animate-menu-open');
+        element.classList.add('is-open');
+        element.style.pointerEvents = 'auto';
+        menuAnimating = true;
+    }
+
+    function applyCloseStyles(element) {
+        if (!element) return;
+        element.classList.remove('animate-menu-open');
+        element.classList.add('animate-menu-close');
+        element.style.pointerEvents = 'none';
+        menuAnimating = true;
+    }
+
+    function onOpenAnimationEnd(event) {
+        if ((event.target === dropdownLinks || event.target === line2) && event.animationName === 'fadeInFromTopMenu') {
+            event.target.classList.remove('animate-menu-open');
+            if (dropdownLinks && line2 && !dropdownLinks.classList.contains('animate-menu-open') && !line2.classList.contains('animate-menu-open')) {
+                menuAnimating = false;
+            }
+        }
     }
     
+    function updateGalleryPositioning() { // Renaming this to updateContentPositioning might be better
+        if (!titleGallery || !contentWrapper) return;
 
-    /* === LAYOUT RESPONSIVE HEADER === */
-    .sticky-header {
-      grid-template-columns: 1fr 1fr 1fr; /* 3 colonne per schermi grandi */
-    }
-    .grid-label-samuele {
-      /* Occupa la seconda colonna dell'header su schermi grandi */
-      grid-column: 2 / span 1; 
-      grid-row: 1;
-      justify-self: start; /* Allineato a sinistra nella sua cella */
-    }
-    .grid-label-about {
-      /* Occupa la terza colonna dell'header su schermi grandi */
-      grid-column: 3 / span 1;
-      grid-row: 1;
-      justify-self: start; /* Allineato a sinistra nella sua cella */
-    }
-
-
-    /* Media Query per layout a 2 COLONNE (Testo | Immagine) */
-    @media (max-width: 1024px) {
-      .sticky-header {
-        grid-template-columns: 1fr 1fr; /* Header a due colonne */
-      }
-      .grid-label-samuele { grid-column: 1 / span 1; }
-      .grid-label-about { grid-column: 2 / span 1; }
-      
-      .text-content-box { 
-        width: 50%;      
-      }
-      .image-column {
-        width: 50%;      
-      }
+        if (window.innerWidth <= 576) {
+            if (dropdownLinks && dropdownLinks.classList.contains('is-open')) {
+                titleGallery.classList.remove('menu-closed');
+                contentWrapper.classList.remove('menu-closed');
+            } else {
+                titleGallery.classList.add('menu-closed');
+                contentWrapper.classList.add('menu-closed');
+            }
+        } else {
+            titleGallery.classList.remove('menu-closed');
+            contentWrapper.classList.remove('menu-closed');
+        }
     }
 
-    /* Media Query per layout a 1 COLONNA (Testo sopra Immagine) */
-    @media (max-width: 600px) {
-      .sticky-header {
-        grid-template-columns: 1fr; /* Header a una colonna */
-        grid-template-rows: auto auto; /* Due righe per i label */
-        gap: 5px clamp(0.8rem, 2.5vw, 1.5rem); 
-        padding-top: clamp(0.5rem, 1.5vw, 1rem);
-        padding-bottom: clamp(0.5rem, 1.5vw, 1rem); 
-      }
-      .grid-label-samuele {
-        grid-column: 1; 
-        grid-row: 1;    
-      }
-      .grid-label-about { 
-        grid-column: 1; 
-        grid-row: 2;    
-        margin-top: 10px; /* Spazio tra i due label nell'header */
-      }
-      
-      .content {
-        flex-direction: column; /* Contenuto principale in colonna */
-      }
-      .text-content-box {
-        width: 100%; 
-        order: 1;  /* Testo prima */
-        margin-bottom: clamp(1rem, 3vw, 2rem); /* Spazio tra testo e immagine */
-      }
-      .image-column { 
-        width: 100%; 
-        order: 2;  /* Immagine dopo */
-      } 
-      
-      /* Stili aggiuntivi per schermi piccoli se necessario */
-      .grid-label { font-size: clamp(1.2rem, 5vw, 1.8rem); } /* Adatta font header */
-      
-      .screen-wide-internal-line {
-        left: clamp(0.8rem, 2.5vw, 1.5rem);
-        right: clamp(0.8rem, 2.5vw, 1.5rem);
-        top: calc( /* Adatta posizione linea */
-          clamp(0.5rem, 1.5vw, 1rem) +  /* Padding top header */
-          (clamp(1.2rem, 5vw, 1.8rem) * 1.2) + /* Altezza primo label */
-          0.35em /* Spaziatura */
-        );
-      }
-
-      .header-sub-nav {
-        margin-top: calc(0.35em + 1px + 0.35em); /* Adatta margine per il dropdown */
-      }
-
-      .divider { /* Adatta posizione divider per schermi piccoli */
-        left: clamp(0.8rem, 2.5vw, 1.5rem);
-        right: clamp(0.8rem, 2.5vw, 1.5rem);
-      }
+    function refinedOnCloseAnimationEnd(event) {
+        if ((event.target === dropdownLinks || event.target === line2) && event.animationName === 'fadeOutToTopMenu') {
+            event.target.style.display = 'none';
+            event.target.classList.remove('is-open');
+            event.target.classList.remove('animate-menu-close');
+            if (dropdownLinks && line2 && !dropdownLinks.classList.contains('animate-menu-close') && !line2.classList.contains('animate-menu-close')) {
+                menuAnimating = false;
+            }
+            if (dropdownLinks && !dropdownLinks.classList.contains('is-open') && line2 && !line2.classList.contains('is-open')) {
+                updateGalleryPositioning();
+            }
+        }
     }
-  </style>
-</head>
 
-<body>
-
-  <div class="cursor" id="customCursor"></div>
-
-  <header class="sticky-header">
-    <div class="grid-label grid-label-samuele fade-in label-fade-delay">
-        <span id="samuele-dropdown-toggle">Samuele De March</span>
-        <div class="header-sub-nav">
-          <a href="/portfolio/index.html">Home</a>        
-          <a href="/portfolio/Galleria/index.html">Galleria</a>
-        </div>
-    </div>
-    <a href="/portfolio/index.html" class="grid-label grid-label-about fade-in label-fade-delay">Bio</a> <div class="screen-wide-internal-line"></div>
-  </header>
-
-  <div class="divider"></div> <div class="content grid-fade-delay">
-    <div class="text-content-box fade-in text-fade-delay">
-        <h2>Titolo del Testo</h2>
-        <p>Questo è il box di testo. Su schermi grandi, occuperà due terzi dello spazio, con l'immagine alla sua destra. Puoi applicare qui gli stili specifici del "box già presente" modificando la classe `.text-content-box` nel CSS (es. `background-color`, `padding`, `border-radius`).</p>
-        <p>Su schermi medi, il testo e l'immagine si divideranno lo spazio a metà. Su schermi piccoli, il testo apparirà sopra l'immagine, occupando l'intera larghezza.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-    </div>
-
-    <div class="image-column fade-in image-fade-delay">
-      <img src="/portfolio/img/17473513706653.jpg" alt="Descrizione dell'immagine singola">
-      </div>
-  </div>
-
-  <script>
-    // --- SCRIPT CURSORE PERSONALIZZATO ---
-    const customCursorElement = document.getElementById('customCursor');
-    // Aggiorna questo selettore se hai altri elementi interattivi che necessitano dell'effetto hover del cursore
-    const interactiveElements = document.querySelectorAll('a, #samuele-dropdown-toggle'); 
-
-    if (customCursorElement) {
-        document.addEventListener('mousemove', (e) => {
-            window.requestAnimationFrame(() => {
-                customCursorElement.style.top = `${e.clientY}px`;
-                customCursorElement.style.left = `${e.clientX}px`;
-            });
+    if (dropdownLinks) {
+        dropdownLinks.addEventListener('animationend', (e) => {
+            if (e.animationName === 'fadeInFromTopMenu') onOpenAnimationEnd(e);
+            if (e.animationName === 'fadeOutToTopMenu') refinedOnCloseAnimationEnd(e);
         });
+    }
+    if (line2) {
+        line2.addEventListener('animationend', (e) => {
+            if (e.animationName === 'fadeInFromTopMenu') onOpenAnimationEnd(e);
+            if (e.animationName === 'fadeOutToTopMenu') refinedOnCloseAnimationEnd(e);
+        });
+    }
 
-        interactiveElements.forEach(el => {
+    function openMenu() {
+        if (menuAnimating || (dropdownLinks && dropdownLinks.classList.contains('is-open'))) return;
+        applyOpenStyles(dropdownLinks, 'flex');
+        applyOpenStyles(line2, 'block');
+        updateGalleryPositioning();
+    }
+
+    function closeMenu() {
+        if (menuAnimating || !(dropdownLinks && dropdownLinks.classList.contains('is-open'))) return;
+        applyCloseStyles(dropdownLinks);
+        applyCloseStyles(line2);
+
+        if (window.innerWidth <= 576 && titleGallery) {
+            titleGallery.classList.add('menu-closed');
+        }
+    }
+    
+    if (dropdownLinks && line2) {
+        const initialMenuLoadDelay = 400;
+        setTimeout(function() {
+            openMenu();
+            updateMenuTriggerCursor();
+        }, initialMenuLoadDelay);
+    } else {
+        console.warn('Elementi dropdownLinks o line2 non trovati per apertura iniziale.');
+    }
+
+    if (menuTrigger && dropdownLinks && line2) {
+        menuTrigger.addEventListener('click', function() {
+            if (dropdownLinks.classList.contains('is-open')) {
+                if (window.scrollY !== 0) {
+                    closeMenu();
+                }
+            } else {
+                openMenu();
+            }
+        });
+    } else {
+        console.error('Elementi del menu (trigger, dropdown, line2) non trovati per il toggle.');
+    }
+
+    // Removed masonry item animation logic
+
+    window.addEventListener('scroll', function() {
+        if (!dropdownLinks || !line2) return;
+        if (menuAnimating) return;
+        updateMenuTriggerCursor();
+        if (window.scrollY === 0) {
+            if (!dropdownLinks.classList.contains('is-open')) {
+                openMenu();
+            }
+        } else {
+            if (dropdownLinks.classList.contains('is-open')) {
+                closeMenu();
+            }
+        }
+    });
+
+    window.addEventListener('resize', updateGalleryPositioning);
+    updateMenuTriggerCursor();
+
+    // --- Custom Cursor Logic ---
+    const customCursorDiv = document.getElementById('custom-cursor');
+    if (customCursorDiv) {
+        document.addEventListener('mousemove', function(e) {
+            customCursorDiv.style.display = 'block';
+            customCursorDiv.style.left = e.clientX + 'px';
+            customCursorDiv.style.top = e.clientY + 'px';
+        });
+        document.addEventListener('mouseleave', function() { customCursorDiv.style.display = 'none'; });
+        document.addEventListener('mouseenter', function() { customCursorDiv.style.display = 'block'; });
+        const hoverables = document.querySelectorAll('a, button, #menu-trigger');
+        hoverables.forEach(el => {
             el.addEventListener('mouseenter', () => {
-                customCursorElement.classList.add('cursor-hover-active');
+                let applyHover = false;
+                if (el.tagName === 'A' || el.tagName === 'BUTTON') {
+                    applyHover = true;
+                } else if (el.id === 'menu-trigger') {
+                    if (window.getComputedStyle(el).cursor === 'pointer') {
+                        applyHover = true;
+                    }
+                }
+                if (applyHover) {
+                    customCursorDiv.classList.add('hover');
+                }
             });
             el.addEventListener('mouseleave', () => {
-                customCursorElement.classList.remove('cursor-hover-active');
+                customCursorDiv.classList.remove('hover');
             });
         });
     }
-
-    // --- SCRIPT PER LAYOUT DINAMICO HEADER E CONTENT PADDING ---
-    function updateDynamicHeaderLayout() {
-        const header = document.querySelector('.sticky-header');
-        const subNav = document.querySelector('.header-sub-nav');
-        const mainDivider = document.querySelector('.divider');
-        const content = document.querySelector('.content');
-        const screenWideInternalLine = document.querySelector('.screen-wide-internal-line');
-
-
-        if (!header || !subNav || !mainDivider || !content || !screenWideInternalLine) {
-            console.warn("Elementi chiave per il layout dinamico dell'header non trovati.");
-            return;
-        }
-
-        const spacingSubNavToDivider = 10; // Spazio tra sub-nav e divider 
-        const spacingDividerToContent = 20; // Spazio tra divider e contenuto
-        const spacingDefaultLineToContent = 20; // Spazio tra linea normale e contenuto
-
-        let headerEffectiveBottom;
-
-        if (subNav.classList.contains('dropdown-item-attivo')) {
-            const subNavRect = subNav.getBoundingClientRect();
-            let newDividerTop = subNavRect.bottom + spacingSubNavToDivider;
-            mainDivider.style.top = newDividerTop + 'px';
-            // mainDivider.style.display = 'block'; // Già gestito dal click
-
-            headerEffectiveBottom = newDividerTop + mainDivider.offsetHeight;
-        } else {
-            // mainDivider.style.display = 'none'; // Già gestito dal click
-            const screenWideLineRect = screenWideInternalLine.getBoundingClientRect();
-            headerEffectiveBottom = screenWideLineRect.bottom;
-        }
-        
-        let newContentPaddingTop;
-        if (subNav.classList.contains('dropdown-item-attivo')) {
-            newContentPaddingTop = headerEffectiveBottom + spacingDividerToContent;
-        } else {
-            newContentPaddingTop = headerEffectiveBottom + spacingDefaultLineToContent;
-        }
-        content.style.paddingTop = newContentPaddingTop + 'px';
-    }
-
-
-    // --- SCRIPT MENU A TENDINA ---
-    document.addEventListener('DOMContentLoaded', function() {
-        const toggleElement = document.getElementById('samuele-dropdown-toggle');
-        const subNav = document.querySelector('.header-sub-nav');
-        const mainDivider = document.querySelector('.divider');  
-        const screenWideInternalLine = document.querySelector('.screen-wide-internal-line');
-
-
-        if (toggleElement && subNav && mainDivider && screenWideInternalLine) {
-            toggleElement.addEventListener('click', function(event) {
-                event.preventDefault();
-                
-                subNav.classList.toggle('dropdown-item-attivo');
-
-                if (subNav.classList.contains('dropdown-item-attivo')) {
-                    screenWideInternalLine.style.opacity = '0'; 
-                    mainDivider.style.display = 'block'; // Mostra il divisore
-                    requestAnimationFrame(() => { // Forza reflow per animazione opacità
-                        mainDivider.style.opacity = '1'; 
-                    });
-                } else {
-                    screenWideInternalLine.style.opacity = '1'; 
-                    mainDivider.style.opacity = '0'; 
-                    // Aspetta la fine della transizione di opacità per nascondere
-                    mainDivider.addEventListener('transitionend', () => {
-                        if (!subNav.classList.contains('dropdown-item-attivo')) {
-                             mainDivider.style.display = 'none'; 
-                        }
-                    }, { once: true });
-                }
-                
-                // Aggiorna il layout dopo un breve ritardo per permettere alle animazioni CSS di iniziare
-                requestAnimationFrame(updateDynamicHeaderLayout);
-            });
-        }
-        // Chiamata iniziale per impostare il padding e il layout
-        requestAnimationFrame(updateDynamicHeaderLayout); 
-    });
-
-    window.addEventListener('resize', () => {
-        requestAnimationFrame(updateDynamicHeaderLayout);
-    });
-  </script>
-
+});
+</script>
 </body>
 </html>
